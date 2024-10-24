@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
-  width: 100%; 
+  width: 100%;
 }
 
 .tab-container {
@@ -15,66 +15,64 @@
 
 .tabs {
   display: flex;
+  margin: 0;
 }
 
 .tab {
   width: 8rem;
   padding: 10px;
   font-size: 16px;
-  cursor: pointer; 
-  border: none; 
-  color: black; 
-  text-align: center; 
-  transition: background 0.3s; 
-  text-decoration: none; 
+  cursor: pointer;
+  border: none;
+  color: black;
+  text-align: center;
+  transition: background 0.3s;
+  text-decoration: none;
   display: inline-block;
+  margin: 0;
 }
 
 .home-tab {
-  background: #FFFA9D; 
+  background: #FFFA9D;
   border-top-left-radius: 10px;
-  /*border-top-right-radius: 15px;*/
-  border-bottom: 1px solid transparent; 
+  border-bottom: 1px solid transparent;
 }
 
 .tasks-tab {
-  background: #FFE79F; 
-  /*border-top-left-radius: 10px;
-  border-top-right-radius: 15px;*/
+  background: #FFE79F;
   border-bottom: 1px solid transparent;
 }
 
 .archive-tab {
-  background: #CC915C; 
-  /*border-top-left-radius: 10px;*/
-  border-top-right-radius: 15px; 
-  border-bottom: 1px solid transparent; 
+  background: #CC915C;
+  border-top-right-radius: 15px;
+  border-bottom: 1px solid transparent;
 }
 
 .tab:hover {
   background: #E29D3F;
-  color: #fff; 
+  color: #fff;
 }
 
 .content {
   border: none;
   padding: 20px;
-  width: calc(100% - 2px); 
-  max-width: 80%; 
+  width: calc(100% - 2px);
+  max-width: 80%;
   text-align: left;
-  border-radius: 0 5px 10px 10px; 
-  box-sizing: border-box; 
+  border-radius: 0 5px 10px 10px;
+  box-sizing: border-box;
   height: 30rem;
 }
 
 .home-content {
-  background-color: #FFFA9D; 
+  background-color: #FFFA9D;
 }
 
 .tasks-content {
-  background-color: #FFE79F; 
+  background-color: #FFE79F;
 }
 
 .archive-content {
-  background-color: #CC915C; 
+  background-color: #CC915C;
 }
