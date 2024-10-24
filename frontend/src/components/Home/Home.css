@@ -1,0 +1,58 @@
+.navbar {
+    display: flex;             
+    align-items: center;       
+    justify-content: space-between;
+    padding: 10px;  
+    background: #E29D3F; 
+    color: white;  
+    transition: 0.5s;       
+}
+
+.navbar.dark {
+    background: #333; 
+    color: #fff;    
+}
+  
+  .logo {
+    max-width: 3rem;
+    max-height: 3rem;
+    border-radius: 45px;
+    margin-right: 10px;       
+  }
+  
+  .appName {
+    font-size: 2rem;
+  }
+  
+  .logoAndName { 
+    display: flex;
+    align-items: center; 
+  }
+  
+  .rightArea {
+    display: flex; 
+    align-items: center; 
+  }
+  
+  .profile {
+    display: flex; 
+    align-items: center;   
+    margin-right: 20px;
+  }
+  
+  .profilePicture {
+    max-width: 3rem;
+    border-radius: 45px;
+  }
+  
+  .accountName {
+    padding-left: 10px;
+    font-size: 20px;
+  }
+  
+  .notifIcon, .lightModeIcon {
+    max-height: 25px;
+    cursor: pointer;
+    margin: 0 20px; 
+  }
+  
