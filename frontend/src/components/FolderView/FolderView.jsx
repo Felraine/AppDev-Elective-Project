@@ -16,6 +16,7 @@ const Tasks = () => (
   /* Dont change className */
   <div className="content tasks-content">
     <h2>Add your content here</h2>
+    <p>Hello World</p>
   </div>
 );
 
