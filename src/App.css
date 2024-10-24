@@ -1,0 +1,5 @@
+ .mainContent {
+    display: flex;
+    flex: 1; /* Fills the remaining space below navbar */
+  }
+  
