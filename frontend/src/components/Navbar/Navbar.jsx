@@ -1,5 +1,5 @@
 import React from 'react';
-import './Home.css';
+import './Navbar.css';
 import logo from '../../assets/images/Logo.png';
 import notif from '../../assets/images/bell.png';
 import lightMode from '../../assets/images/brightness.png';
