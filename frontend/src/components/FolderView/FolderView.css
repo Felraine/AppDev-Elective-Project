@@ -77,7 +77,7 @@
   background-color: #CC915C;
 }
 
-/*TASK CSS*/
+/*TASK CSS PLEASE DONT TOUCH*/
 
 .taskTitle{
   border-radius: 5px;
@@ -88,6 +88,10 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
+.taskTitle:focus {
+  border: 3px solid #CC915C; /* Red border on focus */
+  outline: none; 
+}
 .taskDesc{
   border-radius: 5px;
   height: 30px;
@@ -96,11 +100,15 @@
   padding: 5px;
   margin-bottom: 10px;
 }
+.taskDesc:focus {
+  border: 3px solid #CC915C; /* Red border on focus */
+  outline: none; 
+}
 .taskInput{
   border-radius: 5px;
   height: 30px;
-
 }
+
 .taskPriority{
   border: none;
   height: 30px;
@@ -147,3 +155,5 @@
 .low{
   color: green;
 }
+
+/*EDIT THIS COMMENT AND ADD UR CSS BELOW HERE*/

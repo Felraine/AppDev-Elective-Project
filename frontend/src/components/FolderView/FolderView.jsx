@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 import './FolderView.css';
 
@@ -29,7 +29,17 @@ const Tasks = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
+  // current date
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  const taskWithDate = {
+    ...task,
+    creation_date: formattedDate,
+  };
+
+ 
+
     console.log('Task data:', task);
     setTask({
       title: '',
@@ -39,6 +49,7 @@ const Tasks = () => {
       due_date: ''
     });
   };
+
 
   return (
     /* Dont change className */
