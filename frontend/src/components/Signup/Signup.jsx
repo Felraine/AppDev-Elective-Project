@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Signup.css'
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -40,11 +41,15 @@ const Signup = () => {
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.v1alue)}
           required
         />
-        <button type="submit">Sign Up</button>
+        <button type="submit" className='signup'>Sign Up</button>
       </form>
+      <div className='login'>
+        <span>Already have an account? </span>
+        <a onClick={() => navigate('/')}>Log in</a>
+      </div>
     </div>
   );
 };
