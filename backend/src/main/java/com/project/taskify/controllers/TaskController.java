@@ -2,6 +2,9 @@ package com.project.taskify.controllers;
 
 import com.project.taskify.models.TaskEntity;
 import com.project.taskify.services.TaskService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,4 +26,12 @@ public class TaskController {
         TaskEntity savedTask = taskService.saveTask(task);
         return ResponseEntity.ok(savedTask);
     }
+    
+    //READ
+    @GetMapping
+    public List<TaskEntity> getAllTasks() {
+        return taskService.getAllTasks();
+    }
+
+     
 }
