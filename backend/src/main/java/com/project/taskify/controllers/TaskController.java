@@ -1,4 +1,5 @@
 package com.project.taskify.controllers;
+
 import com.project.taskify.models.TaskEntity;
 import com.project.taskify.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,14 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    //CREATE
+    // CREATE
     @PostMapping("/task")
     public ResponseEntity<TaskEntity> addTask(@RequestBody TaskEntity task) {
+        if (task.getTitle() == null || task.getDescription() == null || task.getPriority() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         TaskEntity savedTask = taskService.saveTask(task);
         return ResponseEntity.ok(savedTask);
     }
-
-     
 }
