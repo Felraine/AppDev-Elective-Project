@@ -19,7 +19,6 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public UserEntity saveUser(UserEntity user) {
-        // Hash the password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

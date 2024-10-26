@@ -1,58 +1,109 @@
 .navbar {
-    display: flex;             
-    align-items: center;       
-    justify-content: space-between;
-    padding: 10px;  
-    background: #E29D3F; 
-    color: white;  
-    transition: 0.5s;       
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: #e29d3f;
+  color: white;
+  transition: 0.5s;
 }
 
 .navbar.dark {
-    background: #333; 
-    color: #fff;    
+  background: #333;
+  color: #fff;
 }
-  
-  .logo {
-    max-width: 3rem;
-    max-height: 3rem;
-    border-radius: 45px;
-    margin-right: 10px;       
-  }
-  
-  .appName {
-    font-size: 2rem;
-  }
-  
-  .logoAndName { 
-    display: flex;
-    align-items: center; 
-  }
-  
-  .rightArea {
-    display: flex; 
-    align-items: center; 
-  }
-  
-  .profile {
-    display: flex; 
-    align-items: center;   
-    margin-right: 20px;
-  }
-  
-  .profilePicture {
-    max-width: 3rem;
-    border-radius: 45px;
-  }
-  
-  .accountName {
-    padding-left: 10px;
-    font-size: 20px;
-  }
-  
-  .notifIcon, .lightModeIcon {
-    max-height: 25px;
-    cursor: pointer;
-    margin: 0 20px; 
-  }
-  
+
+.logo {
+  max-width: 3rem;
+  max-height: 3rem;
+  border-radius: 45px;
+  margin-right: 10px;
+}
+
+.appName {
+  font-size: 2rem;
+}
+
+.logoAndName {
+  display: flex;
+  align-items: center;
+}
+
+.rightArea {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  position: relative; /* Allow positioning of edit overlay */
+}
+
+.profilePicture {
+  width: 3rem; /* Set a fixed width */
+  height: 3rem; /* Set a fixed height */
+  border-radius: 50%; /* Make it circular */
+  object-fit: cover; /* Ensure the image covers the area */
+}
+
+.accountName {
+  padding-left: 10px;
+  font-size: 20px;
+}
+
+.notifIcon,
+.lightModeIcon {
+  max-height: 25px;
+  cursor: pointer;
+  margin: 0 20px;
+}
+
+.editOverlay {
+  position: absolute; /* Position overlay on top of the profile picture */
+  bottom: 0; /* Align at the bottom */
+  left: 0; /* Align to the left */
+  right: 0; /* Stretch to the right */
+  text-align: center; /* Center the text */
+  font-size: 12px; /* Adjust font size */
+  color: white; /* Text color */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+/* Show overlay on hover */
+.profile:hover .editOverlay {
+  opacity: 1; /* Show overlay */
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Ensure it appears above other content */
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modalButtons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}

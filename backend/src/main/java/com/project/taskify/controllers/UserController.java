@@ -9,11 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173") // Allow CORS for all endpoints in this controller
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     @Autowired
@@ -33,11 +31,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserEntity user) {
-        System.out.println("Login attempt for username: " + user.getUsername());
-        
-        UserEntity existingUser = userService.findByUsername(user.getUsername())
-                .orElse(null);
-        
+        UserEntity existingUser = userService.findByUsername(user.getUsername()).orElse(null);
         if (existingUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
@@ -47,24 +41,28 @@ public class UserController {
         }
 
         String token = generateToken(existingUser);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new LoginResponse(token, existingUser.getUsername()));
     }
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable int id) {
-        UserEntity user = userService.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return ResponseEntity.ok(user);
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
-        List<UserEntity> users = userService.findAllUsers();
-        return ResponseEntity.ok(users);
-    }
-
+    
     private String generateToken(UserEntity user) {
         return jwtUtil.generateToken(user.getUsername());
+    }
+
+    private static class LoginResponse {
+        private String token;
+        private String username;
+
+        public LoginResponse(String token, String username) {
+            this.token = token;
+            this.username = username;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public String getUsername() {
+            return username;
+        }
     }
 }
