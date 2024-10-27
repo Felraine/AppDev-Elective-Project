@@ -15,10 +15,10 @@ const Tasks = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchTasks();
+    viewTasks();
   }, []);
-
-  const fetchTasks = async () => {
+  //DISPLAY TASK
+  const viewTasks = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/tasks");
       setTasks(response.data);
@@ -31,8 +31,8 @@ const Tasks = () => {
     const { name, value } = e.target;
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
   };
-
-  const handleSubmit = async (e) => {
+  //ADD TASK
+  const addTask = async (e) => {
     e.preventDefault();
 
     const currentDate = new Date().toISOString().split("T")[0];
@@ -41,7 +41,7 @@ const Tasks = () => {
     setError("");
     try {
       await axios.post("http://localhost:8080/api/tasks/task", taskWithDate);
-      fetchTasks();
+      viewTasks();
       setTask({ title: "", description: "", priority: "", due_date: "" });
     } catch (error) {
       console.error("Error adding task", error.response || error);
@@ -72,11 +72,18 @@ const Tasks = () => {
     }
   };
 
+  const priorityOptions = [
+    { value: "high", label: "High", color: "red" },
+    { value: "medium", label: "Medium", color: "#0056B3" },
+    { value: "low", label: "Low", color: "green" },
+  ];
+
   return (
     <div className="content tasks-content">
       <div className="create-task-form">
         <h3>Create New Task</h3>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={addTask}>
+          {" "}
           <div className="form-group">
             <input
               className="taskTitle"
@@ -88,7 +95,6 @@ const Tasks = () => {
               required
             />
           </div>
-
           <div className="form-group">
             <input
               className="taskDesc"
@@ -99,7 +105,6 @@ const Tasks = () => {
               onChange={handleChange}
             />
           </div>
-
           <div className="form-group row-group">
             <select
               className="taskPriority"
@@ -111,9 +116,15 @@ const Tasks = () => {
               <option value="" disabled>
                 Choose Priority
               </option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              {priorityOptions.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                  style={{ color: option.color }}
+                >
+                  {option.label}
+                </option>
+              ))}
             </select>
 
             <label htmlFor="due_date" className="dueDateLabel">
@@ -128,7 +139,6 @@ const Tasks = () => {
               required
             />
           </div>
-
           <button className="addTask" type="submit">
             Add Task
           </button>
