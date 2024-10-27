@@ -1,4 +1,3 @@
-// TaskService.java
 package com.project.taskify.services;
 
 import com.project.taskify.models.TaskEntity;
@@ -30,10 +29,9 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    
-     //UPDATE
+    //UPDATE
     public TaskEntity putTaskDetails(int id, TaskEntity newTaskDetails) throws NameNotFoundException{
-        TaskEntity task = new TaskEntity();
+        TaskEntity task;
 
         try{
             task = taskRepository.findById(id).get();
@@ -43,7 +41,7 @@ public class TaskService {
             task.setPriority(newTaskDetails.getPriority());
             task.setCreation_date(newTaskDetails.getCreation_date());
             task.setDue_date(newTaskDetails.getDue_date());
-        }catch (NoSuchElementException nex) {
+        } catch (NoSuchElementException nex) {
             throw new NameNotFoundException("Task with ID " + id + " not found");
         }
         return taskRepository.save(task);
@@ -51,15 +49,13 @@ public class TaskService {
 
     //DELETE
     public String deleteTask(int id){
-        String msg = "";
-        if(taskRepository.findById(id) != null){
-            taskRepository.deleteById(null);
+        String msg;
+        if(taskRepository.existsById(id)){
+            taskRepository.deleteById(id);
             msg = "Task Deleted Successfully";
-        }else
-            msg = id + "not found";
+        } else {
+            msg = id + " not found";
+        }
         return msg;
     }
-     
-
-
 }

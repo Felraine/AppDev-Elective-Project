@@ -1,4 +1,4 @@
-package com.project.taskify.config;
+/*package com.project.taskify.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,4 +14,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
-}
+}*/

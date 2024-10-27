@@ -1,4 +1,3 @@
-// TaskController.java
 package com.project.taskify.controllers;
 
 import com.project.taskify.models.TaskEntity;
@@ -12,7 +11,7 @@ import javax.naming.NameNotFoundException;
 
 @RestController
 @RequestMapping("/api/tasks")
-//@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
 
     @Autowired
@@ -29,7 +28,6 @@ public class TaskController {
         return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
     }
 
-
     // READ
     @GetMapping
     public ResponseEntity<List<TaskEntity>> getAllTasks() {
@@ -39,13 +37,13 @@ public class TaskController {
 
     //UPDATE
     @PutMapping("/{id}")
-    public TaskEntity putTaskDetails(@RequestParam int id, @RequestBody TaskEntity newTaskDetails) throws NameNotFoundException{
+    public TaskEntity putTaskDetails(@PathVariable int id, @RequestBody TaskEntity newTaskDetails) throws NameNotFoundException{
         return taskService.putTaskDetails(id,newTaskDetails);
     }
 
     //DELETE
     @DeleteMapping("/{id}")
     public String deleteTask(@PathVariable int id){
-    return taskService.deleteTask(id);
+        return taskService.deleteTask(id);
     }
 }
