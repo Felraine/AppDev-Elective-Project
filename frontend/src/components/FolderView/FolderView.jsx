@@ -1,15 +1,15 @@
-// FolderView.jsx
+//NOTE: DONT TOUCH CODE
 import React from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import Tasks from "./Tasks";
 import "./FolderView.css";
-
+//NOTE: MAKE NEW FILE AND CSS IN FOLDERVIEW FOLDER AND ROUTE TO THIS FILE
 const Home = () => (
   <div className="content home-content">
     <h2>Add your content here</h2>
   </div>
 );
-
+//NOTE: MAKE NEW FILE AND CSS IN FOLDERVIEW FOLDER AND ROUTE TO THIS FILE
 const Archive = () => (
   <div className="content archive-content">
     <h2>Add your content here</h2>
