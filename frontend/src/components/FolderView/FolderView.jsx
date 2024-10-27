@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './FolderView.css';
 
 // NOTE: DONT CHANGE the code
@@ -15,169 +16,118 @@ const Home = () => (
 //Reminder: Creation_date implementation that takes current date
 
 const Tasks = () => {
+  let navigate = useNavigate();
+
   const [task, setTask] = useState({
-    title: '',
-    description: '',
-    priority: '',
-    creation_date: '',
-    due_date: ''
+      title: '',
+      description: '',
+      priority: '',
+      creation_date: '',
+      due_date: ''
   });
 
   const [tasks, setTasks] = useState([]);
-  const [editingTaskId, setEditingTaskId] = useState(null);
 
   useEffect(() => {
-    fetchTasks();
+      fetchTasks(); // Fetch initial task list on component mount
   }, []);
 
   const fetchTasks = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/api/tasks');
-      if (!response.ok) {
-        throw new Error(`Error fetching tasks: ${response.statusText}`);
+      try {
+          const response = await axios.get('http://localhost:8080/api/tasks/task');
+          setTasks(response.data); 
+      } catch (error) {
+          console.error("Error fetching tasks:", error);
       }
-      const data = await response.json();
-      setTasks(data);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-    }
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setTask((prevTask) => ({ ...prevTask, [name]: value }));
+      const { name, value } = e.target;
+      setTask(prevTask => ({ ...prevTask, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => { 
+    e.preventDefault(); 
+
     const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
     const taskWithDate = { ...task, creation_date: currentDate };
 
+    setError("");
     try {
-      let response;
-      if (editingTaskId) {
-        // Update task
-        response = await fetch(`/api/tasks/task/${editingTaskId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(taskWithDate),
-        });
-      } else {
-        // Create new task
-        response = await fetch('/api/tasks/task', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(taskWithDate),
-        });
-      }
+        const response = await axios.post(
+            "http://localhost:8080/api/tasks/task",
+            taskWithDate // Send the correct object here
+        );
 
-      if (!response.ok) {
-        throw new Error(`Error ${editingTaskId ? 'updating' : 'creating'} task: ${response.statusText}`);
-      }
-
-      // Reset form
-      setTask({
-        title: '',
-        description: '',
-        priority: '',
-        creation_date: '',
-        due_date: ''
-      });
-      setEditingTaskId(null); // Reset editingTaskId
-
-      fetchTasks(); // Fetch updated task list
+        console.log("Task Added successful:", response.data);
+        navigate("/");
     } catch (error) {
-      console.error("Error submitting task:", error);
+        console.error("Error adding task", error.response || error);
+        setError(
+            error.response?.data?.message || "Adding Task failed. Please try again."
+        );
     }
-  };
-
-  const handleEdit = (task) => {
-    setTask({
-      title: task.title,
-      description: task.description,
-      priority: task.priority,
-      due_date: task.due_date
-    });
-    setEditingTaskId(task.task_ID);
-  };
-
-  const handleDelete = async (taskId) => {
-    try {
-      const response = await fetch(`/api/tasks/task/${taskId}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error(`Error deleting task: ${response.statusText}`);
-      }
-      fetchTasks();
-    } catch (error) {
-      console.error("Error deleting task:", error);
-    }
-  };
-
-  return (
-    <div className="content tasks-content">
-      <h3>{editingTaskId ? 'Edit Task' : 'Create New Task'}</h3>
-      <form onSubmit={handleSubmit}>
-        <input 
-          className='taskTitle'
-          type="text" 
-          name="title" 
-          placeholder="Title" 
-          value={task.title} 
-          onChange={handleChange} 
-          required 
-        />
-        <br />
-        <input 
-          className='taskDesc'
-          type="text" 
-          name="description" 
-          placeholder="Short description here..." 
-          value={task.description} 
-          onChange={handleChange} 
-        />
-        <br />
-        <select 
-          className='taskPriority'
-          name="priority" 
-          value={task.priority} 
-          onChange={handleChange} 
-          required 
-        >
-          <option value="" disabled>Choose Priority</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-        <label htmlFor="due_date" className='dueDateLabel'>Due Date: </label>
-        <input 
-          className='taskDue'
-          type="date" 
-          name="due_date" 
-          value={task.due_date} 
-          onChange={handleChange} 
-          required 
-        />
-        <br />
-        <button className='addTask' type="submit">{editingTaskId ? 'Update Task' : 'Add Task'}</button>
-      </form>
-
-      <h3>Task List</h3>
-      <ul>
-        {tasks.map(task => (
-          <li key={task.task_ID}>
-            {task.title} - {task.priority} 
-            <button onClick={() => handleEdit(task)}>Edit</button>
-            <button onClick={() => handleDelete(task.task_ID)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
 };
 
+  return (
+      <div className="content tasks-content">
+          <h3>Create New Task</h3>
+          <form onSubmit={handleSubmit}>
+              <input 
+                  className='taskTitle'
+                  type="text" 
+                  name="title" 
+                  placeholder="Title" 
+                  value={task.title} 
+                  onChange={handleChange} 
+                  required 
+              />
+              <br />
+              <input 
+                  className='taskDesc'
+                  type="text" 
+                  name="description" 
+                  placeholder="Short description here..." 
+                  value={task.description} 
+                  onChange={handleChange} 
+              />
+              <br />
+              <select 
+                  className='taskPriority'
+                  name="priority" 
+                  value={task.priority} 
+                  onChange={handleChange} 
+                  required 
+              >
+                  <option value="" disabled>Choose Priority</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+              </select>
+              <label htmlFor="due_date" className='dueDateLabel'>Due Date: </label>
+              <input 
+                  className='taskDue'
+                  type="date" 
+                  name="due_date" 
+                  value={task.due_date} 
+                  onChange={handleChange} 
+                  required 
+              />
+              <br />
+              <button className='addTask' type="submit">{'Add Task'}</button>
+          </form>
 
+          <h3>Task List</h3>
+          <ul>
+              {tasks.map(task => (
+                  <li key={task.task_ID}>
+                      {task.title} - {task.priority} 
+                  </li>
+              ))}
+          </ul>
+      </div>
+  );
+};
 
 
 // Add code here for whos assigned to archive tab
