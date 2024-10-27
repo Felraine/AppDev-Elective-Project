@@ -13,7 +13,6 @@ const Home = () => (
 );
 
 // Add code here for whos assigned to tasks tab
-//Reminder: Creation_date implementation that takes current date
 
 const Tasks = () => {
   let navigate = useNavigate();
@@ -27,13 +26,14 @@ const Tasks = () => {
   });
 
   const [tasks, setTasks] = useState([]);
-  const [error, setError] = useState(""); // State for error messages
+  const [error, setError] = useState(""); 
 
   useEffect(() => {
-    fetchTasks(); // Fetch initial task list on component mount
+    viewTask(); 
   }, []);
 
-  const fetchTasks = async () => {
+  //DISPLAY TASK
+  const viewTask = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/tasks");
       setTasks(response.data);
@@ -42,12 +42,14 @@ const Tasks = () => {
     }
   };
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  //ADD TASK
+  const addTask = async (e) => {
     e.preventDefault();
 
     const currentDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
@@ -57,12 +59,12 @@ const Tasks = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/tasks/task",
-        taskWithDate // Send the correct object here
+        taskWithDate 
       );
 
       console.log("Task Added successful:", response.data);
-      navigate("/home/tasks"); // Navigate to the tasks tab after adding a task
-      fetchTasks(); // Refresh the task list after adding
+      navigate("/home/tasks"); 
+      viewTask(); // Refresh the task list after adding
     } catch (error) {
       console.error("Error adding task", error.response || error);
       setError(
@@ -74,7 +76,7 @@ const Tasks = () => {
   return (
     <div className="content tasks-content">
       <h3>Create New Task</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={addTask}>
         <input
           className="taskTitle"
           type="text"
@@ -129,7 +131,7 @@ const Tasks = () => {
       <ul>
         {tasks.map((task) => (
           <li key={task.task_ID}>
-            {task.title} - {task.priority}
+            {task.title} - {task.priority} - {task.due_date}
           </li>
         ))}
       </ul>
