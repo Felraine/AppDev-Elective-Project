@@ -33,24 +33,24 @@
 }
 
 .home-tab {
-  background: #FFFA9D;
+  background: #fffa9d;
   border-top-left-radius: 10px;
   border-bottom: 1px solid transparent;
 }
 
 .tasks-tab {
-  background: #FFE79F;
+  background: #ffe79f;
   border-bottom: 1px solid transparent;
 }
 
 .archive-tab {
-  background: #CC915C;
+  background: #cc915c;
   border-top-right-radius: 15px;
   border-bottom: 1px solid transparent;
 }
 
 .tab:hover {
-  background: #E29D3F;
+  background: #e29d3f;
   color: #fff;
 }
 
@@ -66,94 +66,21 @@
 }
 
 .home-content {
-  background-color: #FFFA9D;
+  background-color: #fffa9d;
 }
 
 .tasks-content {
-  background-color: #FFE79F;
+  background-color: #ffe79f;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
 }
 
 .archive-content {
-  background-color: #CC915C;
+  background-color: #cc915c;
 }
 
 /*TASK CSS PLEASE DONT TOUCH*/
-
-.taskTitle{
-  border-radius: 5px;
-  height: 30px;
-  width: 310px;
-  border: none;
-  padding: 5px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-.taskTitle:focus {
-  border: 3px solid #CC915C; /* Red border on focus */
-  outline: none; 
-}
-.taskDesc{
-  border-radius: 5px;
-  height: 30px;
-  width: 310px;
-  border: none;
-  padding: 5px;
-  margin-bottom: 10px;
-}
-.taskDesc:focus {
-  border: 3px solid #CC915C; /* Red border on focus */
-  outline: none; 
-}
-.taskInput{
-  border-radius: 5px;
-  height: 30px;
-}
-
-.taskPriority{
-  border: none;
-  height: 30px;
-  width: auto;
-  border-radius: 5px;
-  margin-right: 10px;
-
-}
-
-.taskDue{
-  border: none;
-  height: 30px;
-  border-radius: 5px;
-  padding: 5px;
-
-}
-.dueDateLabel{
-  font-size: 14px;
-}
-
-.addTask{
-  color: white;
-  border: none;
-  border-radius: 5px;
-  height: 30px;
-  cursor: pointer;
-  width: 310px;
-  margin-top: 10px;
-  background-color: #E29D3F;
-  font-weight: bold;
-}
-
-.addTask:hover{
-  font-weight: bold;
-  background-color: #CC915C;
-  box-shadow: 0 12px 16px 0 rgba(186, 183, 183, 0.24),0 17px 50px 0 rgba(210, 234, 0, 0.19);
-}
-.high{
-  color: red;
-}
-.medium{
-  color: #a69e01;
-}
-.low{
-  color: green;
-}
 
 /*EDIT THIS COMMENT AND ADD UR CSS BELOW HERE*/
