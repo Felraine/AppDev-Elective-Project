@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "TaskifyApplication",
+            "request": "launch",
+            "mainClass": "com.project.taskify.TaskifyApplication",
+            "projectName": "taskify"
+        },
+        {
+            "type": "cmake",
+            "request": "launch",
+            "name": "CMake: Configure project",
+            "cmakeDebugType": "configure",
+            "clean": false,
+            "configureAll": false
+        }
+    ]
+}

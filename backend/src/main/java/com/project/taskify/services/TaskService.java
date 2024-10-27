@@ -1,12 +1,14 @@
+// TaskService.java
 package com.project.taskify.services;
 
 import com.project.taskify.models.TaskEntity;
 import com.project.taskify.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
+
+import javax.naming.NameNotFoundException;
 
 @Service
 public class TaskService {
@@ -14,38 +16,50 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public TaskService(){
+    public TaskService() {
         super();
     }
 
+    // CREATE
     public TaskEntity saveTask(TaskEntity task) {
         return taskRepository.save(task);
     }
 
-    //READ
+    // READ
     public List<TaskEntity> getAllTasks() {
         return taskRepository.findAll();
     }
 
-    public Optional<TaskEntity> findById(int task_ID) {
-        return taskRepository.findById(task_ID);
-    }
     
+     //UPDATE
+    public TaskEntity putTaskDetails(int id, TaskEntity newTaskDetails) throws NameNotFoundException{
+        TaskEntity task = new TaskEntity();
 
-    public Optional<TaskEntity> findByTitle(String title) {
-        return taskRepository.findByTitle(title);
+        try{
+            task = taskRepository.findById(id).get();
+
+            task.setTitle(newTaskDetails.getTitle());
+            task.setDescription(newTaskDetails.getDescription());
+            task.setPriority(newTaskDetails.getPriority());
+            task.setCreation_date(newTaskDetails.getCreation_date());
+            task.setDue_date(newTaskDetails.getDue_date());
+        }catch (NoSuchElementException nex) {
+            throw new NameNotFoundException("Task with ID " + id + " not found");
+        }
+        return taskRepository.save(task);
     }
 
-
-
-    public List<TaskEntity> findAllTasks() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAllTasks'");
+    //DELETE
+    public String deleteTask(int id){
+        String msg = "";
+        if(taskRepository.findById(id) != null){
+            taskRepository.deleteById(null);
+            msg = "Task Deleted Successfully";
+        }else
+            msg = id + "not found";
+        return msg;
     }
+     
 
-   /*  public List<TaskEntity> getAllTasks() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllTasks'");
-    }*/
 
 }

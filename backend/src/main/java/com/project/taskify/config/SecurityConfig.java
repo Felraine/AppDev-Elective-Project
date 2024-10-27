@@ -19,6 +19,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/signup", "/api/users/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/all").permitAll() 
                 .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll() 
+                .requestMatchers(HttpMethod.POST, "/api/tasks/task").permitAll()
                 .anyRequest().authenticated() 
             );
 
