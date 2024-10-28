@@ -1,4 +1,4 @@
-package com.project.taskify.controller;
+package com.project.taskify.controllers;
 
 import java.util.Optional;
 
