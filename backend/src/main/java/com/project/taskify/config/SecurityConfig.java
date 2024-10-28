@@ -24,7 +24,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/users/all").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/tasks/task").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/tasks").permitAll()  // Add this line to allow GET requests
+                .requestMatchers(HttpMethod.GET, "/api/tasks").permitAll()  
+                .requestMatchers(HttpMethod.DELETE, "/api/tasks/{id}").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/tasks/{id}").permitAll()
                 .anyRequest().authenticated()
             )
             .cors(); // Enable CORS globally
