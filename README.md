@@ -16,3 +16,7 @@
 10. Change password to password for your mysql
 11. Create "taskify_db" connection in mysql and then create "taskify_db" database in mysql
 12. Type in terminal "npm run dev"
+
+## THINGS TO NOTE:
+
+1. Every time you pull, make sure to change password in application.properties
