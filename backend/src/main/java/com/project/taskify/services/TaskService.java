@@ -27,7 +27,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    // READ - Get tasks by user ID
+    // READ
     public List<TaskEntity> getTasksByUserId(int userId) {
         List<TaskEntity> tasks = taskRepository.findByUser_UserId(userId);
         System.out.println("Retrieved " + tasks.size() + " tasks for user " + userId);
@@ -35,7 +35,7 @@ public class TaskService {
         return tasks;
     }
 
-    // UPDATE - Update task details
+    // UPDATE
     public TaskEntity putTaskDetails(int id, TaskEntity newTaskDetails) throws NameNotFoundException {
         TaskEntity task;
         try {
@@ -51,12 +51,11 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    // DELETE - Delete task
+    // DELETE
     public String deleteTask(int id, int userId) throws NameNotFoundException {
         TaskEntity task = taskRepository.findById(id)
                 .orElseThrow(() -> new NameNotFoundException("Task with ID " + id + " not found"));
 
-        // Check if the task belongs to the user
         if (task.getUser().getUserId() != userId) {
             throw new NameNotFoundException("You are not authorized to delete this task.");
         }

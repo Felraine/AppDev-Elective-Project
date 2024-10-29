@@ -18,7 +18,7 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    // CREATE - Add a task for a specific user
+    // CREATE
     @PostMapping("/user/{userId}/task")
     public ResponseEntity<TaskEntity> addTask(@PathVariable int userId, @RequestBody TaskEntity task) {
         try {
@@ -29,20 +29,20 @@ public class TaskController {
         }
     }
 
-    // READ - Get tasks by user ID
+    // READ
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<TaskEntity>> getTasksByUserId(@PathVariable int userId) {
         List<TaskEntity> tasks = taskService.getTasksByUserId(userId);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    // UPDATE - Update task details
+    // UPDATE
     @PutMapping("/{id}")
     public TaskEntity putTaskDetails(@PathVariable int id, @RequestBody TaskEntity newTaskDetails) throws NameNotFoundException {
         return taskService.putTaskDetails(id, newTaskDetails);
     }
 
-    // DELETE - Delete task
+    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTask(@PathVariable int id, @RequestHeader("userId") int userId) {
         try {
