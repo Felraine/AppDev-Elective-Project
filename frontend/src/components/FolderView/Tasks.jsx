@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Tasks.css";
+import {useNavigate } from "react-router-dom";
 
 const Tasks = () => {
+
+  let navigate = useNavigate;
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -17,6 +20,11 @@ const Tasks = () => {
   useEffect(() => {
     viewTasks();
   }, []);
+  //addTask, viewTask
+  //TO DO: deleteTask, editTask
+
+  
+
   //DISPLAY TASK
   const viewTasks = async () => {
     try {
@@ -27,10 +35,28 @@ const Tasks = () => {
     }
   };
 
+  //DELETE TASK
+  const deleteTask = async (id) => {
+    try {
+      console.log("Current tasks before deletion:", tasks);
+      console.log("Deleting task with ID:", id);
+      const response = await axios.delete(`http://localhost:8080/api/tasks/${id}`); 
+      if (response.status === 200) {
+        //location.reload();
+        console.log("Deleted Task Successfully!");
+        setTasks((prevTasks) => prevTasks.filter((task) => task.task_ID !== id)); 
+      }
+    } catch (error) {
+      console.error("Error in deleting a task: ", error.response?.data);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
+
   };
+
   //ADD TASK
   const addTask = async (e) => {
     e.preventDefault();
@@ -42,6 +68,7 @@ const Tasks = () => {
     try {
       await axios.post("http://localhost:8080/api/tasks/task", taskWithDate);
       viewTasks();
+      console.log("Task Added Successfully!");
       setTask({ title: "", description: "", priority: "", due_date: "" });
     } catch (error) {
       console.error("Error adding task", error.response || error);
@@ -50,6 +77,7 @@ const Tasks = () => {
       );
     }
   };
+
 
   const sortedTasks = tasks.sort((a, b) => {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
@@ -139,9 +167,7 @@ const Tasks = () => {
               required
             />
           </div>
-          <button className="addTask" type="submit">
-            Add Task
-          </button>
+          <button className="addTask" type="submit"> Add Task </button>
         </form>
       </div>
 
@@ -179,9 +205,7 @@ const Tasks = () => {
                   <button onClick={() => handleEdit(task.task_ID)}>Edit</button>
                 </td>
                 <td>
-                  <button onClick={() => handleDelete(task.task_ID)}>
-                    Delete
-                  </button>
+                  <button onClick={() => deleteTask(task.task_ID)}> Delete </button>
                 </td>
               </tr>
             ))}
