@@ -44,12 +44,14 @@ public class TaskController {
 
     // DELETE - Delete task
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable int id) {
-        String result = taskService.deleteTask(id);
-        if (result.contains("successfully")) {
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+    public ResponseEntity<HttpStatus> deleteTask(@PathVariable int id, @RequestHeader("userId") int userId) {
+        try {
+            taskService.deleteTask(id, userId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NameNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

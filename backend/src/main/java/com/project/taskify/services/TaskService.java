@@ -49,12 +49,16 @@ public class TaskService {
     }
 
     // DELETE - Delete task
-    public String deleteTask(int id) {
-        if (taskRepository.existsById(id)) {
-            taskRepository.deleteById(id);
-            return "Task deleted successfully";
-        } else {
-            return "Task with ID " + id + " not found";
+    public String deleteTask(int id, int userId) throws NameNotFoundException {
+        TaskEntity task = taskRepository.findById(id)
+                .orElseThrow(() -> new NameNotFoundException("Task with ID " + id + " not found"));
+
+        // Check if the task belongs to the user
+        if (task.getUser().getUserId() != userId) {
+            throw new NameNotFoundException("You are not authorized to delete this task.");
         }
+
+        taskRepository.deleteById(id);
+        return "Task Deleted Successfully";
     }
 }

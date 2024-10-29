@@ -59,14 +59,17 @@ public class UserController {
             this.userId = userId; 
         }
 
+        @SuppressWarnings("unused")
         public String getToken() {
             return token;
         }
 
+        @SuppressWarnings("unused")
         public String getUsername() {
             return username;
         }
 
+        @SuppressWarnings("unused")
         public int getUserId() {
             return userId;
         }

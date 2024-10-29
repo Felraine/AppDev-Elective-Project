@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Tasks.css";
+import { useNavigate } from "react-router-dom";
 
 const Tasks = () => {
+  let navigate = useNavigate;
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -26,6 +28,9 @@ const Tasks = () => {
     }
   }, []);
 
+  //addTask, viewTask
+  //TO DO: deleteTask, editTask
+
   // Fetch tasks specific to the logged-in user
   const viewTasks = async () => {
     try {
@@ -44,12 +49,37 @@ const Tasks = () => {
     }
   };
 
+  //DELETE TASK
+  const deleteTask = async (id) => {
+    try {
+      console.log("Current tasks before deletion:", tasks);
+      console.log("Deleting task with ID:", id);
+      const response = await axios.delete(
+        `http://localhost:8080/api/tasks/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            userId: userId,
+          },
+        }
+      );
+
+      if (response.status === 204) {
+        console.log("Deleted Task Successfully!");
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => task.task_ID !== id)
+        );
+      }
+    } catch (error) {
+      console.error("Error in deleting a task: ", error.response?.data);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
   };
-
-  // Add a new task for the specific user
+  //ADD TASK
   const addTask = async (e) => {
     e.preventDefault();
 
@@ -68,6 +98,7 @@ const Tasks = () => {
         }
       );
       viewTasks();
+      console.log("Task Added Successfully!");
       setTask({ title: "", description: "", priority: "", due_date: "" });
     } catch (error) {
       console.error("Error adding task", error.response || error);
@@ -165,7 +196,8 @@ const Tasks = () => {
             />
           </div>
           <button className="addTask" type="submit">
-            Add Task
+            {" "}
+            Add Task{" "}
           </button>
         </form>
       </div>
@@ -204,8 +236,9 @@ const Tasks = () => {
                   <button onClick={() => handleEdit(task.task_ID)}>Edit</button>
                 </td>
                 <td>
-                  <button onClick={() => handleDelete(task.task_ID)}>
-                    Delete
+                  <button onClick={() => deleteTask(task.task_ID)}>
+                    {" "}
+                    Delete{" "}
                   </button>
                 </td>
               </tr>
