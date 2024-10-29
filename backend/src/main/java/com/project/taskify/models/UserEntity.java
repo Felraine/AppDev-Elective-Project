@@ -1,6 +1,7 @@
 package com.project.taskify.models;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -16,8 +17,8 @@ public class UserEntity {
 
     private String email;
 
-    @Lob
-    private byte[] profilePicture;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TaskEntity> tasks;
 
     // Getters and Setters
 
@@ -51,5 +52,13 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<TaskEntity> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskEntity> tasks) {
+        this.tasks = tasks;
     }
 }

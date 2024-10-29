@@ -41,7 +41,7 @@ public class UserController {
         }
 
         String token = generateToken(existingUser);
-        return ResponseEntity.ok(new LoginResponse(token, existingUser.getUsername()));
+        return ResponseEntity.ok(new LoginResponse(token, existingUser.getUsername(), existingUser.getUserId())); // Include userId
     }
     
     private String generateToken(UserEntity user) {
@@ -51,10 +51,12 @@ public class UserController {
     private static class LoginResponse {
         private String token;
         private String username;
+        private int userId;
 
-        public LoginResponse(String token, String username) {
+        public LoginResponse(String token, String username, int userId) {
             this.token = token;
             this.username = username;
+            this.userId = userId; 
         }
 
         public String getToken() {
@@ -63,6 +65,10 @@ public class UserController {
 
         public String getUsername() {
             return username;
+        }
+
+        public int getUserId() {
+            return userId;
         }
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import javax.naming.NameNotFoundException;
 
@@ -17,31 +18,31 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    public TaskController(){
-        
+    // CREATE - Add a task for a specific user
+    @PostMapping("/user/{userId}/task")
+    public ResponseEntity<TaskEntity> addTask(@PathVariable int userId, @RequestBody TaskEntity task) {
+        try {
+            TaskEntity savedTask = taskService.saveTask(userId, task);
+            return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
+        } catch (NameNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    // CREATE
-    @PostMapping("/task")
-    public ResponseEntity<TaskEntity> addTask(@RequestBody TaskEntity task) {
-        TaskEntity savedTask = taskService.saveTask(task);
-        return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
-    }
-
-    // READ
-    @GetMapping
-    public ResponseEntity<List<TaskEntity>> getAllTasks() {
-        List<TaskEntity> tasks = taskService.getAllTasks();
+    // READ - Get tasks by user ID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TaskEntity>> getTasksByUserId(@PathVariable int userId) {
+        List<TaskEntity> tasks = taskService.getTasksByUserId(userId);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    //UPDATE
+    // UPDATE - Update task details
     @PutMapping("/{id}")
-    public TaskEntity putTaskDetails(@PathVariable int id, @RequestBody TaskEntity newTaskDetails) throws NameNotFoundException{
-        return taskService.putTaskDetails(id,newTaskDetails);
+    public TaskEntity putTaskDetails(@PathVariable int id, @RequestBody TaskEntity newTaskDetails) throws NameNotFoundException {
+        return taskService.putTaskDetails(id, newTaskDetails);
     }
 
-
+    // DELETE - Delete task
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTask(@PathVariable int id) {
         String result = taskService.deleteTask(id);

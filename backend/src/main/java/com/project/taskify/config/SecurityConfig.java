@@ -23,10 +23,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/signup", "/api/users/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/all").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/tasks/task").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/tasks").permitAll()  
-                .requestMatchers(HttpMethod.DELETE, "/api/tasks/{id}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/tasks/user/{userId}/task").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/tasks/user/{userId}").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/api/tasks/{id}").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/api/tasks/{id}").permitAll()
                 .anyRequest().authenticated()
             )
             .cors(); // Enable CORS globally

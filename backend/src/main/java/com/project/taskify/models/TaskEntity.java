@@ -25,6 +25,10 @@ public class TaskEntity {
     @Column(nullable = false)
     private Date due_date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
     public TaskEntity() {}
 
     public TaskEntity(String title, String description, String priority, Date creation_date, Date due_date) {
@@ -79,5 +83,13 @@ public class TaskEntity {
 
     public void setDue_date(Date due_date) {
         this.due_date = due_date;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

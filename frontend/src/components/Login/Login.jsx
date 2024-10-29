@@ -23,10 +23,10 @@ const Login = ({ onLogin }) => {
       );
       console.log("Login successful:", response.data);
 
-      // Assuming response.data includes the token and username
-      const { token, username: loggedInUserName } = response.data; // Adjust as per your actual response structure
+      const { token, username: loggedInUserName, userId } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("username", loggedInUserName); // Store the username
+      localStorage.setItem("username", loggedInUserName);
+      localStorage.setItem("userId", userId);
       onLogin(response.data);
       navigate("/home");
     } catch (error) {

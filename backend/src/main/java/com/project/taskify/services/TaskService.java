@@ -1,13 +1,14 @@
 package com.project.taskify.services;
 
 import com.project.taskify.models.TaskEntity;
+import com.project.taskify.models.UserEntity;
 import com.project.taskify.repositories.TaskRepository;
+import com.project.taskify.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.naming.NameNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import javax.naming.NameNotFoundException;
 
 @Service
 public class TaskService {
@@ -15,27 +16,27 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public TaskService() {
-        super();
-    }
+    @Autowired
+    private UserRepository userRepository;
 
-    // CREATE
-    public TaskEntity saveTask(TaskEntity task) {
+    // CREATE - Save task associated with a user
+    public TaskEntity saveTask(int userId, TaskEntity task) throws NameNotFoundException {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new NameNotFoundException("User not found with ID: " + userId));
+        task.setUser(user);
         return taskRepository.save(task);
     }
 
-    // READ
-    public List<TaskEntity> getAllTasks() {
-        return taskRepository.findAll();
+    // READ - Get tasks by user ID
+    public List<TaskEntity> getTasksByUserId(int userId) {
+        return taskRepository.findByUser_UserId(userId);
     }
 
-    //UPDATE
-    public TaskEntity putTaskDetails(int id, TaskEntity newTaskDetails) throws NameNotFoundException{
+    // UPDATE - Update task details
+    public TaskEntity putTaskDetails(int id, TaskEntity newTaskDetails) throws NameNotFoundException {
         TaskEntity task;
-
-        try{
+        try {
             task = taskRepository.findById(id).get();
-
             task.setTitle(newTaskDetails.getTitle());
             task.setDescription(newTaskDetails.getDescription());
             task.setPriority(newTaskDetails.getPriority());
@@ -47,15 +48,13 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    //DELETE
-    public String deleteTask(int id){
-        String msg;
-        if(taskRepository.existsById(id)){
+    // DELETE - Delete task
+    public String deleteTask(int id) {
+        if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
-            msg = "Task Deleted Successfully";
+            return "Task deleted successfully";
         } else {
-            msg = id + " not found";
+            return "Task with ID " + id + " not found";
         }
-        return msg;
     }
 }

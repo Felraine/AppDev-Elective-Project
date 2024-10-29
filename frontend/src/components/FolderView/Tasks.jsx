@@ -14,16 +14,33 @@ const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
 
+  const username = localStorage.getItem("username");
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   useEffect(() => {
-    viewTasks();
+    if (username && token) {
+      viewTasks();
+    } else {
+      setError("You need to be logged in to view tasks.");
+    }
   }, []);
-  //DISPLAY TASK
+
+  // Fetch tasks specific to the logged-in user
   const viewTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/tasks");
+      const response = await axios.get(
+        `http://localhost:8080/api/tasks/user/${userId}`, // Adjust endpoint if necessary
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
+      setError("Could not fetch tasks. Please try again later.");
     }
   };
 
@@ -31,7 +48,8 @@ const Tasks = () => {
     const { name, value } = e.target;
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
   };
-  //ADD TASK
+
+  // Add a new task for the specific user
   const addTask = async (e) => {
     e.preventDefault();
 
@@ -40,7 +58,15 @@ const Tasks = () => {
 
     setError("");
     try {
-      await axios.post("http://localhost:8080/api/tasks/task", taskWithDate);
+      await axios.post(
+        `http://localhost:8080/api/tasks/user/${userId}/task`, // Adjust endpoint if necessary
+        taskWithDate,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       viewTasks();
       setTask({ title: "", description: "", priority: "", due_date: "" });
     } catch (error) {
@@ -83,7 +109,6 @@ const Tasks = () => {
       <div className="create-task-form">
         <h3>Create New Task</h3>
         <form onSubmit={addTask}>
-          {" "}
           <div className="form-group">
             <input
               className="taskTitle"
