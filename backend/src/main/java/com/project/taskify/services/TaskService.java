@@ -29,7 +29,10 @@ public class TaskService {
 
     // READ - Get tasks by user ID
     public List<TaskEntity> getTasksByUserId(int userId) {
-        return taskRepository.findByUser_UserId(userId);
+        List<TaskEntity> tasks = taskRepository.findByUser_UserId(userId);
+        System.out.println("Retrieved " + tasks.size() + " tasks for user " + userId);
+        tasks.forEach(task -> System.out.println("Task ID: " + task.getTask_ID() + ", Title: " + task.getTitle()));
+        return tasks;
     }
 
     // UPDATE - Update task details

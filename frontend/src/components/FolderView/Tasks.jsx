@@ -30,12 +30,10 @@ const Tasks = () => {
 
   //addTask, viewTask
   //TO DO: deleteTask, editTask
-
-  // Fetch tasks specific to the logged-in user
   const viewTasks = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/tasks/user/${userId}`, // Adjust endpoint if necessary
+        `http://localhost:8080/api/tasks/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,6 +41,7 @@ const Tasks = () => {
         }
       );
       setTasks(response.data);
+      console.log("Fetched tasks:", response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
       setError("Could not fetch tasks. Please try again later.");
@@ -82,14 +81,13 @@ const Tasks = () => {
   //ADD TASK
   const addTask = async (e) => {
     e.preventDefault();
-
     const currentDate = new Date().toISOString().split("T")[0];
     const taskWithDate = { ...task, creation_date: currentDate };
 
     setError("");
     try {
       await axios.post(
-        `http://localhost:8080/api/tasks/user/${userId}/task`, // Adjust endpoint if necessary
+        `http://localhost:8080/api/tasks/user/${userId}/task`,
         taskWithDate,
         {
           headers: {
@@ -97,9 +95,9 @@ const Tasks = () => {
           },
         }
       );
-      viewTasks();
       console.log("Task Added Successfully!");
       setTask({ title: "", description: "", priority: "", due_date: "" });
+      viewTasks(); // Fetch tasks again after adding a new task
     } catch (error) {
       console.error("Error adding task", error.response || error);
       setError(
