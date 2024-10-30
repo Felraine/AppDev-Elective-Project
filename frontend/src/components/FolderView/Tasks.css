@@ -203,14 +203,32 @@ h3{
 .taskButtons button {
   border: none;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 3px 8px;
   cursor: pointer;
   background-color: #e29d3f;
   color: white;
-  font-weight: bold;
+  font-weight: 300;
 }
 
 .taskButtons button:hover {
   background-color: #cc915c;
 }
+.taskHeader {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+}
 
+.editTaskButton {
+  width: 50px;
+  height: 30px; 
+  background-color: transparent;
+  border: none; 
+  cursor: pointer; 
+}
+
+.editTaskButton img {
+  width: 20px; 
+  height: 20px; 
+   
+}

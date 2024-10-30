@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Tasks.css";
 import { useNavigate } from "react-router-dom";
+import editTaskIcon from '../../assets/images/editTaskIcon.png';
+
 
 const Tasks = () => {
   let navigate = useNavigate;
@@ -15,6 +17,7 @@ const Tasks = () => {
 
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
+  const [buttonsVisible, setButtonsVisible] = useState(true); //edit task button
 
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
@@ -106,7 +109,7 @@ const Tasks = () => {
     }
   };
 
-  const sortedTasks = tasks.sort((a, b) => {
+    const sortedTasks = tasks.sort((a, b) => {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
       return priorityOrder[a.priority] - priorityOrder[b.priority];
@@ -217,7 +220,15 @@ const Tasks = () => {
 
 </div>
 <div className="taskList">
-    <h3>Recently added tasks</h3> 
+
+<div className="taskHeader">
+  <h3>Recently added tasks</h3> 
+  <button className="editTaskButton" onClick={() => setButtonsVisible(!buttonsVisible)}>
+    <img src={editTaskIcon} alt="Edit" />
+    {buttonsVisible ? '' : ''}
+  </button>
+</div>
+
 
     {error && <p className="error">{error}</p>}
 
@@ -234,10 +245,15 @@ const Tasks = () => {
           <div>
             <p className="task-desc">{task.description}</p>
             <div className="taskdue-final">
-              <p>Due Date: {task.due_date}</p>
+              <p>Due on: {task.due_date}</p>
+
               <div className="taskButtons">
-                <button onClick={() => handleEdit(task.task_ID)}>Edit</button>
-                <button onClick={() => deleteTask(task.task_ID)}>Delete</button>
+              {buttonsVisible && (
+                  <>
+                    <button onClick={() => handleEdit(task.task_ID)}>Edit</button>
+                    <button onClick={() => deleteTask(task.task_ID)}>Delete</button>
+                  </>
+                )}
               </div>
        </div>
        </div>
