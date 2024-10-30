@@ -2,6 +2,7 @@
 import React from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import Tasks from "./Tasks";
+import Archive from "./ArchivedTasks";
 import "./FolderView.css";
 //NOTE: MAKE NEW FILE AND CSS IN FOLDERVIEW FOLDER AND ROUTE TO THIS FILE
 const Home = () => (
@@ -9,13 +10,6 @@ const Home = () => (
     <h2>Add your content here</h2>
   </div>
 );
-//NOTE: MAKE NEW FILE AND CSS IN FOLDERVIEW FOLDER AND ROUTE TO THIS FILE
-const Archive = () => (
-  <div className="content archive-content">
-    <h2>Add your content here</h2>
-  </div>
-);
-
 class FolderView extends React.Component {
   getActiveTab = () => {
     const path = window.location.pathname;

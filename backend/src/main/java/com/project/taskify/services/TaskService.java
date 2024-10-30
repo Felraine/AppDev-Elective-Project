@@ -1,5 +1,6 @@
 package com.project.taskify.services;
 
+import com.project.taskify.models.ArchivedTaskEntity;
 import com.project.taskify.models.TaskEntity;
 import com.project.taskify.models.UserEntity;
 import com.project.taskify.repositories.TaskRepository;
@@ -18,6 +19,9 @@ public class TaskService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ArchiveService archiveService;
 
     // CREATE - Save task associated with a user
     public TaskEntity saveTask(int userId, TaskEntity task) throws NameNotFoundException {
@@ -62,5 +66,26 @@ public class TaskService {
 
         taskRepository.deleteById(id);
         return "Task Deleted Successfully";
+    }
+
+    //Archive Task
+    public void archiveTask(int taskId, int userId) throws NameNotFoundException {
+        TaskEntity task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NameNotFoundException("Task not found"));
+
+        if (task.getUser().getUserId() != userId) {
+            throw new NameNotFoundException("User not authorized to archive this task.");
+        }
+
+        ArchivedTaskEntity archivedTask = new ArchivedTaskEntity();
+        archivedTask.setTitle(task.getTitle());
+        archivedTask.setDescription(task.getDescription());
+        archivedTask.setPriority(task.getPriority());
+        archivedTask.setCreation_date(task.getCreation_date());
+        archivedTask.setDue_date(task.getDue_date());
+        archivedTask.setUserId(userId);
+
+        archiveService.saveArchivedTask(archivedTask);
+        taskRepository.delete(task);
     }
 }

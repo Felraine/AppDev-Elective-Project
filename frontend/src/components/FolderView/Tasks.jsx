@@ -97,7 +97,7 @@ const Tasks = () => {
       );
       console.log("Task Added Successfully!");
       setTask({ title: "", description: "", priority: "", due_date: "" });
-      viewTasks(); // Fetch tasks again after adding a new task
+      viewTasks();
     } catch (error) {
       console.error("Error adding task", error.response || error);
       setError(
@@ -132,6 +132,23 @@ const Tasks = () => {
     { value: "medium", label: "Medium", color: "#0056B3" },
     { value: "low", label: "Low", color: "green" },
   ];
+
+  // Archive Task Function
+  // idk if this works
+  const archiveTask = async (taskId) => {
+    try {
+      await axios.put(
+        `http://localhost:8080/api/archive/${taskId}/user/${userId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setTasks((prevTasks) =>
+        prevTasks.filter((task) => task.task_ID !== taskId)
+      );
+    } catch (error) {
+      console.error("Error archiving task:", error);
+    }
+  };
 
   return (
     <div className="content tasks-content">
@@ -228,15 +245,17 @@ const Tasks = () => {
                 </td>
                 <td>{task.due_date}</td>
                 <td className="completeStatus">
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    onChange={() => archiveTask(task.task_ID)}
+                  />
                 </td>
                 <td>
                   <button onClick={() => handleEdit(task.task_ID)}>Edit</button>
                 </td>
                 <td>
                   <button onClick={() => deleteTask(task.task_ID)}>
-                    {" "}
-                    Delete{" "}
+                    Delete
                   </button>
                 </td>
               </tr>
