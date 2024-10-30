@@ -1,0 +1,45 @@
+.task-reminder {
+    background-color: #fff9e6; /* Soft white-yellow background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: center;
+  }
+  
+  .reminder-title {
+    font-size: 1.8em;
+    color: #f1c40f; /* Golden yellow */
+    margin-bottom: 10px;
+  }
+  
+  .reminder-list {
+    background-color: #fffbeb; /* Light yellow background for list */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reminder-item {
+    font-size: 1.2em;
+    color: #333;
+    margin: 8px 0;
+  }
+  
+  .add-reminder-button {
+    background-color: #f1c40f;
+    color: #fff;
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .add-reminder-button:hover {
+    background-color: #d4ac0d; /* Darker shade of yellow */
+  }
+  
