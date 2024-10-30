@@ -4,6 +4,7 @@ import { Route, Routes, Link } from "react-router-dom";
 import Tasks from "./Tasks";
 import Archive from "./ArchivedTasks";
 import "./FolderView.css";
+import Progress from "./Progress";
 //NOTE: MAKE NEW FILE AND CSS IN FOLDERVIEW FOLDER AND ROUTE TO THIS FILE
 const Home = () => (
   <div className="content home-content">

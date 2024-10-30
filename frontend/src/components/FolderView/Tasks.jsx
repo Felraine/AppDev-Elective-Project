@@ -151,120 +151,103 @@ const Tasks = () => {
   };
 
   return (
-    <div className="content tasks-content">
-      <div className="create-task-form">
-        <h3>Create New Task</h3>
-        <form onSubmit={addTask}>
-          <div className="form-group">
-            <input
-              className="taskTitle"
-              type="text"
-              name="title"
-              placeholder="Title"
-              value={task.title}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              className="taskDesc"
-              type="text"
-              name="description"
-              placeholder="Short description here..."
-              value={task.description}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group row-group">
-            <select
-              className="taskPriority"
-              name="priority"
-              value={task.priority}
-              onChange={handleChange}
-              required
-            >
-              <option value="" disabled>
-                Choose Priority
-              </option>
-              {priorityOptions.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                  style={{ color: option.color }}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
+  <div className="content tasks-content">
+    <div className="create-task-form">
+      <h3>Create New Task</h3>
+      <form onSubmit={addTask}>
+  <div>
+    <input
+      className="taskTitle"
+      type="text"
+      name="title"
+      placeholder="Title"
+      value={task.title}
+      onChange={handleChange}
+      required
+    />
+  </div>
+  <div>
+    <input
+      className="taskDesc"
+      type="text"
+      name="description"
+      placeholder="Short description here..."
+      value={task.description}
+      onChange={handleChange}
+    />
+  </div>
+  <div className="priorityDueContainer"> 
+    <select
+      className="taskPriority"
+      name="priority"
+      value={task.priority}
+      onChange={handleChange}
+      required
+    >
+      <option value="" disabled>
+        Priority
+      </option>
+      {priorityOptions.map((option) => (
+        <option
+          key={option.value}
+          value={option.value}
+          style={{ color: option.color }}
+        >
+          {option.label}
+        </option>
+      ))}
+    </select>
 
-            <label htmlFor="due_date" className="dueDateLabel">
-              Due Date:
-            </label>
-            <input
-              className="taskDue"
-              type="date"
-              name="due_date"
-              value={task.due_date}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <button className="addTask" type="submit">
-            {" "}
-            Add Task{" "}
-          </button>
-        </form>
-      </div>
+    <label htmlFor="due_date" className="dueDateLabel">
+      Due Date: 
+    </label>
+    <input
+      className="taskDue"
+      type="date"
+      name="due_date"
+      value={task.due_date}
+      onChange={handleChange}
+      required
+    />
+  </div>
+  <button className="addTask" type="submit">
+    Add Task
+  </button>
+</form>
 
-      <div className="taskList">
-        <h3>Task List</h3>
-        {error && <p className="error">{error}</p>}
-        <table>
-          <thead>
-            <tr>
-              <th>Task Description</th>
-              <th>Priority</th>
-              <th>Due Date</th>
-              <th>Complete</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedTasks.map((task) => (
-              <tr key={task.task_ID}>
-                <td>
-                  <strong>{task.title}</strong>
-                  <br />
-                  <span className="task-desc">{task.description}</span>
-                </td>
-                <td style={getPriorityStyle(task.priority)}>
-                  {task.priority.charAt(0).toUpperCase() +
-                    task.priority.slice(1)}
-                </td>
-                <td>{task.due_date}</td>
-                <td className="completeStatus">
-                  <input
-                    type="checkbox"
-                    onChange={() => archiveTask(task.task_ID)}
-                  />
-                </td>
-                <td>
-                  <button onClick={() => handleEdit(task.task_ID)}>Edit</button>
-                </td>
-                <td>
-                  <button onClick={() => deleteTask(task.task_ID)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+</div>
+<div className="taskList">
+    <h3>Recently added tasks</h3> 
+
+    {error && <p className="error">{error}</p>}
+
+    <div className="scrollableTasks"> 
+      {sortedTasks.map((task) => (
+        <div className="taskCard" key={task.task_ID}>
+          <div className="task-head">
+            <input type="checkbox" onChange={() => archiveTask(task.task_ID)} />
+            <strong style={{ color: "#514538", marginLeft: "10px" }}>{task.title}</strong>
+            <span style={getPriorityStyle(task.priority)} className="task-priority">
+              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+            </span>
+          </div>
+          <div>
+            <p className="task-desc">{task.description}</p>
+            <div className="taskdue-final">
+              <p>Due Date: {task.due_date}</p>
+              <div className="taskButtons">
+                <button onClick={() => handleEdit(task.task_ID)}>Edit</button>
+                <button onClick={() => deleteTask(task.task_ID)}>Delete</button>
+              </div>
+       </div>
+       </div>
       </div>
+      ))}
     </div>
-  );
+  </div>
+</div>
+);
+
 };
 
 export default Tasks;
