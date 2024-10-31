@@ -1,6 +1,8 @@
 package com.project.taskify.models;
 
 import java.sql.Date;
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -27,6 +29,8 @@ public class ArchivedTaskEntity {
 
     @Column(nullable = false)
     private int userId;
+
+    private LocalDate completionDate;
 
 
     public int getArchivedTask_ID() {
@@ -83,5 +87,13 @@ public class ArchivedTaskEntity {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public LocalDate getCompletionDate() {
+        return completionDate;
+    }
+
+    public void setCompletionDate(LocalDate completionDate) {
+        this.completionDate = completionDate;
     }
 }

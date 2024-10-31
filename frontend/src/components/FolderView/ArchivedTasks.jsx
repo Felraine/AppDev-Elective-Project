@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./ArchivedTasks.css";
 
 const ArchivedTasks = () => {
   const [archivedTasks, setArchivedTasks] = useState([]);
@@ -26,17 +27,27 @@ const ArchivedTasks = () => {
 
   return (
     <div className="content archive-content">
-      {" "}
-      {/* Add the content and archive-content class here */}
-      <h3>Archived Tasks</h3>
-      <ul>
+      <div className="taskHeader">
+        <h3 style={{ textAlign: "left", marginLeft: "10px" }}>
+          Archived Tasks
+        </h3>
+      </div>
+
+      <div className="scrollableTasks">
         {archivedTasks.map((task) => (
-          <li key={task.archivedTask_ID}>
-            <strong>{task.title}</strong>: {task.description} - Due on{" "}
-            {task.due_date}
-          </li>
+          <div className="taskCard" key={task.archivedTask_ID}>
+            <div className="task-head">
+              <strong style={{ color: "#514538" }}>{task.title}</strong>
+              <p className="completion-date">
+                Completed on: {task.completionDate}
+              </p>
+            </div>
+            <div>
+              <p className="task-desc">{task.description}</p>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

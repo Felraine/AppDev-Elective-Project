@@ -8,6 +8,8 @@ import com.project.taskify.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.naming.NameNotFoundException;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -84,8 +86,10 @@ public class TaskService {
         archivedTask.setCreation_date(task.getCreation_date());
         archivedTask.setDue_date(task.getDue_date());
         archivedTask.setUserId(userId);
+        archivedTask.setCompletionDate(LocalDate.now());
 
         archiveService.saveArchivedTask(archivedTask);
         taskRepository.delete(task);
+        archiveService.saveArchivedTask(archivedTask);
     }
 }
