@@ -20,3 +20,7 @@
 ## THINGS TO NOTE:
 
 1. Every time you pull, make sure to change password in application.properties
+
+## new install:
+npm install @mui/material @emotion/react @emotion/styled
+

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Tasks.css";
-import { useNavigate } from "react-router-dom";
 import editTaskIcon from "../../assets/images/editTaskIcon.png";
+import TaskEditDialog from "./TaskEditDialog";
 
 const Tasks = () => {
-  let navigate = useNavigate;
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -13,6 +12,11 @@ const Tasks = () => {
     creation_date: "",
     due_date: "",
   });
+
+  //Dialog
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentTask, setCurrentTask] = useState({});
 
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
@@ -30,8 +34,7 @@ const Tasks = () => {
     }
   }, []);
 
-  //addTask, viewTask
-  //TO DO: deleteTask, editTask
+  //VIEW TASKS
   const viewTasks = async () => {
     try {
       const response = await axios.get(
@@ -80,6 +83,7 @@ const Tasks = () => {
     const { name, value } = e.target;
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
   };
+
   //ADD TASK
   const addTask = async (e) => {
     e.preventDefault();
@@ -108,6 +112,51 @@ const Tasks = () => {
     }
   };
 
+  //UPDATE TASK
+  const editTask = async (editedTask) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/tasks/user/${userId}/task/${editedTask.task_ID}`, 
+        editedTask,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data; 
+    } catch (error) {
+      console.error('Error editing task:', error);
+      throw error; 
+    }
+  };
+  
+
+  //Edit task button handling
+  const handleEdit = (taskId) => {
+    const taskToEdit = tasks.find((task) => task.task_ID === taskId);
+    setCurrentTask({ ...taskToEdit }); 
+    setIsDialogOpen(true);
+  };
+
+  //saves edited task
+  const handleSave = (editedTask) => {
+    const updatedTasks = tasks.map((task) =>
+      task.task_ID === editedTask.task_ID ? editedTask : task
+    );
+    setTasks(updatedTasks);
+
+    try {
+      editTask(editedTask); 
+      console.log('Task updated successfully');
+    } catch (error) {
+      console.error('Failed to update task in backend:', error);
+    }
+   
+  };
+
+
+  //SORTING TASK DEPENDING ON PRIORITY (temporary?)
   const sortedTasks = tasks.sort((a, b) => {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
@@ -134,6 +183,8 @@ const Tasks = () => {
     { value: "medium", label: "Medium", color: "#0056B3" },
     { value: "low", label: "Low", color: "green" },
   ];
+
+ 
 
   // Archive Task Function
   const archiveTask = async (taskId) => {
@@ -271,6 +322,13 @@ const Tasks = () => {
             </div>
           ))}
         </div>
+         {/* MUI Dialog for editing tasks */}
+      <TaskEditDialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onSave={handleSave}
+        task={currentTask}
+      />
       </div>
     </div>
   );

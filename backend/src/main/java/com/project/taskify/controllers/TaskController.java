@@ -37,9 +37,19 @@ public class TaskController {
     }
 
     // UPDATE
-    @PutMapping("/{id}")
-    public TaskEntity putTaskDetails(@PathVariable int id, @RequestBody TaskEntity newTaskDetails) throws NameNotFoundException {
-        return taskService.putTaskDetails(id, newTaskDetails);
+    @PutMapping("/user/{userId}/task/{taskId}")
+    public ResponseEntity<TaskEntity> putTaskDetails( @PathVariable int userId,@PathVariable int taskId,
+    @RequestBody TaskEntity newTaskDetails) throws NameNotFoundException {
+        
+        System.out.println("Editing task with ID: " + taskId + " for user with ID: " + userId);
+        try {
+            TaskEntity updatedTask = taskService.putTaskDetails(taskId, newTaskDetails);
+            return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        } catch (NameNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // DELETE
