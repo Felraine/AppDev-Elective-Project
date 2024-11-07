@@ -1,0 +1,31 @@
+.completion-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 1.2em;
+}
+
+.incomplete-message {
+  color: orange;
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 1.2em;
+}
+
+.progress-fill {
+  height: 20px;
+  background-color: blue;
+  transition: width 0.3s ease;
+}
+
+.progress-bar-container {
+  background-color: #e0e0e0; /* Light gray background for the progress bar container */
+  border-radius: 8px; /* Round corners */
+  overflow: hidden; /* Hide overflow for smooth rounding */
+  height: 30px; /* Increase height of the progress bar for better visibility */
+  position: relative; /* Position for the animated fill */
+}
+
+.progress-bar {
+  height: 100%;
+}

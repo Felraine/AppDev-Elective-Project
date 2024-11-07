@@ -70,26 +70,25 @@ public class TaskService {
         return "Task Deleted Successfully";
     }
 
-    //Archive Task
-    public void archiveTask(int taskId, int userId) throws NameNotFoundException {
-        TaskEntity task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new NameNotFoundException("Task not found"));
+    // Archive Task
+public void archiveTask(int taskId, int userId) throws NameNotFoundException {
+    TaskEntity task = taskRepository.findById(taskId)
+            .orElseThrow(() -> new NameNotFoundException("Task not found"));
 
-        if (task.getUser().getUserId() != userId) {
-            throw new NameNotFoundException("User not authorized to archive this task.");
-        }
-
-        ArchivedTaskEntity archivedTask = new ArchivedTaskEntity();
-        archivedTask.setTitle(task.getTitle());
-        archivedTask.setDescription(task.getDescription());
-        archivedTask.setPriority(task.getPriority());
-        archivedTask.setCreation_date(task.getCreation_date());
-        archivedTask.setDue_date(task.getDue_date());
-        archivedTask.setUserId(userId);
-        archivedTask.setCompletionDate(LocalDate.now());
-
-        archiveService.saveArchivedTask(archivedTask);
-        taskRepository.delete(task);
-        archiveService.saveArchivedTask(archivedTask);
+    if (task.getUser().getUserId() != userId) {
+        throw new NameNotFoundException("User not authorized to archive this task.");
     }
+
+    ArchivedTaskEntity archivedTask = new ArchivedTaskEntity();
+    archivedTask.setTitle(task.getTitle());
+    archivedTask.setDescription(task.getDescription());
+    archivedTask.setPriority(task.getPriority());
+    archivedTask.setCreation_date(task.getCreation_date());
+    archivedTask.setDue_date(task.getDue_date());
+    archivedTask.setUserId(userId);
+    archivedTask.setCompletionDate(LocalDate.now());
+    archiveService.saveArchivedTask(archivedTask);
+
+    taskRepository.delete(task);
+}
 }
