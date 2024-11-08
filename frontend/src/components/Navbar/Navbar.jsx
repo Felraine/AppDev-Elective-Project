@@ -5,7 +5,7 @@ import logo from "../../assets/images/Logo.png";
 import notif from "../../assets/images/bell.png";
 import lightMode from "../../assets/images/brightness.png";
 import darkMode from "../../assets/images/moon.png";
-import defaultProfile from "../../assets/images/JohnDoe.png";
+import defaultProfile from "../../assets/images/JohnDoe.png"; //hello world
 
 const Navbar = ({ theme, setTheme }) => {
   const toggle_mode = () => {
