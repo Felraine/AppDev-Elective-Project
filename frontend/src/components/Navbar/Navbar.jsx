@@ -1,10 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 import logo from "../../assets/images/Logo.png";
 import notif from "../../assets/images/bell.png";
 import lightMode from "../../assets/images/brightness.png";
 import darkMode from "../../assets/images/moon.png";
-import defaultProfile from "../../assets/images/JohnDoe.png"; // Import the profile picture
+import defaultProfile from "../../assets/images/JohnDoe.png";
 
 const Navbar = ({ theme, setTheme }) => {
   const toggle_mode = () => {
@@ -16,16 +17,14 @@ const Navbar = ({ theme, setTheme }) => {
   return (
     <div className={`navbar ${theme}`}>
       <div className="logoAndName">
-        <img src={logo} alt="logo" className="logo" />
+        <Link to="/home">
+          <img src={logo} alt="logo" className="logo" />
+        </Link>
         <span className="appName">Taskify</span>
       </div>
 
       <div className="rightArea">
-        <img
-          src={defaultProfile} // Use the imported profile picture
-          alt="profile"
-          className="profilePicture"
-        />
+        <img src={defaultProfile} alt="profile" className="profilePicture" />
         <span className="accountName">{username}</span>
 
         <div className="notif">
