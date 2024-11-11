@@ -5,7 +5,8 @@ import logo from "../../assets/images/Logo.png";
 import notif from "../../assets/images/bell.png";
 import lightMode from "../../assets/images/brightness.png";
 import darkMode from "../../assets/images/moon.png";
-import defaultProfile from "../../assets/images/JohnDoe.png"; //hello world
+import defaultProfile from "../../assets/images/JohnDoe.png";
+import settingsIcon from "../../assets/images/settings.png";
 
 const Navbar = ({ theme, setTheme }) => {
   const toggle_mode = () => {
@@ -38,6 +39,10 @@ const Navbar = ({ theme, setTheme }) => {
             alt="mode toggle"
             className="lightModeIcon"
           />
+        </div>
+
+        <div className="settings">
+          <img src={settingsIcon} alt="settings" className="settingsIcon" />
         </div>
       </div>
     </div>

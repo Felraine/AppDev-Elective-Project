@@ -116,7 +116,7 @@ const Tasks = () => {
   const editTask = async (editedTask) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/tasks/user/${userId}/task/${editedTask.task_ID}`, 
+        `http://localhost:8080/api/tasks/user/${userId}/task/${editedTask.task_ID}`,
         editedTask,
         {
           headers: {
@@ -124,18 +124,17 @@ const Tasks = () => {
           },
         }
       );
-      return response.data; 
+      return response.data;
     } catch (error) {
-      console.error('Error editing task:', error);
-      throw error; 
+      console.error("Error editing task:", error);
+      throw error;
     }
   };
-  
 
   //Edit task button handling
   const handleEdit = (taskId) => {
     const taskToEdit = tasks.find((task) => task.task_ID === taskId);
-    setCurrentTask({ ...taskToEdit }); 
+    setCurrentTask({ ...taskToEdit });
     setIsDialogOpen(true);
   };
 
@@ -147,14 +146,12 @@ const Tasks = () => {
     setTasks(updatedTasks);
 
     try {
-      editTask(editedTask); 
-      console.log('Task updated successfully');
+      editTask(editedTask);
+      console.log("Task updated successfully");
     } catch (error) {
-      console.error('Failed to update task in backend:', error);
+      console.error("Failed to update task in backend:", error);
     }
-   
   };
-
 
   //SORTING TASK DEPENDING ON PRIORITY (temporary?)
   const sortedTasks = tasks.sort((a, b) => {
@@ -184,8 +181,6 @@ const Tasks = () => {
     { value: "low", label: "Low", color: "green" },
   ];
 
- 
-
   // Archive Task Function
   const archiveTask = async (taskId) => {
     try {
@@ -206,7 +201,7 @@ const Tasks = () => {
     <div className="content tasks-content">
       <div className="create-task-form">
         <h3>Create New Task</h3>
-        <form onSubmit={addTask}>
+        <form className="inputTask" onSubmit={addTask}>
           <div>
             <input
               className="taskTitle"
@@ -322,13 +317,13 @@ const Tasks = () => {
             </div>
           ))}
         </div>
-         {/* MUI Dialog for editing tasks */}
-      <TaskEditDialog
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        onSave={handleSave}
-        task={currentTask}
-      />
+        {/* MUI Dialog for editing tasks */}
+        <TaskEditDialog
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          onSave={handleSave}
+          task={currentTask}
+        />
       </div>
     </div>
   );
