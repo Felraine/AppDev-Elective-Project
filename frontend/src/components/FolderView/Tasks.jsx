@@ -128,7 +128,7 @@ const Tasks = () => {
 
   const handleEdit = (taskId) => {
     const taskToEdit = tasks.find((task) => task.task_ID === taskId);
-    console.log("Editing task:", taskToEdit); // Add this line to debug
+    console.log("Editing task:", taskToEdit);
     setCurrentTask({ ...taskToEdit });
     setIsDialogOpen(true);
   };
