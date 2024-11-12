@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./Home.css";
+import { Box, Typography, LinearProgress } from "@mui/material";
 
 const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -14,7 +14,6 @@ const Home = () => {
 
   const fetchTasksData = async () => {
     try {
-      // Fetch completed tasks
       const archivedResponse = await axios.get(
         `http://localhost:8080/api/archive/user/${userId}`,
         {
@@ -23,20 +22,18 @@ const Home = () => {
       );
       setCompletedTasks(archivedResponse.data.length);
 
-      // Fetch total tasks
       const tasksResponse = await axios.get(
         `http://localhost:8080/api/tasks/user/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setTotalTasks(archivedResponse.data.length + tasksResponse.data.length); // Update this line to count all tasks
+      setTotalTasks(archivedResponse.data.length + tasksResponse.data.length);
     } catch (error) {
       console.error("Error fetching tasks data:", error);
     }
   };
 
-  // Function to mark a task as completed
   const completeTask = async (taskId) => {
     try {
       await axios.patch(
@@ -46,50 +43,82 @@ const Home = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      // Increment the completed tasks count without decreasing total tasks
       setCompletedTasks((prev) => prev + 1);
     } catch (error) {
       console.error("Error completing task:", error);
     }
   };
 
-  // Function to add a new task
   const addTask = async (taskData) => {
     try {
       await axios.post(`http://localhost:8080/api/tasks`, taskData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // Increment the total tasks count
       setTotalTasks((prev) => prev + 1);
     } catch (error) {
       console.error("Error adding task:", error);
     }
   };
 
-  // Calculate progress percentage
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
   return (
-    <div className="content home-content">
-      <div className="progress-container">
-        <h1 className="progress-title">Progress Tracker</h1>
-        <div className="progress-bar-container">
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-          </div>
-        </div>
-        <div className="progress-details">
-          <p>Tasks Completed: {completedTasks}</p>
-          <p>Remaining Tasks: {totalTasks - completedTasks}</p> {/* Remaining tasks */}
-          <p>Progress: {progress.toFixed(1)}%</p>
-        </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: 3,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        backgroundColor: "#fffa9d",
+        maxWidth: "100%",
+        margin: "auto",
+        minHeight: "calc(100vh - 160px)", // Example: Adjust height dynamically
+        height: "auto",
+        overflow: "auto",
+      }}
+    >
+      <Typography variant="h4" gutterBottom>
+        Progress Tracker
+      </Typography>
+      <Box sx={{ width: "100%", mt: 2 }}>
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          sx={{
+            height: 20,
+            borderRadius: 1,
+            backgroundColor: "#e0e0e0",
+            "& .MuiLinearProgress-bar": {
+              backgroundColor: "blue",
+            },
+          }}
+        />
+      </Box>
+      <Box sx={{ mt: 2, textAlign: "center" }}>
+        <Typography>Tasks Completed: {completedTasks}</Typography>
+        <Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
+        <Typography>Progress: {progress.toFixed(1)}%</Typography>
+      </Box>
+      <Box sx={{ mt: 2 }}>
         {progress === 100 ? (
-          <p className="completion-message">🎉 Congratulations! You've completed all tasks!</p>
+          <Typography
+            sx={{ color: "green", fontWeight: "bold", fontSize: "1.2em" }}
+          >
+            🎉 Congratulations! You've completed all tasks!
+          </Typography>
         ) : (
-          <p className="incomplete-message">🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!</p>
+          <Typography
+            sx={{ color: "orange", fontWeight: "bold", fontSize: "1.2em" }}
+          >
+            🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
+          </Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
