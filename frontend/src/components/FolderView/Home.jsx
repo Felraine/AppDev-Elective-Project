@@ -76,7 +76,7 @@ const Home = () => {
         backgroundColor: "#fffa9d",
         maxWidth: "100%",
         margin: "auto",
-        minHeight: "calc(100vh - 160px)", // Example: Adjust height dynamically
+        minHeight: "calc(100vh - 160px)",
         height: "auto",
         overflow: "auto",
       }}

@@ -128,6 +128,7 @@ const Tasks = () => {
 
   const handleEdit = (taskId) => {
     const taskToEdit = tasks.find((task) => task.task_ID === taskId);
+    console.log("Editing task:", taskToEdit); // Add this line to debug
     setCurrentTask({ ...taskToEdit });
     setIsDialogOpen(true);
   };
@@ -191,12 +192,19 @@ const Tasks = () => {
         gap: 2,
         flexDirection: "row",
         justifyContent: "space-between",
-        backgroundColor: "#f4f4f4", // Main content box color
+        backgroundColor: "#ffe79f",
         padding: 2,
-        borderRadius: 2,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        maxWidth: "100%",
+        margin: "auto",
+        maxHeight: "calc(100vh - 160px)",
+        height: "auto",
+        overflow: "auto",
       }}
     >
-      {/* Left side: Add Task */}
       <Box
         className="create-task-form"
         sx={{
@@ -217,7 +225,7 @@ const Tasks = () => {
             onChange={handleChange}
             fullWidth
             required
-            sx={{ marginBottom: 2 }}
+            sx={{ marginBottom: 2, backgroundColor: "white" }}
           />
           <TextField
             label="Short description here..."
@@ -226,7 +234,7 @@ const Tasks = () => {
             value={task.description}
             onChange={handleChange}
             fullWidth
-            sx={{ marginBottom: 2 }}
+            sx={{ marginBottom: 2, backgroundColor: "white" }}
           />
           <Box sx={{ display: "flex", gap: 2 }}>
             <FormControl fullWidth>
@@ -237,6 +245,7 @@ const Tasks = () => {
                 value={task.priority}
                 onChange={handleChange}
                 required
+                sx={{ marginBottom: 2, backgroundColor: "white" }}
               >
                 {priorityOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -254,7 +263,10 @@ const Tasks = () => {
               onChange={handleChange}
               fullWidth
               required
-              sx={{ marginTop: 2 }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              sx={{ marginBottom: 2, backgroundColor: "white" }}
             />
           </Box>
           <Button
@@ -268,7 +280,6 @@ const Tasks = () => {
         </form>
       </Box>
 
-      {/* Right side: Task List */}
       <Box
         className="taskList"
         sx={{
@@ -313,7 +324,7 @@ const Tasks = () => {
                 borderRadius: 2,
                 padding: 2,
                 marginBottom: 2,
-                backgroundColor: "#fff", // Card background color
+                backgroundColor: "#fff",
               }}
             >
               <Box
@@ -356,24 +367,19 @@ const Tasks = () => {
                 onClick={() => archiveTask(task.task_ID)}
                 sx={{ marginTop: 2 }}
               >
-                Archive Task
+                Complete Task
               </Button>
             </Box>
           ))}
         </Box>
       </Box>
 
-      {/* Task Edit Dialog */}
-      <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
-        <DialogTitle>Edit Task</DialogTitle>
-        <DialogContent>
-          <TaskEditDialog
-            currentTask={currentTask}
-            handleSave={handleSave}
-            handleClose={() => setIsDialogOpen(false)}
-          />
-        </DialogContent>
-      </Dialog>
+      <TaskEditDialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        task={currentTask}
+        onSave={handleSave}
+      />
     </Box>
   );
 };

@@ -27,7 +27,6 @@ class FolderView extends React.Component {
           marginTop: "15px",
           width: "100%",
           maxWidth: "1500px",
-          minHeight: "",
           height: "100%",
         }}
       >
@@ -86,8 +85,11 @@ class FolderView extends React.Component {
                 },
                 ...(activeTab === 1 && {
                   color: "#fff",
-                  backgroundColor: "#e29d3f",
+                  backgroundColor: "#ffe79f",
                 }),
+                "&.MuiTab-root": {
+                  color: "black",
+                },
               }}
             />
 
