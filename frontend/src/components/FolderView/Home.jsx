@@ -75,18 +75,26 @@ const Home = () => {
         <h1 className="progress-title">Progress Tracker</h1>
         <div className="progress-bar-container">
           <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+            <div
+              className="progress-fill"
+              style={{ width: `${progress}%` }}
+            ></div>
           </div>
         </div>
         <div className="progress-details">
           <p>Tasks Completed: {completedTasks}</p>
-          <p>Remaining Tasks: {totalTasks - completedTasks}</p> {/* Remaining tasks */}
+          <p>Remaining Tasks: {totalTasks - completedTasks}</p>{" "}
+          {/* Remaining tasks */}
           <p>Progress: {progress.toFixed(1)}%</p>
         </div>
         {progress === 100 ? (
-          <p className="completion-message">🎉 Congratulations! You've completed all tasks!</p>
+          <p className="completion-message">
+            🎉 Congratulations! You've completed all tasks!
+          </p>
         ) : (
-          <p className="incomplete-message">🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!</p>
+          <p className="incomplete-message">
+            🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
+          </p>
         )}
       </div>
     </div>

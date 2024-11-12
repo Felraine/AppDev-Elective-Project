@@ -3,9 +3,9 @@ import React from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import Tasks from "./Tasks";
 import Archive from "./ArchivedTasks";
-import "./FolderView.css";
 import Home from "./Home";
-
+import "./FolderView.css";
+//NOTE: MAKE NEW FILE AND CSS IN FOLDERVIEW FOLDER AND ROUTE TO THIS FILE
 class FolderView extends React.Component {
   getActiveTab = () => {
     const path = window.location.pathname;
