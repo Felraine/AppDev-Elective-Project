@@ -26,12 +26,12 @@ class FolderView extends React.Component {
           alignItems: "center",
           marginTop: "15px",
           width: "100%",
-          maxWidth: "1800px",
+          maxWidth: "1500px",
           minHeight: "",
           height: "100%",
         }}
       >
-        <Box className="tab-container" sx={{ width: "100%", maxWidth: "90%" }}>
+        <Box className="tab-container" sx={{ width: "80%", maxWidth: "90%" }}>
           <Tabs
             value={activeTab}
             TabIndicatorProps={{
@@ -121,7 +121,7 @@ class FolderView extends React.Component {
         </Box>
         <Box
           className="content"
-          sx={{ width: "90%", flex: 1, minHeight: "400px" }}
+          sx={{ width: "80%", flex: 1, minHeight: "400px" }}
         >
           <Routes>
             <Route path="/" element={<Home />} />
