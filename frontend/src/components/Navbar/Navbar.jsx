@@ -7,6 +7,7 @@ import lightMode from "../../assets/images/brightness.png";
 import darkMode from "../../assets/images/moon.png";
 import defaultProfile from "../../assets/images/JohnDoe.png";
 import settingsIcon from "../../assets/images/settings.png";
+//import jsx file for reminder here
 
 const Navbar = ({ theme, setTheme }) => {
   const toggle_mode = () => {

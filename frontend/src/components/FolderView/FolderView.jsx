@@ -51,6 +51,7 @@ class FolderView extends React.Component {
                 padding: "10px",
                 backgroundColor: "#fffa9d",
                 borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
                 color: "black",
                 textDecoration: "none",
                 "&:hover": {
@@ -78,6 +79,8 @@ class FolderView extends React.Component {
                 padding: "10px",
                 backgroundColor: "#ffe79f",
                 color: "black",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
                 textDecoration: "none",
                 "&:hover": {
                   backgroundColor: "#e29d3f",
@@ -103,7 +106,8 @@ class FolderView extends React.Component {
                 fontSize: "16px",
                 padding: "10px",
                 backgroundColor: "#cc915c",
-                borderTopRightRadius: "15px",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
                 color: "black",
                 textDecoration: "none",
                 "&:hover": {

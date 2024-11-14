@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, Paper } from "@mui/material";
-
+ 
 const ArchivedTasks = () => {
   const [archivedTasks, setArchivedTasks] = useState([]);
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
-
+ 
   useEffect(() => {
     fetchArchivedTasks();
   }, []);
-
+ 
   const fetchArchivedTasks = async () => {
     try {
       const response = await axios.get(
@@ -24,7 +24,7 @@ const ArchivedTasks = () => {
       console.error("Error fetching archived tasks:", error);
     }
   };
-
+ 
   return (
     <Box
       className="content"
@@ -48,11 +48,12 @@ const ArchivedTasks = () => {
           Archived Tasks
         </Typography>
       </Box>
-
+ 
       <Box
         sx={{
           maxHeight: "calc(100vh - 240px)",
-          overflowY: "scroll",
+          minHeight: "calc(100vh - 240px)",
+          overflowY: "auto",
           width: "100%",
           pb: 2,
           paddingRight: 2,
@@ -99,5 +100,5 @@ const ArchivedTasks = () => {
     </Box>
   );
 };
-
+ 
 export default ArchivedTasks;

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, LinearProgress } from "@mui/material";
-
+ 
 const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
   const [totalTasks, setTotalTasks] = useState(0);
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+ 
   useEffect(() => {
     fetchTasksData();
   }, []);
-
+ 
   const fetchTasksData = async () => {
     try {
       const archivedResponse = await axios.get(
@@ -21,7 +21,7 @@ const Home = () => {
         }
       );
       setCompletedTasks(archivedResponse.data.length);
-
+ 
       const tasksResponse = await axios.get(
         `http://localhost:8080/api/tasks/user/${userId}`,
         {
@@ -33,7 +33,7 @@ const Home = () => {
       console.error("Error fetching tasks data:", error);
     }
   };
-
+ 
   const completeTask = async (taskId) => {
     try {
       await axios.patch(
@@ -48,7 +48,7 @@ const Home = () => {
       console.error("Error completing task:", error);
     }
   };
-
+ 
   const addTask = async (taskData) => {
     try {
       await axios.post(`http://localhost:8080/api/tasks`, taskData, {
@@ -59,9 +59,9 @@ const Home = () => {
       console.error("Error adding task:", error);
     }
   };
-
+ 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
+ 
   return (
     <Box
       sx={{
@@ -121,5 +121,5 @@ const Home = () => {
     </Box>
   );
 };
-
+ 
 export default Home;
