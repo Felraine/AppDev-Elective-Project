@@ -38,6 +38,7 @@ const ArchivedTasks = () => {
         maxWidth: "100%",
         margin: "auto",
         maxHeight: "calc(100vh - 160px)",
+        minHeight: "calc(100vh - 160px)",
         height: "auto",
         overflow: "hidden", // Hide scrollbar
       }}
