@@ -51,6 +51,7 @@ const ArchivedTasks = () => {
       <Box
         sx={{
           maxHeight: "calc(100vh - 240px)",
+          minHeight: "calc(100vh - 240px)",
           overflowY: "scroll",
           width: "100%",
           pb: 2,
