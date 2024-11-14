@@ -38,14 +38,14 @@
   display: flex;
   align-items: center;
   margin-right: 20px;
-  position: relative; /* Allow positioning of edit overlay */
+  position: relative;
 }
 
 .profilePicture {
-  width: 3rem; /* Set a fixed width */
-  height: 3rem; /* Set a fixed height */
-  border-radius: 50%; /* Make it circular */
-  object-fit: cover; /* Ensure the image covers the area */
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .accountName {
@@ -54,27 +54,27 @@
 }
 
 .notifIcon,
-.lightModeIcon {
+.lightModeIcon,
+.settingsIcon {
   max-height: 25px;
   cursor: pointer;
-  margin: 0 20px;
+  margin: 0 20px 0;
 }
 
 .editOverlay {
-  position: absolute; /* Position overlay on top of the profile picture */
-  bottom: 0; /* Align at the bottom */
-  left: 0; /* Align to the left */
-  right: 0; /* Stretch to the right */
-  text-align: center; /* Center the text */
-  font-size: 12px; /* Adjust font size */
-  color: white; /* Text color */
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  cursor: pointer; /* Change cursor to pointer on hover */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 }
 
-/* Show overlay on hover */
 .profile:hover .editOverlay {
-  opacity: 1; /* Show overlay */
+  opacity: 1;
 }
 
 .modal {
@@ -87,7 +87,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Ensure it appears above other content */
+  z-index: 1000;
 }
 
 .modalContent {
