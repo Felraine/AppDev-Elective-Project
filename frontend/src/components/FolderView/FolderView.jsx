@@ -4,7 +4,7 @@ import { Box, Tab, Tabs } from "@mui/material";
 import Tasks from "./Tasks";
 import Archive from "./ArchivedTasks";
 import Home from "./Home";
- 
+
 class FolderView extends React.Component {
   getActiveTab = () => {
     const path = window.location.pathname;
@@ -13,10 +13,10 @@ class FolderView extends React.Component {
     if (path === "/home/archive") return 2;
     return false;
   };
- 
+
   render() {
     const activeTab = this.getActiveTab();
- 
+
     return (
       <Box
         className="folder-view"
@@ -51,6 +51,7 @@ class FolderView extends React.Component {
                 padding: "10px",
                 backgroundColor: "#fffa9d",
                 borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
                 color: "black",
                 textDecoration: "none",
                 "&:hover": {
@@ -66,7 +67,7 @@ class FolderView extends React.Component {
                 },
               }}
             />
- 
+
             <Tab
               component={Link}
               to="/home/tasks"
@@ -78,6 +79,8 @@ class FolderView extends React.Component {
                 padding: "10px",
                 backgroundColor: "#ffe79f",
                 color: "black",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
                 textDecoration: "none",
                 "&:hover": {
                   backgroundColor: "#e29d3f",
@@ -92,7 +95,7 @@ class FolderView extends React.Component {
                 },
               }}
             />
- 
+
             <Tab
               component={Link}
               to="/home/archive"
@@ -103,7 +106,8 @@ class FolderView extends React.Component {
                 fontSize: "16px",
                 padding: "10px",
                 backgroundColor: "#cc915c",
-                borderTopRightRadius: "15px",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
                 color: "black",
                 textDecoration: "none",
                 "&:hover": {
@@ -135,5 +139,5 @@ class FolderView extends React.Component {
     );
   }
 }
- 
+
 export default FolderView;
