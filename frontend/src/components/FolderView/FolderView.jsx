@@ -4,8 +4,7 @@ import { Box, Tab, Tabs } from "@mui/material";
 import Tasks from "./Tasks";
 import Archive from "./ArchivedTasks";
 import Home from "./Home";
-import "./FolderView.css";
-//NOTE: MAKE NEW FILE AND CSS IN FOLDERVIEW FOLDER AND ROUTE TO THIS FILE
+ 
 class FolderView extends React.Component {
   getActiveTab = () => {
     const path = window.location.pathname;
@@ -14,10 +13,10 @@ class FolderView extends React.Component {
     if (path === "/home/archive") return 2;
     return false;
   };
-
+ 
   render() {
     const activeTab = this.getActiveTab();
-
+ 
     return (
       <Box
         className="folder-view"
@@ -28,7 +27,6 @@ class FolderView extends React.Component {
           marginTop: "15px",
           width: "100%",
           maxWidth: "1500px",
-          minHeight: "",
           height: "100%",
         }}
       >
@@ -68,7 +66,7 @@ class FolderView extends React.Component {
                 },
               }}
             />
-
+ 
             <Tab
               component={Link}
               to="/home/tasks"
@@ -87,11 +85,14 @@ class FolderView extends React.Component {
                 },
                 ...(activeTab === 1 && {
                   color: "#fff",
-                  backgroundColor: "#e29d3f",
+                  backgroundColor: "#ffe79f",
                 }),
+                "&.MuiTab-root": {
+                  color: "black",
+                },
               }}
             />
-
+ 
             <Tab
               component={Link}
               to="/home/archive"
@@ -134,5 +135,5 @@ class FolderView extends React.Component {
     );
   }
 }
-
+ 
 export default FolderView;
