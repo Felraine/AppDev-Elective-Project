@@ -14,6 +14,10 @@ const Navbar = ({ theme, setTheme }) => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
+  const showReminderPrompt = () => {
+    alert("You have a reminder");
+  };
+
   const username = localStorage.getItem("username") || "User";
 
   return (
@@ -29,7 +33,7 @@ const Navbar = ({ theme, setTheme }) => {
         <img src={defaultProfile} alt="profile" className="profilePicture" />
         <span className="accountName">{username}</span>
 
-        <div className="notif">
+        <div className="notif" onClick={showReminderPrompt}>
           <img src={notif} alt="notification" className="notifIcon" />
         </div>
 

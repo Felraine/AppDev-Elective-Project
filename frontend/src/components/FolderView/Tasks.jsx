@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import axios from "axios";
 import {
   Button,
@@ -236,6 +237,18 @@ const Tasks = () => {
             onChange={handleChange}
             fullWidth
             sx={{ marginBottom: 2, backgroundColor: "white" }}
+          />
+          <TextField
+            label="Set Reminder"
+            type="datetime-local"
+            name="set_reminder"
+            value={task.set_reminder}
+            onChange={handleChange}
+            fullWidth
+            sx={{ marginBottom: 2, backgroundColor: "white" }}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <Box sx={{ display: "flex", gap: 2 }}>
             <FormControl fullWidth>
