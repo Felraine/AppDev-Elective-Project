@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import "./Login.css";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -38,6 +41,10 @@ const Login = ({ onLogin }) => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   return (
     <div className="login-container">
       <h2>Login</h2>
@@ -52,15 +59,23 @@ const Login = ({ onLogin }) => {
           required
           aria-label="Username"
         />
-        <input
-          type="password"
-          placeholder="Password"
-          className="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          aria-label="Password"
-        />
+        <div className="password-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            aria-label="Password"
+          />
+          {password && (
+            <span onClick={togglePasswordVisibility} className="password-icon">
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </span>
+          )}
+        </div>
+
         <button type="submit" className="login">
           Login
         </button>
