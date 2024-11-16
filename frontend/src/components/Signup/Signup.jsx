@@ -1,26 +1,40 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./Signup.css";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Link,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      setOpenSnackbar(true); // Open the snackbar if passwords don't match
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:8080/api/users/signup",
-        {
-          username,
-          email,
-          password,
-        }
+        { username, email, password }
       );
       console.log("Signup successful:", response.data);
       navigate("/");
@@ -32,41 +46,154 @@ const Signup = () => {
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
-    <div className="signup-container">
-      <h2>Signup</h2>
-      <form onSubmit={handleSignup}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="signup">
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: `url('./src/assets/images/loginBackground.jpg')`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
+      <Paper
+        elevation={6}
+        sx={{
+          padding: "2rem",
+          width: "100%",
+          maxWidth: 400,
+          backgroundColor: "rgba(255, 250, 157, 0.9)",
+          borderRadius: "20px",
+        }}
+      >
+        <Typography
+          variant="h4"
+          textAlign="center"
+          mb={2}
+          fontFamily="monospace"
+        >
           Sign Up
-        </button>
-      </form>
-      {error && <div className="error-message">{error}</div>}
-      <div className="login">
-        <span>Already have an account? </span>
-        <a onClick={() => navigate("/")}>Log in</a>
-      </div>
-    </div>
+        </Typography>
+        {error && (
+          <Typography color="error" mb={2} textAlign="center">
+            {error}
+          </Typography>
+        )}
+        <form
+          onSubmit={handleSignup}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            alignItems: "center",
+          }}
+        >
+          <TextField
+            label="Username"
+            variant="outlined"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            sx={{
+              backgroundColor: "white",
+              borderRadius: "4px",
+              width: "90%",
+            }}
+          />
+          <TextField
+            label="Email"
+            type="email"
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            sx={{
+              backgroundColor: "white",
+              borderRadius: "4px",
+              width: "90%",
+            }}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            sx={{
+              backgroundColor: "white",
+              borderRadius: "4px",
+              width: "90%",
+            }}
+          />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            sx={{
+              backgroundColor: "white",
+              borderRadius: "4px",
+              width: "90%",
+            }}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{
+              textTransform: "none",
+              backgroundColor: "#e29d3f",
+              "&:hover": {
+                backgroundColor: "#cc915c",
+              },
+              width: "90%",
+            }}
+          >
+            Sign Up
+          </Button>
+        </form>
+        <Box mt={2} textAlign="center">
+          <Typography variant="body2">
+            Already have an account?{" "}
+            <Link
+              component="button"
+              onClick={() => navigate("/")}
+              sx={{
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+            >
+              Log in
+            </Link>
+          </Typography>
+        </Box>
+      </Paper>
+
+      {/* Snackbar for password mismatch */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Passwords do not match!
+        </Alert>
+      </Snackbar>
+    </Box>
   );
 };
 
