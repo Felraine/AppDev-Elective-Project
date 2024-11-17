@@ -287,7 +287,10 @@ const Tasks = () => {
             type="submit"
             variant="contained"
             color="primary"
-            sx={{ marginTop: 2 }}
+            sx={{ marginTop: 2,
+             backgroundColor: '#E29D3F',
+             width:'100%',
+             }}
           >
             Add Task
           </Button>
@@ -320,7 +323,7 @@ const Tasks = () => {
             <img
               src={editTaskIcon}
               alt="Edit"
-              style={{ width: "20px", height: "20px" }}
+              style={{ width: "20px", height: "20px" ,}}
             />
           </Button>
         </Box>
