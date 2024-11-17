@@ -1,22 +1,9 @@
 import React, { useState, useEffect } from "react";
-
 import axios from "axios";
-import {
-  Button,
-  TextField,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Box,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import {Button,TextField,MenuItem,Select,InputLabel,FormControl,Box} from "@mui/material";
 import TaskEditDialog from "./TaskEditDialog";
 import editTaskIcon from "../../assets/images/editTaskIcon.png";
+
  
 const Tasks = () => {
   const [task, setTask] = useState({
@@ -184,26 +171,15 @@ const Tasks = () => {
       console.error("Error archiving task:", error);
     }
   };
- 
+
   return (
+    
     <Box
       className="content tasks-content"
       sx={{
-        display: "flex",
-        gap: 2,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        backgroundColor: "#ffe79f",
-        padding: 2,
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 20,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        maxWidth: "100%",
-        margin: "auto",
-        maxHeight: "calc(100vh - 160px)",
-        minHeight: "calc(100vh - 160px)",
-        height: "auto",
+        display: "flex",gap: 2, flexDirection: "row",justifyContent: "space-between",backgroundColor: "#ffe79f",
+        padding: 2, borderTopLeftRadius: 0,borderTopRightRadius: 20,borderBottomLeftRadius: 20,borderBottomRightRadius: 20,
+        maxWidth: "100%", margin: "auto",maxHeight: "calc(100vh - 160px)",minHeight: "calc(100vh - 160px)",height: "auto",
         overflow: "auto",
       }}
     >
@@ -364,8 +340,9 @@ const Tasks = () => {
                     <Button
                       onClick={() => handleEdit(task.task_ID)}
                       variant="contained"
-                      color="secondary"
-                      sx={{ marginRight: 1 }}
+                      color="primary"
+                      sx={{ marginRight: 1,
+                      }}
                     >
                       Edit
                     </Button>
@@ -390,13 +367,13 @@ const Tasks = () => {
           ))}
         </Box>
       </Box>
- 
       <TaskEditDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         task={currentTask}
         onSave={handleSave}
       />
+
     </Box>
   );
 };
