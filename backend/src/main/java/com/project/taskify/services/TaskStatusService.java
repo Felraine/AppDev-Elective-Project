@@ -2,12 +2,14 @@ package com.project.taskify.services;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Date;
 
 import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.taskify.models.TaskEntity;
 import com.project.taskify.models.TaskStatusEntity;
 import com.project.taskify.repositories.TaskStatusRepository;
 
@@ -22,24 +24,27 @@ public class TaskStatusService {
 	}
 	
 	//create task status
-	public TaskStatusEntity saveTaskStatus(TaskStatusEntity taskStat) {
-		return tsrepo.save(taskStat);
+	public TaskStatusEntity createTaskStatus(TaskStatusEntity taskStatus) {
+		TaskEntity task = taskStatus.getTask();
+		String status = determineTaskStatus(task);
+		taskStatus.setStatus(status);
+		return tsrepo.save(taskStatus);
 	}
 
 	//view task status
-	public Optional<TaskStatusEntity> findById(int status_ID){
-		return tsrepo.findById(status_ID);
+	public Optional<TaskStatusEntity> getTaskStatusById(int statusId){
+		return tsrepo.findById(statusId);
 	}
 	
 	//update task status
-	public TaskStatusEntity putTaskStatusDetails(int status_ID, TaskStatusEntity newTaskStatusDetails) throws NameNotFoundException{
-		TaskStatusEntity tStat = new TaskStatusEntity();
+	public TaskStatusEntity updateTaskStatus(int statusId, TaskStatusEntity newTaskStatus) throws NameNotFoundException{
+		TaskStatusEntity tStat;
 		
 		try {
-			tStat = tsrepo.findById(status_ID).get();
+			tStat = tsrepo.findById(statusId).get();
 			
-			tStat.setStatus(newTaskStatusDetails.getStatus());
-			tStat.setLast_updated(newTaskStatusDetails.getLast_updated());
+			tStat.setStatus(newTaskStatus.getStatus());
+			tStat.setLast_updated(newTaskStatus.getLast_updated());
 			
 		}catch(NoSuchElementException nex) {
 			throw new NameNotFoundException("This Task has no Status");
@@ -47,16 +52,27 @@ public class TaskStatusService {
 	}
 	
 	//delete task status
-	public String deleteTaskStatus(int id) {
+	public String deleteTaskStatus(int statusId) {
 		String msg;
 		
-		if(tsrepo.existsById(id)) {
-			tsrepo.deleteById(id);
+		if(tsrepo.existsById(statusId)) {
+			tsrepo.deleteById(statusId);
 			msg="Task Status Deleted!";
 		}else {
 			msg="Task Status not found!";
 		}
 		return msg;
+	}
+
+	//Determines Task
+	private String determineTaskStatus(TaskEntity task){
+		Date currentDate = new Date();
+
+		if(task.getDue_date().before(currentDate)){
+			return "Overdue";
+		}else{
+			return "Pending";
+		}
 	}
 		
 }

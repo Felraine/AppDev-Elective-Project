@@ -7,6 +7,7 @@ import javax.naming.NameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import com.project.taskify.services.TaskStatusService;
 
 @RestController
 @RequestMapping(method = RequestMethod.GET,path="/api/tasks/status")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TaskStatusController {
 	
 	@Autowired
@@ -34,14 +36,18 @@ public class TaskStatusController {
 	//create task status
 	@PostMapping("/add")
 	public ResponseEntity<TaskStatusEntity> createTaskStatus(@RequestBody TaskStatusEntity taskStatus) {
-	     TaskStatusEntity savedTaskStatus = tsServ.saveTaskStatus(taskStatus);
-	     return new ResponseEntity<>(savedTaskStatus, HttpStatus.CREATED);
+        try {
+            TaskStatusEntity createdTaskStatus = tsServ.createTaskStatus(taskStatus);
+            return new ResponseEntity<>(createdTaskStatus, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 	}
 	
 	//view task status
-	@GetMapping("/{id}")
-    public ResponseEntity<TaskStatusEntity> getTaskStatusById(@PathVariable int id) {
-        Optional<TaskStatusEntity> taskStatus = tsServ.findById(id);
+	@GetMapping("/{statusId}")
+    public ResponseEntity<TaskStatusEntity> getTaskStatusById(@PathVariable int statusId) {
+        Optional<TaskStatusEntity> taskStatus = tsServ.getTaskStatusById(statusId);
         if (taskStatus.isPresent()) {
             return new ResponseEntity<>(taskStatus.get(), HttpStatus.OK);
         } else {
@@ -50,16 +56,22 @@ public class TaskStatusController {
     }
 	
 	//update task status
-	@PutMapping("/update/{id}")
-    public ResponseEntity<TaskStatusEntity> updateTaskStatus(@PathVariable int id, @RequestBody TaskStatusEntity taskStatus) throws NameNotFoundException{
-        TaskStatusEntity updatedTaskStatus = tsServ.putTaskStatusDetails(id, taskStatus);
-        return new ResponseEntity<>(updatedTaskStatus, HttpStatus.OK);
+	@PutMapping("/update/{statusId}")
+    public ResponseEntity<TaskStatusEntity> updateTaskStatus(@PathVariable int statusId, @RequestBody TaskStatusEntity taskStatus) throws NameNotFoundException{
+        try {
+            TaskStatusEntity updatedTaskStatus = tsServ.updateTaskStatus(statusId, taskStatus);
+            return new ResponseEntity<>(updatedTaskStatus, HttpStatus.OK);
+        } catch (NameNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 	
-	@DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteTaskStatus(@PathVariable int id) {
+	@DeleteMapping("/delete/{statusId}")
+    public ResponseEntity<HttpStatus> deleteTaskStatus(@PathVariable int statusId) {
         try {
-        	tsServ.deleteTaskStatus(id);
+        	tsServ.deleteTaskStatus(statusId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
