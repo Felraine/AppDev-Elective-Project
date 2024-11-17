@@ -3,6 +3,7 @@ package com.project.taskify.services;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Date;
+import java.util.List;
 
 import javax.naming.NameNotFoundException;
 
@@ -11,13 +12,18 @@ import org.springframework.stereotype.Service;
 
 import com.project.taskify.models.TaskEntity;
 import com.project.taskify.models.TaskStatusEntity;
+import com.project.taskify.models.ArchivedTaskEntity;
 import com.project.taskify.repositories.TaskStatusRepository;
+import com.project.taskify.repositories.ArchivedTaskRepository;
 
 @Service
 public class TaskStatusService {
 	
 	@Autowired
 	private TaskStatusRepository tsrepo;
+
+	@Autowired
+	private ArchivedTaskRepository archievedRepo;
 	
 	public TaskStatusService() {
 		super();
@@ -66,6 +72,10 @@ public class TaskStatusService {
 
 	//Determines Task
 	private String determineTaskStatus(TaskEntity task){
+
+		if(isTaskArchived(task.getTask_ID())){
+			return "Completed";
+		}
 		Date currentDate = new Date();
 
 		if(task.getDue_date().before(currentDate)){
@@ -73,6 +83,12 @@ public class TaskStatusService {
 		}else{
 			return "Pending";
 		}
+	}
+
+	//checks if it is already in the archieve
+	private boolean isTaskArchived(int task_ID){
+		List<ArchivedTaskEntity> archivedTasks = archievedRepo.findByUserId(task_ID);
+		return !archivedTasks.isEmpty();
 	}
 		
 }
