@@ -23,7 +23,7 @@ public class TaskStatusService {
 	private TaskStatusRepository tsrepo;
 
 	@Autowired
-	private ArchivedTaskRepository archievedRepo;
+	private ArchivedTaskRepository archivedRepo;
 	
 	public TaskStatusService() {
 		super();
@@ -51,6 +51,7 @@ public class TaskStatusService {
 			
 			tStat.setStatus(newTaskStatus.getStatus());
 			tStat.setLast_updated(newTaskStatus.getLast_updated());
+
 			
 		}catch(NoSuchElementException nex) {
 			throw new NameNotFoundException("This Task has no Status");
@@ -71,14 +72,12 @@ public class TaskStatusService {
 	}
 
 	//Determines Task
-	private String determineTaskStatus(TaskEntity task){
+	public String determineTaskStatus(TaskEntity task){
+		Date currentDate = new Date();
 
 		if(isTaskArchived(task.getTask_ID())){
 			return "Completed";
-		}
-		Date currentDate = new Date();
-
-		if(task.getDue_date().before(currentDate)){
+		}else if(task.getDue_date().before(currentDate)){
 			return "Overdue";
 		}else{
 			return "Pending";
@@ -87,8 +86,12 @@ public class TaskStatusService {
 
 	//checks if it is already in the archieve
 	private boolean isTaskArchived(int task_ID){
-		List<ArchivedTaskEntity> archivedTasks = archievedRepo.findByUserId(task_ID);
+		List<ArchivedTaskEntity> archivedTasks = archivedRepo.findByUserId(task_ID);
 		return !archivedTasks.isEmpty();
 	}
-		
+
+	//all status
+	public List<TaskStatusEntity> getAllTaskStatuses() {
+		return tsrepo.findAll();
+	}
 }
