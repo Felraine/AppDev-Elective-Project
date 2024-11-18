@@ -44,7 +44,7 @@ const ArchivedTasks = () => {
         maxHeight: "calc(100vh - 160px)",
         minHeight: "calc(100vh - 160px)",
         height: "auto",
-        overflow: "hidden", // Hide scrollbar
+        overflow: "hidden",
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "start", mb: 2 }}>
