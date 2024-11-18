@@ -77,7 +77,7 @@ const Home = () => {
       >
         <Typography
           variant="h5"
-          sx={{ textAlign: "center", marginBottom: 2 }}
+          sx={{ textAlign: "center", marginBottom: 2, fontFamily: "monospace" }}
         >
           To Do List
         </Typography>
@@ -90,6 +90,7 @@ const Home = () => {
               fontWeight: "bold",
               textAlign: "center",
               marginBottom: 1,
+              fontFamily: "monospace",
             }}
           >
             {progress.toFixed(1)}% Completed
@@ -132,16 +133,18 @@ const Home = () => {
                 padding: 2,
               }}
             >
-              {/* Priority Circle */}
-              <Box
-                sx={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  backgroundColor: getPriorityColor(task.priority),
-                  flexShrink: 0,
-                }}
-              ></Box>
+               {/* Priority Circle */}
+                <Box
+                  sx={{
+                    width: 12,
+                    height: 12, // Adjust for visual balance
+                    borderRadius: "50%",
+                    backgroundColor: getPriorityColor(task.priority),
+                    flexShrink: 0,
+                    alignSelf: "flex-start", // Align the circle to the top of the container
+                    marginTop: "0.4rem", // Fine-tune vertical position if necessary
+                  }}
+                ></Box>
 
               {/* Task Details */}
               <Box
@@ -149,16 +152,17 @@ const Home = () => {
                   display: "flex",
                   flexDirection: "column",
                   flexGrow: 1,
+                  fontFamily: "monospace",
                 }}
               >
                 <Typography
                   variant="h6"
-                  sx={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 1 }}
+                  sx={{ fontSize: "1.1rem", fontWeight: "bold", marginBottom: 1, fontFamily: "monospace" }}
                 >
                   {task.title}
                 </Typography>
                 <Typography
-                  sx={{ fontSize: "0.9rem", color: "#555", marginBottom: 1 }}
+                  sx={{ fontSize: "1rem", color: "#555", marginBottom: 1, fontFamily: "monospace" }}
                 >
                   {task.description}
                 </Typography>
