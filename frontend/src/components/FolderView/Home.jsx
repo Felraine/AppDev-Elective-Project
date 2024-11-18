@@ -7,6 +7,16 @@ const Home = () => {
   const [totalTasks, setTotalTasks] = useState(0);
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const [pendingCount, setPendingCount] = useState(0);
+  const [overdueCount, setOverdueCount] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [taskStatuses, setTaskStatuses] = useState([]);
+  //maybe deleted
+  /*const [counts, setCounts] = useState({
+    pending: 0,
+    overdue: 0,
+    completed: 0
+  });*/
  
   useEffect(() => {
     fetchTasksData();
@@ -61,6 +71,40 @@ const Home = () => {
   };
  
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+  /*useEffect(() => {
+    const fetchTaskCounts = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/tasks/status/count', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.status === 200) {
+          setCounts(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching task status counts:', error);
+      }
+    };
+
+    fetchTaskCounts();
+  }, []);*/
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/tasks/status/statuses')
+      .then(response => {
+        const statuses = response.data;
+        setTaskStatuses(statuses);
+        console.log('Statuses:', statuses);
+
+        setPendingCount(statuses.filter(task => task.status === 'Pending').length);
+        setOverdueCount(statuses.filter(task => task.status === 'Overdue').length);
+        setCompletedCount(statuses.filter(task => task.status === 'Completed').length);
+      })
+      .catch(error => {
+        console.error('Error fetching task statuses:', error);
+      });
+  }, []);
  
   return (
     <Box
@@ -102,6 +146,9 @@ const Home = () => {
         <Typography>Tasks Completed: {completedTasks}</Typography>
         <Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
         <Typography>Progress: {progress.toFixed(1)}%</Typography>
+        <Typography>Pending: {pendingCount}</Typography>
+        <Typography>Overdue: {overdueCount}</Typography>
+        <Typography>Completed: {completedCount}</Typography>
       </Box>
       <Box sx={{ mt: 2 }}>
         {progress === 100 ? (

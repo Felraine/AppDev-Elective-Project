@@ -116,7 +116,7 @@ class FolderView extends React.Component {
                 },
                 ...(activeTab === 2 && {
                   color: "#fff",
-                  backgroundColor: "#e29d3f",
+                  backgroundColor: "#cc915c",
                 }),
                 "&.MuiTab-root": {
                   color: "black",

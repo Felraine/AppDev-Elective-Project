@@ -1,7 +1,7 @@
 package com.project.taskify.controllers;
 
 import java.util.Optional;
-
+import java.util.List;
 import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,13 @@ public class TaskStatusController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-	
+   
+    @GetMapping("/statuses")
+    public ResponseEntity<List<TaskStatusEntity>> getAllTaskStatuses() {
+        List<TaskStatusEntity> taskStatuses = tsServ.getAllTaskStatuses();
+        return ResponseEntity.ok(taskStatuses);
+    }
+
 	//update task status
 	@PutMapping("/update/{statusId}")
     public ResponseEntity<TaskStatusEntity> updateTaskStatus(@PathVariable int statusId, @RequestBody TaskStatusEntity taskStatus) throws NameNotFoundException{
