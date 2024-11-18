@@ -32,7 +32,7 @@ public class TaskService {
     private TaskStatusRepository taskStatusRepository;
 
     @Autowired
-    private TaskStatusService taskStatusService;  // For determining the status
+    private TaskStatusService taskStatusService;  
 
     // CREATE - Save task associated with a user
     public TaskEntity saveTask(int userId, TaskEntity task) throws NameNotFoundException {
@@ -44,12 +44,11 @@ public class TaskService {
 
         // Automatically create TaskStatus for the saved task
         TaskStatusEntity taskStatus = new TaskStatusEntity();
-        taskStatus.setTask(savedTask);  // Associate TaskStatus with the Task
-        String status = taskStatusService.determineTaskStatus(savedTask);  // Determine the status
+        taskStatus.setTask(savedTask);  
+        String status = taskStatusService.determineTaskStatus(savedTask);  
         taskStatus.setStatus(status);
-        taskStatus.setLast_updated(new Date());  // Set the current date as the last updated date
+        taskStatus.setLast_updated(new Date()); 
 
-        // Save TaskStatus
         taskStatusRepository.save(taskStatus);
 
         return savedTask;

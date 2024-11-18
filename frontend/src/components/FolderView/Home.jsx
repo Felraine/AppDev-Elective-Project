@@ -72,30 +72,11 @@ const Home = () => {
  
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
-  /*useEffect(() => {
-    const fetchTaskCounts = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/tasks/status/count', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (response.status === 200) {
-          setCounts(response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching task status counts:', error);
-      }
-    };
-
-    fetchTaskCounts();
-  }, []);*/
-
   useEffect(() => {
     axios.get('http://localhost:8080/api/tasks/status/statuses')
       .then(response => {
         const statuses = response.data;
         setTaskStatuses(statuses);
-        console.log('Statuses:', statuses);
 
         setPendingCount(statuses.filter(task => task.status === 'Pending').length);
         setOverdueCount(statuses.filter(task => task.status === 'Overdue').length);
@@ -140,15 +121,15 @@ const Home = () => {
               backgroundColor: "blue",
             },
           }}
+          
+        //<Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
         />
       </Box>
       <Box sx={{ mt: 2, textAlign: "center" }}>
         <Typography>Tasks Completed: {completedTasks}</Typography>
-        <Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
         <Typography>Progress: {progress.toFixed(1)}%</Typography>
         <Typography>Pending: {pendingCount}</Typography>
         <Typography>Overdue: {overdueCount}</Typography>
-        <Typography>Completed: {completedCount}</Typography>
       </Box>
       <Box sx={{ mt: 2 }}>
         {progress === 100 ? (
