@@ -1,9 +1,12 @@
 package com.project.taskify.models;
 
 import java.sql.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -40,6 +44,10 @@ public class TaskEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private UserEntity user;
+
+    @OneToMany(mappedBy="task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<TaskStatusEntity> taskStatus;
 
     public TaskEntity() {}
 
@@ -103,5 +111,13 @@ public class TaskEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public List<TaskStatusEntity> getaskStatus(){
+        return taskStatus;
+    }
+
+    public void setTaskStatus(List<TaskStatusEntity> taskStatus){
+        this.taskStatus = taskStatus;
     }
 }

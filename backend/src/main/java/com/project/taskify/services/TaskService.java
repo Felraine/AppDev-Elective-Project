@@ -2,8 +2,10 @@ package com.project.taskify.services;
 
 import com.project.taskify.models.ArchivedTaskEntity;
 import com.project.taskify.models.TaskEntity;
+import com.project.taskify.models.TaskStatusEntity;
 import com.project.taskify.models.UserEntity;
 import com.project.taskify.repositories.TaskRepository;
+import com.project.taskify.repositories.TaskStatusRepository;
 import com.project.taskify.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import javax.naming.NameNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Date;
 import java.util.NoSuchElementException;
 
 @Service
@@ -25,12 +28,31 @@ public class TaskService {
     @Autowired
     private ArchiveService archiveService;
 
+    @Autowired
+    private TaskStatusRepository taskStatusRepository;
+
+    @Autowired
+    private TaskStatusService taskStatusService;  // For determining the status
+
     // CREATE - Save task associated with a user
     public TaskEntity saveTask(int userId, TaskEntity task) throws NameNotFoundException {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new NameNotFoundException("User not found with ID: " + userId));
         task.setUser(user);
-        return taskRepository.save(task);
+
+        TaskEntity savedTask = taskRepository.save(task);
+
+        // Automatically create TaskStatus for the saved task
+        TaskStatusEntity taskStatus = new TaskStatusEntity();
+        taskStatus.setTask(savedTask);  // Associate TaskStatus with the Task
+        String status = taskStatusService.determineTaskStatus(savedTask);  // Determine the status
+        taskStatus.setStatus(status);
+        taskStatus.setLast_updated(new Date());  // Set the current date as the last updated date
+
+        // Save TaskStatus
+        taskStatusRepository.save(taskStatus);
+
+        return savedTask;
     }
 
     // READ

@@ -8,7 +8,7 @@ const Home = () => {
   const [tasks, setTasks] = useState([]);
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+ 
   useEffect(() => {
     fetchTasksData();
   }, []);
@@ -50,7 +50,7 @@ const Home = () => {
   };
 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
+ 
   return (
     <Box
       sx={{
@@ -60,125 +60,46 @@ const Home = () => {
         padding: 3,
         backgroundColor: "#fff9c4",
         minHeight: "calc(100vh - 160px)",
+        height: "auto",
+        overflow: "auto",
       }}
     >
-      {/* To-Do List on the Right */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          backgroundColor: "#ffe79f",
-          borderRadius: 2,
-          padding: 3,
-          width: "40%", // Right section width
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <Typography
-          variant="h5"
-          sx={{ textAlign: "center", marginBottom: 2, fontFamily: "monospace" }}
-        >
-          To Do List
-        </Typography>
-
-        {/* Task Progress */}
-        <Box sx={{ marginBottom: 2 }}>
-          <Typography
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "bold",
-              textAlign: "center",
-              marginBottom: 1,
-              fontFamily: "monospace",
-            }}
-          >
-            {progress.toFixed(1)}% Completed
-          </Typography>
-          <LinearProgress
-            variant="determinate"
-            value={progress}
-            sx={{
-              height: 15,
-              borderRadius: 1,
-              backgroundColor: "#e0e0e0",
-              "& .MuiLinearProgress-bar": {
-                backgroundColor: "#ffa500",
-              },
-            }}
-          />
-        </Box>
-
-        {/* Task List */}
-        <Box
+      <Typography variant="h4" gutterBottom>
+        Progress Tracker
+      </Typography>
+      <Box sx={{ width: "100%", mt: 2 }}>
+        <LinearProgress
+          variant="determinate"
+          value={progress}
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 3,
-            maxHeight: "calc(100vh - 240px)",
-            overflowY: "auto",
+            height: 20,
+            borderRadius: 1,
+            backgroundColor: "#e0e0e0",
+            "& .MuiLinearProgress-bar": {
+              backgroundColor: "blue",
+            },
           }}
-        >
-          {tasks.map((task) => (
-            <Box
-              key={task.task_ID}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                backgroundColor: "#fff",
-                borderRadius: 2,
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                border: "1px solid #ccc",
-                padding: 2,
-              }}
-            >
-               {/* Priority Circle */}
-                <Box
-                  sx={{
-                    width: 12,
-                    height: 12, // Adjust for visual balance
-                    borderRadius: "50%",
-                    backgroundColor: getPriorityColor(task.priority),
-                    flexShrink: 0,
-                    alignSelf: "flex-start", // Align the circle to the top of the container
-                    marginTop: "0.4rem", // Fine-tune vertical position if necessary
-                  }}
-                ></Box>
-
-              {/* Task Details */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  flexGrow: 1,
-                  fontFamily: "monospace",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{ fontSize: "1.1rem", fontWeight: "bold", marginBottom: 1, fontFamily: "monospace" }}
-                >
-                  {task.title}
-                </Typography>
-                <Typography
-                  sx={{ fontSize: "1rem", color: "#555", marginBottom: 1, fontFamily: "monospace" }}
-                >
-                  {task.description}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "0.8rem",
-                    color: "#888",
-                    fontStyle: "italic",
-                  }}
-                >
-                  Due Date: {task.due_date}
-                </Typography>
-              </Box>
-            </Box>
-          ))}
-        </Box>
+        />
+      </Box>
+      <Box sx={{ mt: 2, textAlign: "center" }}>
+        <Typography>Tasks Completed: {completedTasks}</Typography>
+        <Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
+        <Typography>Progress: {progress.toFixed(1)}%</Typography>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        {progress === 100 ? (
+          <Typography
+            sx={{ color: "green", fontWeight: "bold", fontSize: "1.2em" }}
+          >
+            🎉 Congratulations! You've completed all tasks!
+          </Typography>
+        ) : (
+          <Typography
+            sx={{ color: "orange", fontWeight: "bold", fontSize: "1.2em" }}
+          >
+            🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
+          </Typography>
+        )}
       </Box>
     </Box>
   );

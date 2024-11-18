@@ -154,7 +154,7 @@ const Signup = () => {
               textTransform: "none",
               backgroundColor: "#e29d3f",
               "&:hover": {
-                backgroundColor: "#cc915c",
+                backgroundColor: "#C37A2C",
               },
               width: "90%",
             }}
