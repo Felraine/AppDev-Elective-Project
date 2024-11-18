@@ -38,7 +38,6 @@ const Tasks = () => {
   const userId = localStorage.getItem("userId");
  
   useEffect(() => {
-    fetchTasks();
     if (username && token) {
       viewTasks();
     } else {
@@ -184,24 +183,6 @@ const Tasks = () => {
     } catch (error) {
       console.error("Error archiving task:", error);
     }
-  };
-  const fetchTasks = async () => {
-    try {
-      const response = await axios.get('API_URL'); // Replace with your API URL
-      setTasks(response.data);
-      updateNotificationCount(response.data); // Update notification count
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-    }
-  };
-  const updateNotificationCount = (tasks) => {
-    let count = 0;
-    tasks.forEach((task) => {
-      if (task.set_reminder && new Date(task.set_reminder) <= new Date()) {
-        count++;
-      }
-    });
-    setNotificationsCount(count); // Update the notification count in App.js
   };
  
   return (

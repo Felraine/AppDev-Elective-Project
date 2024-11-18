@@ -1,36 +1,61 @@
-// RemindersContext.jsx
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from 'react';
 
+// Create the context
 export const RemindersContext = createContext();
 
 export const RemindersProvider = ({ children }) => {
   const [reminders, setReminders] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
 
-  // Add a new reminder to the list
-  const addReminder = (reminder) => {
-    setReminders((prevReminders) => [...prevReminders, reminder]);
-  };
+  // Dummy reminder data for testing (you can replace this with your own reminder logic)
+  const dummyReminders = [
+    {
+      id: 1,
+      text: 'Test reminder',
+      dueDate: new Date().getTime() + 5000, // Set to 5 seconds from now for testing
+    },
+    {
+      id: 2,
+      text: 'Past reminder',
+      dueDate: new Date().getTime() - 1000, // Set to 1 second ago (for testing)
+    },
+  ];
 
-  // Delete a reminder from the list
-  const deleteReminder = (id) => {
-    setReminders((prevReminders) => prevReminders.filter((reminder) => reminder.id !== id));
-  };
-
-  // Check if the reminder due time has passed
   useEffect(() => {
-    const interval = setInterval(() => {
-      const dueReminders = reminders.filter(
-        (reminder) => new Date(reminder.dueTime) <= new Date() && !reminder.completed
-      );
-      setNotificationCount(dueReminders.length); // Update notification count when reminder is due
-    }, 1000); // Check every second, or adjust the interval as needed
+    // Initially set reminders (replace with your own reminder data logic)
+    setReminders(dummyReminders);
 
-    return () => clearInterval(interval); // Cleanup the interval when the component unmounts
-  }, [reminders]); // Re-run the effect if reminders change
+    // This will be used to check reminders' due dates
+    const checkReminderStatus = () => {
+      let count = 0;
+
+      reminders.forEach(reminder => {
+        const currentTime = new Date().getTime();
+
+        // Increment count if the current time is greater than or equal to the reminder's dueDate
+        if (currentTime >= reminder.dueDate) {
+          count += 1;
+        }
+      });
+
+      setNotificationCount(count); // Update notification count based on reminders due
+    };
+
+    // Check reminders immediately when component is mounted
+    checkReminderStatus();
+
+    // Check reminders every second
+    const intervalId = setInterval(() => {
+      checkReminderStatus();
+    }, 1000);  // Check every second (adjust as necessary)
+
+    // Clear the interval on cleanup
+    return () => clearInterval(intervalId);
+
+  }, [reminders]); // Trigger this when reminders are updated
 
   return (
-    <RemindersContext.Provider value={{ reminders, addReminder, deleteReminder, notificationCount }}>
+    <RemindersContext.Provider value={{ notificationCount }}>
       {children}
     </RemindersContext.Provider>
   );
