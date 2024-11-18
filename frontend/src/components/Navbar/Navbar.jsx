@@ -8,6 +8,11 @@ import darkMode from "../../assets/images/moon.png";
 import defaultProfile from "../../assets/images/JohnDoe.png";
 import settingsIcon from "../../assets/images/settings.png";
 
+// MUI Icons
+import EditIcon from "@mui/icons-material/Edit";
+import LockIcon from "@mui/icons-material/Lock";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 const Navbar = ({ theme, setTheme }) => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
@@ -74,11 +79,18 @@ const Navbar = ({ theme, setTheme }) => {
             <span className="profileInModalName">{username}</span>
           </div>
           <ul className="settingsOptions">
-            <li onClick={() => alert("Edit Account Clicked")}>Edit Account</li>
+            <li onClick={() => alert("Edit Account Clicked")}>
+              <EditIcon className="settingsOptionIcon" />
+              Edit Account
+            </li>
             <li onClick={() => alert("Change Password Clicked")}>
+              <LockIcon className="settingsOptionIcon" />
               Change Password
             </li>
-            <li onClick={() => alert("Logout Clicked")}>Logout</li>
+            <li onClick={() => alert("Logout Clicked")}>
+              <LogoutIcon className="settingsOptionIcon" />
+              Logout
+            </li>
           </ul>
         </div>
       </div>

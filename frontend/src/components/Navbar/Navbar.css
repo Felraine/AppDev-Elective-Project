@@ -148,22 +148,27 @@ button {
 }
 
 .settingsOptions {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .settingsOptions li {
+  display: flex;
+  align-items: center;
   padding: 10px;
-  font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 16px;
 }
 
 .settingsOptions li:hover {
-  background: #e29d3f;
-  color: white;
-  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.settingsOptionIcon {
+  margin-right: 10px;
+  font-size: 20px;
+  color: #fff;
 }
 
 .settingsModal.dark .settingsOptions li:hover {
