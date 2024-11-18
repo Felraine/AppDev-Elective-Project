@@ -1,12 +1,35 @@
-import React from "react";
+import React, { useContext } from 'react';
+import { RemindersContext } from '../context/RemindersContext';
+import { Button } from '@mui/material';
 
-const Notif = () => {
+const NotificationButton = () => {
+  const { notificationCount } = useContext(RemindersContext);
+
   return (
-    <div>
-      <h1>Notifications</h1>
-      <p>This is the notifications page.</p>
-    </div>
+    <Button
+      variant="contained"
+      color="secondary"
+      sx={{ position: 'relative' }}
+    >
+      Notifications
+      {notificationCount > 0 && (
+        <span
+          style={{
+            position: 'absolute',
+            top: '-8px',
+            right: '-8px',
+            backgroundColor: 'red',
+            color: 'white',
+            borderRadius: '50%',
+            padding: '4px 8px',
+            fontSize: '12px',
+          }}
+        >
+          {notificationCount}
+        </span>
+      )}
+    </Button>
   );
 };
 
-export default Notif;
+export default NotificationButton;
