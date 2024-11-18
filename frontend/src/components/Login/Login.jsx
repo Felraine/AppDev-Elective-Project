@@ -123,7 +123,13 @@ const Login = ({ onLogin }) => {
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ textTransform: "none", backgroundColor: "#e29d3f" }}
+            sx={{
+              textTransform: "none",
+              backgroundColor: "#e29d3f",
+              "&:hover": {
+                backgroundColor: "#C37A2C",
+              },
+            }}
           >
             Login
           </Button>
