@@ -113,7 +113,7 @@ button {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 250px;
+  width: 299px;
   height: 100%;
   position: absolute;
   right: 0;
@@ -175,4 +175,23 @@ button {
   .settingsModal {
     width: 80%;
   }
+}
+
+.profileInModal {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profileInModalImage {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.profileInModalName {
+  font-size: 24px;
+  color: #fff;
 }

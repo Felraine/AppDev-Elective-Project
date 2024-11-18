@@ -65,6 +65,14 @@ const Navbar = ({ theme, setTheme }) => {
           className={`settingsModal ${theme}`}
           onClick={(e) => e.stopPropagation()}
         >
+          <div className="profileInModal">
+            <img
+              src={defaultProfile}
+              alt="profile"
+              className="profileInModalImage"
+            />
+            <span className="profileInModalName">{username}</span>
+          </div>
           <ul className="settingsOptions">
             <li onClick={() => alert("Edit Account Clicked")}>Edit Account</li>
             <li onClick={() => alert("Change Password Clicked")}>
