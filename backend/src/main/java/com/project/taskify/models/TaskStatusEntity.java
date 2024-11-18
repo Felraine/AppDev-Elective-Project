@@ -1,6 +1,6 @@
 package com.project.taskify.models;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

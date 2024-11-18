@@ -10,5 +10,5 @@ import com.project.taskify.models.TaskStatusEntity;
 @Repository
 public interface TaskStatusRepository extends JpaRepository<TaskStatusEntity, Integer>{
 	Optional<TaskStatusEntity> findByStatusId(int statusId);
-
+	
 }
