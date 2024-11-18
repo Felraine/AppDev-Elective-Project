@@ -2,15 +2,11 @@ import React, { useContext } from 'react';
 import { RemindersContext } from '../context/RemindersContext';
 import { Button } from '@mui/material';
 
-const NotificationButton = () => {
+const Notif = () => {
   const { notificationCount } = useContext(RemindersContext);
 
   return (
-    <Button
-      variant="contained"
-      color="secondary"
-      sx={{ position: 'relative' }}
-    >
+    <Button variant="contained" color="secondary" sx={{ position: 'relative' }}>
       Notifications
       {notificationCount > 0 && (
         <span
@@ -32,4 +28,4 @@ const NotificationButton = () => {
   );
 };
 
-export default NotificationButton;
+export default Notif;

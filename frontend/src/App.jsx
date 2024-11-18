@@ -4,65 +4,59 @@ import Navbar from './components/Navbar/Navbar';
 import FolderView from './components/FolderView/FolderView';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
-import { RemindersProvider } from './components/context/RemindersContext'; // Import the RemindersProvider to wrap the app with context
-import Notif from './components/Navbar/Notif';
- 
-import Tasks from './components/FolderView/Tasks'; 
- 
+
+import { RemindersProvider } from './components/context/RemindersContext'; // Correct path to context
+import Notif from './components/Navbar/Notif'; // Correct path to Notif component
+
+import Tasks from './components/FolderView/Tasks';
+
 const NotFound = () => <div>ERROR 404: Page Not Found</div>;
- 
+
 const App = () => {
-  const App = () => {
-    return (
-      <RemindersProvider>
-        <div>
-          <header>
-            <Notif /> {/* This will display the NotificationButton with the notification count */}
-          </header>
   
-          {/* Main content of the app */}
-          <main>
-            <Tasks /> {/* Tasks component */}
-            {/* You can add other components here */}
-          </main>
-        </div>
-      </RemindersProvider>
-    );
-  };
-  const current_theme = localStorage.getItem('current_theme');
-  const [theme, setTheme] = useState(current_theme ? current_theme : 'light');
+  const [theme, setTheme] = useState(localStorage.getItem('current_theme') || 'light');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
- 
+  const [notificationsCount, setNotificationsCount] = useState(0);
   useEffect(() => {
     if (isAuthenticated) {
       localStorage.setItem('current_theme', theme);
     }
   }, [theme, isAuthenticated]);
- 
+
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
- 
+  
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Login onLogin={handleLogin} />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/home/*"
-          element={isAuthenticated ? (
-            <div className={`container ${theme}`}>
-              <Navbar theme={theme} setTheme={setTheme} />
-              <FolderView />
-            </div>
-          ) : (
-            <Navigate to="/" />
-          )}
-        />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <RemindersProvider> {/* Wrap your app with RemindersProvider */}
+        <Routes>
+          <Route path="/" element={<Login onLogin={handleLogin} />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/home/*"
+            element={isAuthenticated ? (
+              <div className={`container ${theme}`}>
+                <Navbar theme={theme} setTheme={setTheme} />
+                <header>
+                  <Notif /> {/* This will display the NotificationButton with the notification count */}
+                </header>
+                <FolderView />
+                {/* Main content of the app */}
+                <main>
+                  <Tasks /> {/* Tasks component */}
+                  {/* You can add other components here */}
+                </main>
+              </div>
+            ) : (
+              <Navigate to="/" />
+            )}
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </RemindersProvider>
     </Router>
   );
 };
- 
+
 export default App;
