@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, LinearProgress } from "@mui/material";
+import { Button } from "@mui/material";
 
 const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -77,6 +78,22 @@ const Home = () => {
         return "#28a745"; // Green for low priority
       default:
         return "#ccc"; // Gray for unknown priority
+    }
+  };
+
+  //For Complete Task Button
+  const archiveTask = async (taskId) => {
+    try {
+      await axios.put(
+        `http://localhost:8080/api/archive/${taskId}/user/${userId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setTasks((prevTasks) =>
+        prevTasks.filter((task) => task.task_ID !== taskId)
+      );
+    } catch (error) {
+      console.error("Error archiving task:", error);
     }
   };
 
@@ -166,6 +183,7 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
+        
           <Box sx={{ marginBottom: 2 }}>
             <Typography
               sx={{
@@ -225,6 +243,14 @@ const Home = () => {
                   fontFamily: "monospace",
                 }}
               >
+                {/*Complete Task Button */}
+               <Button
+                variant="outlined"
+                onClick={() => archiveTask(task.task_ID)}
+                sx={{ marginTop: 2 }}
+              >
+                Complete Task
+                </Button>               
                 <Typography
                   variant="h6"
                   sx={{
