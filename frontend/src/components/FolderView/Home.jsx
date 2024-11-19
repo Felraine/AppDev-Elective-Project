@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Typography, LinearProgress } from "@mui/material";
-import { Button } from "@mui/material";
+import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
 
 const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -106,7 +105,7 @@ const Home = () => {
         flexDirection: "row",
         justifyContent: "space-between",
         padding: 3,
-        backgroundColor: "#fff9c4",
+        backgroundColor: "#fffa9d",
         minHeight: "calc(100vh - 160px)",
         maxHeight: "calc(100vh - 160px)",
         borderTopLeftRadius: 0,
@@ -244,13 +243,14 @@ const Home = () => {
                 }}
               >
                 {/*Complete Task Button */}
-               <Button
-                variant="outlined"
-                onClick={() => archiveTask(task.task_ID)}
-                sx={{ marginTop: 2 }}
-              >
-                Complete Task
-                </Button>               
+                <Checkbox
+                  defaultChecked={false}
+                  onChange={() => archiveTask(task.task_ID)}
+                  sx={{
+                   
+                  
+                  }}
+                />          
                 <Typography
                   variant="h6"
                   sx={{
