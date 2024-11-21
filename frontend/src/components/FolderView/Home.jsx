@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Typography, LinearProgress } from "@mui/material";
+import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
 
 const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -80,6 +80,22 @@ const Home = () => {
     }
   };
 
+  //For Complete Task Button
+  const archiveTask = async (taskId) => {
+    try {
+      await axios.put(
+        `http://localhost:8080/api/archive/${taskId}/user/${userId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setTasks((prevTasks) =>
+        prevTasks.filter((task) => task.task_ID !== taskId)
+      );
+    } catch (error) {
+      console.error("Error archiving task:", error);
+    }
+  };
+
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
   return (
@@ -89,7 +105,7 @@ const Home = () => {
         flexDirection: "row",
         justifyContent: "space-between",
         padding: 3,
-        backgroundColor: "#fff9c4",
+        backgroundColor: "#fffa9d",
         minHeight: "calc(100vh - 160px)",
         maxHeight: "calc(100vh - 160px)",
         borderTopLeftRadius: 0,
@@ -166,6 +182,7 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
+        
           <Box sx={{ marginBottom: 2 }}>
             <Typography
               sx={{
@@ -191,6 +208,7 @@ const Home = () => {
               }}
             />
           </Box>
+
           {tasks.map((task) => (
             <Box
               key={task.task_ID}
@@ -223,8 +241,9 @@ const Home = () => {
                   flexDirection: "column",
                   flexGrow: 1,
                   fontFamily: "monospace",
-                }}
-              >
+                  marginRight: "10px",
+                }} 
+              >    
                 <Typography
                   variant="h6"
                   sx={{
@@ -233,7 +252,18 @@ const Home = () => {
                     marginBottom: 1,
                     fontFamily: "monospace",
                   }}
-                >
+                > 
+                {/* Complete Checkbox for Task*/}
+                
+                  <Checkbox
+                  defaultChecked={false}
+                  onChange={() => archiveTask(task.task_ID)}
+                  sx={{
+                    padding: 0,         
+                    justifyContent: "flex-start",
+                    marginRight: "10px",              
+                  }}              
+                /> 
                   {task.title}
                 </Typography>
                 <Typography
@@ -244,6 +274,7 @@ const Home = () => {
                     fontFamily: "monospace",
                   }}
                 >
+                  
                   {task.description}
                 </Typography>
                 <Typography
