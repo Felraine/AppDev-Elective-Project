@@ -208,6 +208,7 @@ const Home = () => {
               }}
             />
           </Box>
+
           {tasks.map((task) => (
             <Box
               key={task.task_ID}
@@ -240,17 +241,9 @@ const Home = () => {
                   flexDirection: "column",
                   flexGrow: 1,
                   fontFamily: "monospace",
-                }}
-              >
-                {/*Complete Task Button */}
-                <Checkbox
-                  defaultChecked={false}
-                  onChange={() => archiveTask(task.task_ID)}
-                  sx={{
-                   
-                  
-                  }}
-                />          
+                  marginRight: "10px",
+                }} 
+              >    
                 <Typography
                   variant="h6"
                   sx={{
@@ -259,7 +252,18 @@ const Home = () => {
                     marginBottom: 1,
                     fontFamily: "monospace",
                   }}
-                >
+                > 
+                {/* Complete Checkbox for Task*/}
+                
+                  <Checkbox
+                  defaultChecked={false}
+                  onChange={() => archiveTask(task.task_ID)}
+                  sx={{
+                    padding: 0,         
+                    justifyContent: "flex-start",
+                    marginRight: "10px",              
+                  }}              
+                /> 
                   {task.title}
                 </Typography>
                 <Typography
@@ -270,6 +274,7 @@ const Home = () => {
                     fontFamily: "monospace",
                   }}
                 >
+                  
                   {task.description}
                 </Typography>
                 <Typography
