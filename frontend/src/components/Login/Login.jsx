@@ -31,12 +31,14 @@ const Login = ({ onLogin }) => {
       );
       const { token, username: loggedInUserName, userId } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("username", loggedInUserName);
-      localStorage.setItem("userId", userId);
-      onLogin(response.data);
+      localStorage.setItem("username", loggedInUserName); // store username
+      localStorage.setItem("userId", userId); // store userId
+      onLogin(response.data); // Trigger the onLogin handler (this could be updating state in a parent component)
       navigate("/home");
     } catch (error) {
-      setErrorMessage("Login failed. Please check your credentials.");
+      const errorMsg =
+        error.response?.data || "Login failed. Please check your credentials.";
+      setErrorMessage(errorMsg);
     }
   };
 
