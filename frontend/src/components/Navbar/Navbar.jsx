@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Navbar.css";
 import logo from "../../assets/images/Logo.png";
@@ -15,15 +15,20 @@ import LogoutIcon from "@mui/icons-material/Logout";
 const Navbar = ({ theme, setTheme }) => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
+    useState(false);
   const [username, setUsername] = useState(
     localStorage.getItem("username") || "User"
   );
   const [profilePicture, setProfilePicture] = useState(defaultProfile);
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const token = localStorage.getItem("token");
 
-  const navigate = useNavigate(); // Initialize useNavigate for redirecting
+  const navigate = useNavigate();
 
   const toggleMode = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -37,7 +42,7 @@ const Navbar = ({ theme, setTheme }) => {
     const file = event.target.files[0];
     if (file) {
       setProfilePicture(URL.createObjectURL(file));
-      localStorage.setItem("profilePicture", URL.createObjectURL(file)); // Save the profile picture to localStorage
+      localStorage.setItem("profilePicture", URL.createObjectURL(file));
     }
   };
 
@@ -67,10 +72,10 @@ const Navbar = ({ theme, setTheme }) => {
         alert("Profile updated successfully!");
         const updatedUser = response.data.user;
         const newToken = response.data.token;
-        localStorage.setItem("username", updatedUser.username); // Update the username
-        localStorage.setItem("token", newToken); // Save the new token
-        setUsername(updatedUser.username); // Update the username in the UI
-        setIsEditProfileModalOpen(false); // Close the modal
+        localStorage.setItem("username", updatedUser.username);
+        localStorage.setItem("token", newToken);
+        setUsername(updatedUser.username);
+        setIsEditProfileModalOpen(false);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -78,13 +83,43 @@ const Navbar = ({ theme, setTheme }) => {
     }
   };
 
-  // Logout function
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove the token from localStorage
-    localStorage.removeItem("username"); // Optional: Remove username from localStorage
-    setUsername("User"); // Reset username in the UI
-    setProfilePicture(defaultProfile); // Reset profile picture
-    navigate("/"); // Redirect to login page
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    setUsername("User");
+    setProfilePicture(defaultProfile);
+    navigate("/");
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      alert("New password and confirm password do not match.");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        "http://localhost:8080/api/users/change-password",
+        { currentPassword, newPassword },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Password changed successfully!");
+        setIsChangePasswordModalOpen(false);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+      alert("Error changing password.");
+    }
   };
 
   return (
@@ -117,7 +152,6 @@ const Navbar = ({ theme, setTheme }) => {
         </div>
       </div>
 
-      {/* Settings Modal */}
       {isSettingsModalOpen && (
         <div className="settingsModalOverlay" onClick={toggleSettingsModal}>
           <div
@@ -138,6 +172,10 @@ const Navbar = ({ theme, setTheme }) => {
                 <EditIcon className="settingsOptionIcon" />
                 Edit Profile
               </li>
+              <li onClick={() => setIsChangePasswordModalOpen(true)}>
+                <LockIcon className="settingsOptionIcon" />
+                Change Password
+              </li>
               <li onClick={handleLogout}>
                 <LogoutIcon className="settingsOptionIcon" />
                 Logout
@@ -147,7 +185,6 @@ const Navbar = ({ theme, setTheme }) => {
         </div>
       )}
 
-      {/* Edit Profile Modal */}
       {isEditProfileModalOpen && (
         <div
           className="settingsModalOverlay"
@@ -163,11 +200,7 @@ const Navbar = ({ theme, setTheme }) => {
                 alt="profile"
                 className="profileInModalImage"
               />
-              <input
-                type="file"
-                onChange={handleProfilePictureChange}
-                className="profilePictureInput"
-              />
+              <span className="profileInModalName">{username}</span>
             </div>
 
             <div className="profileForm">
@@ -187,6 +220,45 @@ const Navbar = ({ theme, setTheme }) => {
 
             <div className="saveButton">
               <button onClick={handleUpdateProfile}>Save</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isChangePasswordModalOpen && (
+        <div
+          className="settingsModalOverlay"
+          onClick={() => setIsChangePasswordModalOpen(false)}
+        >
+          <div
+            className={`settingsModal ${theme}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modalHeader">
+              <h2>Change Password</h2>
+            </div>
+            <div className="profileForm">
+              <input
+                type="password"
+                placeholder="Current Password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+            <div className="saveButton">
+              <button onClick={handleChangePassword}>Change Password</button>
             </div>
           </div>
         </div>

@@ -23,77 +23,83 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Endpoint for user signup
     @PostMapping("/signup")
     public ResponseEntity<UserEntity> signup(@RequestBody UserEntity user) {
-        // Save the user to the database and return the saved user as a response
         UserEntity savedUser = userService.saveUser(user);
         return ResponseEntity.ok(savedUser);
     }
 
-    // Endpoint for user login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserEntity user) {
-        // Check if the user exists
         UserEntity existingUser = userService.findByUsername(user.getUsername()).orElse(null);
         if (existingUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username not found");
         }
 
-        // Validate the password
         if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
         }
 
-        // Generate JWT token for the user
         String token = generateToken(existingUser);
         return ResponseEntity.ok(new LoginResponse(token, existingUser.getUsername(), existingUser.getUserId()));
     }
 
-
-    // Method to generate JWT token
     private String generateToken(UserEntity user) {
-        return jwtUtil.generateToken(user.getUsername());  // Ensure this uses the updated username
+        return jwtUtil.generateToken(user.getUsername());
     }
 
-    // Endpoint for updating user profile
     @PutMapping("/update")
     public ResponseEntity<UpdateProfileResponse> updateUserProfile(
             @RequestBody UserEntity updatedUser,
             @RequestHeader("Authorization") String token) {
         try {
-            // Extract username from the JWT token
             String username = jwtUtil.extractUsername(token.substring(7));
             UserEntity existingUser = userService.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            // Update fields only if they are provided
             if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
                 existingUser.setUsername(updatedUser.getUsername());
             }
             if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
                 existingUser.setEmail(updatedUser.getEmail());
             }
-            // Update password only if it is provided
+
             if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
                 existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
             }
 
-            // Save the updated user
             UserEntity savedUser = userService.saveUser(existingUser);
-
-            // Generate a new JWT token with the updated username (if it was changed)
             String newToken = jwtUtil.generateToken(savedUser.getUsername());
 
-            // Return the updated user and new token
             return ResponseEntity.ok(new UpdateProfileResponse(savedUser, newToken));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
+    @PutMapping("/change-password")
+    public ResponseEntity<?> updatePassword(
+            @RequestBody PasswordChangeRequest request,
+            @RequestHeader("Authorization") String token) {
+        try {
+            String username = jwtUtil.extractUsername(token.substring(7));
+            UserEntity user = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-    // Response structure for profile update
+            if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Current password is incorrect.");
+            }
+
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userService.saveUser(user);
+
+            return ResponseEntity.ok("Password updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating password: " + e.getMessage());
+        }
+    }
+
     private static class UpdateProfileResponse {
         private UserEntity user;
         private String token;
@@ -112,7 +118,27 @@ public class UserController {
         }
     }
 
-    // Response structure for login
+    public static class PasswordChangeRequest {
+        private String currentPassword;
+        private String newPassword;
+
+        public String getCurrentPassword() {
+            return currentPassword;
+        }
+
+        public void setCurrentPassword(String currentPassword) {
+            this.currentPassword = currentPassword;
+        }
+
+        public String getNewPassword() {
+            return newPassword;
+        }
+
+        public void setNewPassword(String newPassword) {
+            this.newPassword = newPassword;
+        }
+    }
+
     private static class LoginResponse {
         private String token;
         private String username;

@@ -16,7 +16,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -31,9 +31,9 @@ const Login = ({ onLogin }) => {
       );
       const { token, username: loggedInUserName, userId } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("username", loggedInUserName); // store username
-      localStorage.setItem("userId", userId); // store userId
-      onLogin(response.data); // Trigger the onLogin handler (this could be updating state in a parent component)
+      localStorage.setItem("username", loggedInUserName);
+      localStorage.setItem("userId", userId);
+      onLogin(response.data);
       navigate("/home");
     } catch (error) {
       const errorMsg =

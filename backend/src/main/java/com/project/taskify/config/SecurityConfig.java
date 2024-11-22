@@ -29,12 +29,13 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/tasks/{id}").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/api/archive/{taskId}/user/{userId}").permitAll() // Archive task
                 .requestMatchers(HttpMethod.GET, "/api/archive/user/{userId}").permitAll() // Get archived tasks
-                .requestMatchers(HttpMethod.PUT, "/api/tasks/user/{userId}/task/{taskId}").permitAll() //edit task
-                .requestMatchers(HttpMethod.GET, "/api/tasks/status/statuses").permitAll() //get all status
+                .requestMatchers(HttpMethod.PUT, "/api/tasks/user/{userId}/task/{taskId}").permitAll() // Edit task
+                .requestMatchers(HttpMethod.GET, "/api/tasks/status/statuses").permitAll() // Get all statuses
                 .requestMatchers(HttpMethod.PUT, "/api/users/update").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/users/change-password").permitAll()
                 .anyRequest().authenticated()
             )
-            .cors(); // Enable CORS globally
+            .cors(); 
 
         return http.build();
     }
@@ -45,7 +46,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // Important for CORS with credentials
+        configuration.setAllowCredentials(true); 
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
