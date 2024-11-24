@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Navbar.css";
@@ -17,6 +17,8 @@ const Navbar = ({ theme, setTheme }) => {
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState(false);
+  const [isUpdateProfilePictureModalOpen, setIsUpdateProfilePictureModalOpen] =
+    useState(false);
   const [username, setUsername] = useState(
     localStorage.getItem("username") || "User"
   );
@@ -26,9 +28,37 @@ const Navbar = ({ theme, setTheme }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
   const token = localStorage.getItem("token");
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/users/profile-picture/${localStorage.getItem(
+            "userId"
+          )}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data) {
+          const updatedProfilePicture = `data:image/jpeg;base64,${response.data}`;
+          setProfilePicture(updatedProfilePicture);
+          localStorage.setItem("profilePicture", updatedProfilePicture);
+        }
+      } catch (error) {
+        console.error("Error fetching profile picture:", error);
+      }
+    };
+
+    if (token) {
+      fetchProfilePicture();
+    }
+  }, [token]); // Dependency array ensures it runs on token change
 
   const toggleMode = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -41,28 +71,32 @@ const Navbar = ({ theme, setTheme }) => {
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setProfilePicture(URL.createObjectURL(file));
-      localStorage.setItem("profilePicture", URL.createObjectURL(file));
+      const imageURL = URL.createObjectURL(file);
+      setProfilePicture(imageURL); // Show preview
+      setSelectedImage(file); // Store selected file
     }
   };
 
   const handleUpdateProfile = async () => {
     try {
-      const updatedProfileData = {
-        username: newUsername,
-        email: newEmail,
-      };
-
       if (!token) {
         throw new Error("No auth token found");
       }
 
+      const formData = new FormData();
+      formData.append("username", newUsername);
+      formData.append("email", newEmail);
+
+      if (selectedImage) {
+        formData.append("profilePicture", selectedImage);
+      }
+
       const response = await axios.put(
         "http://localhost:8080/api/users/update",
-        updatedProfileData,
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -70,11 +104,28 @@ const Navbar = ({ theme, setTheme }) => {
 
       if (response.status === 200) {
         alert("Profile updated successfully!");
+
         const updatedUser = response.data.user;
         const newToken = response.data.token;
         localStorage.setItem("username", updatedUser.username);
         localStorage.setItem("token", newToken);
+
+        // Fetch the updated profile picture from the server
+        const profilePictureResponse = await axios.get(
+          `http://localhost:8080/api/users/profile-picture/${updatedUser._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const updatedProfilePicture = profilePictureResponse.data
+          ? `data:image/jpeg;base64,${profilePictureResponse.data}`
+          : defaultProfile;
+
         setUsername(updatedUser.username);
+        setProfilePicture(updatedProfilePicture); // Update profile picture from DB
         setIsEditProfileModalOpen(false);
       }
     } catch (error) {
@@ -91,34 +142,46 @@ const Navbar = ({ theme, setTheme }) => {
     navigate("/");
   };
 
-  const handleChangePassword = async () => {
-    if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match.");
+  const handleUpdateProfilePicture = async () => {
+    if (!token) {
+      alert("No auth token found");
       return;
     }
 
+    const formData = new FormData();
+    formData.append("profilePicture", selectedImage);
+
     try {
       const response = await axios.put(
-        "http://localhost:8080/api/users/change-password",
-        { currentPassword, newPassword },
+        "http://localhost:8080/api/users/update-profile-picture",
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (response.status === 200) {
-        alert("Password changed successfully!");
-        setIsChangePasswordModalOpen(false);
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
+        alert("Profile picture updated successfully!");
+
+        // Assuming the response returns the updated profile picture as base64
+        const updatedProfilePicture = response.data.profilePicture
+          ? `data:image/jpeg;base64,${response.data.profilePicture}`
+          : defaultProfile;
+
+        // Force a refresh of the image with a timestamp
+        const updatedProfilePictureWithTimestamp = `${updatedProfilePicture}?${new Date().getTime()}`;
+        setProfilePicture(updatedProfilePictureWithTimestamp); // Update state immediately with timestamp
+        localStorage.setItem(
+          "profilePicture",
+          updatedProfilePictureWithTimestamp
+        ); // Update localStorage immediately
       }
     } catch (error) {
-      console.error("Error changing password:", error);
-      alert("Error changing password.");
+      console.error("Error updating profile picture:", error);
+      alert("Error updating profile picture.");
     }
   };
 
@@ -131,7 +194,11 @@ const Navbar = ({ theme, setTheme }) => {
         <span className="appName">Taskify</span>
       </div>
       <div className="rightArea">
-        <img src={profilePicture} alt="profile" className="profilePicture" />
+        <img
+          src={profilePicture || defaultProfile}
+          alt="profile"
+          className="profilePicture"
+        />
         <span className="accountName">{username}</span>
 
         <div className="notif" onClick={() => alert("You have a reminder")}>
@@ -160,7 +227,7 @@ const Navbar = ({ theme, setTheme }) => {
           >
             <div className="profileInModal">
               <img
-                src={profilePicture}
+                src={profilePicture || defaultProfile}
                 alt="profile"
                 className="profileInModalImage"
               />
@@ -175,6 +242,10 @@ const Navbar = ({ theme, setTheme }) => {
               <li onClick={() => setIsChangePasswordModalOpen(true)}>
                 <LockIcon className="settingsOptionIcon" />
                 Change Password
+              </li>
+              <li onClick={() => setIsUpdateProfilePictureModalOpen(true)}>
+                <EditIcon className="settingsOptionIcon" />
+                Change Profile Picture
               </li>
               <li onClick={handleLogout}>
                 <LogoutIcon className="settingsOptionIcon" />
@@ -196,31 +267,27 @@ const Navbar = ({ theme, setTheme }) => {
           >
             <div className="profileInModal">
               <img
-                src={profilePicture}
+                src={profilePicture || defaultProfile}
                 alt="profile"
                 className="profileInModalImage"
               />
               <span className="profileInModalName">{username}</span>
             </div>
 
-            <div className="profileForm">
-              <input
-                type="text"
-                placeholder="New Username"
-                value={newUsername}
-                onChange={(e) => setNewUsername(e.target.value)}
-              />
-              <input
-                type="email"
-                placeholder="New Email"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="New Username"
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="New Email"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+            />
 
-            <div className="saveButton">
-              <button onClick={handleUpdateProfile}>Save</button>
-            </div>
+            <button onClick={handleUpdateProfile}>Save Changes</button>
           </div>
         </div>
       )}
@@ -234,32 +301,47 @@ const Navbar = ({ theme, setTheme }) => {
             className={`settingsModal ${theme}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="modalHeader">
-              <h2>Change Password</h2>
-            </div>
-            <div className="profileForm">
-              <input
-                type="password"
-                placeholder="Current Password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="New Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="Confirm New Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            <div className="saveButton">
-              <button onClick={handleChangePassword}>Change Password</button>
-            </div>
+            <input
+              type="password"
+              placeholder="Current Password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Confirm New Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+
+            <button onClick={handleChangePassword}>Change Password</button>
+          </div>
+        </div>
+      )}
+
+      {isUpdateProfilePictureModalOpen && (
+        <div
+          className="settingsModalOverlay"
+          onClick={() => setIsUpdateProfilePictureModalOpen(false)}
+        >
+          <div
+            className={`settingsModal ${theme}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePictureChange}
+            />
+            <button onClick={handleUpdateProfilePicture}>
+              Update Profile Picture
+            </button>
           </div>
         </div>
       )}

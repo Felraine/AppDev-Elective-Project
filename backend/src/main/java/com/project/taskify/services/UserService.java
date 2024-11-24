@@ -5,7 +5,12 @@ import com.project.taskify.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,4 +85,22 @@ public class UserService {
         }
         return null; // Or throw an exception, depending on how you want to handle it
     }    
+
+    //Update profile pciture
+    public UserEntity updateProfilePicture(int userId, MultipartFile profilePicture) {
+        try {
+            // Convert the MultipartFile to a byte array
+            byte[] profilePictureBytes = profilePicture.getBytes();
+    
+            // Retrieve the user and update the profile picture in the database
+            UserEntity user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            user.setProfilePicture(profilePictureBytes);
+    
+            // Save the updated user entity in the database
+            return userRepository.save(user);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload profile picture", e);
+        }
+    }     
 }

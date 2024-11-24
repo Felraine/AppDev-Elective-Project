@@ -2,12 +2,19 @@ package com.project.taskify.controllers;
 
 import com.project.taskify.models.UserEntity;
 import com.project.taskify.services.UserService;
+
+import io.jsonwebtoken.io.IOException;
+
 import com.project.taskify.security.JwtUtil;
+
+import java.util.Base64;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/users")
@@ -162,4 +169,56 @@ public class UserController {
             return userId;
         }
     }
+
+    @PutMapping("/update-profile-picture")
+    public ResponseEntity<?> updateProfilePicture(
+            @RequestParam("profilePicture") MultipartFile profilePicture,
+            @RequestHeader("Authorization") String token) {
+        try {
+            // Validate the token format
+            if (token == null || !token.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token format");
+            }
+
+            // Extract the username from the JWT token
+            String username = jwtUtil.extractUsername(token.substring(7));
+
+            // Find the user by username
+            UserEntity existingUser = userService.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Update the profile picture using the service method
+            UserEntity updatedUser = userService.updateProfilePicture(existingUser.getUserId(), profilePicture);
+
+            // Return the updated user with the new profile picture (you can return only relevant fields if needed)
+            return ResponseEntity.ok(updatedUser);
+        } catch (IOException e) {
+            // Handle IO exceptions specifically
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error uploading the profile picture: " + e.getMessage());
+        } catch (RuntimeException e) {
+            // Handle user not found or other runtime exceptions
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            // Catch all other exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating profile picture: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/profile-picture/{userId}")
+    public ResponseEntity<String> getProfilePicture(@PathVariable int userId) {
+        UserEntity user = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        byte[] profilePictureBytes = user.getProfilePicture();
+
+        if (profilePictureBytes != null) {
+            // Convert byte array to base64
+            String base64Image = Base64.getEncoder().encodeToString(profilePictureBytes);
+            return ResponseEntity.ok(base64Image);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Profile picture not found");
+        }
+    }   
 }

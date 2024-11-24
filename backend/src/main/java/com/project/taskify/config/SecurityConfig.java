@@ -33,6 +33,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/tasks/status/statuses").permitAll() // Get all statuses
                 .requestMatchers(HttpMethod.PUT, "/api/users/update").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/api/users/change-password").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/users/update-profile-picture").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/users/update-profile-picture/{userId}").permitAll()
                 .anyRequest().authenticated()
             )
             .cors(); 
