@@ -33,6 +33,15 @@ const Navbar = ({ theme, setTheme }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const storedProfilePicture = localStorage.getItem("profilePicture");
+    if (storedProfilePicture) {
+      setProfilePicture(storedProfilePicture);
+    } else {
+      setProfilePicture(defaultProfile);
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchProfilePicture = async () => {
       try {
         const response = await axios.get(
@@ -47,8 +56,11 @@ const Navbar = ({ theme, setTheme }) => {
         );
         if (response.data) {
           const updatedProfilePicture = `data:image/jpeg;base64,${response.data}`;
+          console.log("Fetched Profile Picture:", updatedProfilePicture); // Log the fetched image data
           setProfilePicture(updatedProfilePicture);
           localStorage.setItem("profilePicture", updatedProfilePicture);
+        } else {
+          console.log("No profile picture found, using default."); // Log if no picture found
         }
       } catch (error) {
         console.error("Error fetching profile picture:", error);
@@ -58,7 +70,7 @@ const Navbar = ({ theme, setTheme }) => {
     if (token) {
       fetchProfilePicture();
     }
-  }, [token]); // Dependency array ensures it runs on token change
+  }, [token]);
 
   const toggleMode = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -173,11 +185,33 @@ const Navbar = ({ theme, setTheme }) => {
 
         // Force a refresh of the image with a timestamp
         const updatedProfilePictureWithTimestamp = `${updatedProfilePicture}?${new Date().getTime()}`;
-        setProfilePicture(updatedProfilePictureWithTimestamp); // Update state immediately with timestamp
+
+        // Update state immediately with the new image (this should trigger a re-render)
+        setProfilePicture(updatedProfilePictureWithTimestamp);
         localStorage.setItem(
           "profilePicture",
           updatedProfilePictureWithTimestamp
         ); // Update localStorage immediately
+
+        // Optionally, re-fetch the profile picture to make sure it's up-to-date
+        // (This will handle cases where the image URL needs to be revalidated)
+        const fetchUpdatedProfilePicture = await axios.get(
+          `http://localhost:8080/api/users/profile-picture/${localStorage.getItem(
+            "userId"
+          )}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const newProfilePicture = fetchUpdatedProfilePicture.data
+          ? `data:image/jpeg;base64,${fetchUpdatedProfilePicture.data}`
+          : defaultProfile;
+
+        setProfilePicture(newProfilePicture);
+        localStorage.setItem("profilePicture", newProfilePicture); // Store in localStorage
       }
     } catch (error) {
       console.error("Error updating profile picture:", error);
@@ -195,10 +229,15 @@ const Navbar = ({ theme, setTheme }) => {
       </div>
       <div className="rightArea">
         <img
-          src={profilePicture || defaultProfile}
+          src={
+            profilePicture && profilePicture !== defaultProfile
+              ? profilePicture
+              : defaultProfile
+          }
           alt="profile"
           className="profilePicture"
         />
+
         <span className="accountName">{username}</span>
 
         <div className="notif" onClick={() => alert("You have a reminder")}>

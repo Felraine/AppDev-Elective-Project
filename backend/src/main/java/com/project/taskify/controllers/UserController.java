@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.IOException;
 import com.project.taskify.security.JwtUtil;
 
 import java.util.Base64;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -179,19 +180,26 @@ public class UserController {
             if (token == null || !token.startsWith("Bearer ")) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token format");
             }
-
+    
             // Extract the username from the JWT token
             String username = jwtUtil.extractUsername(token.substring(7));
-
+    
             // Find the user by username
             UserEntity existingUser = userService.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
-
-            // Update the profile picture using the service method
-            UserEntity updatedUser = userService.updateProfilePicture(existingUser.getUserId(), profilePicture);
-
-            // Return the updated user with the new profile picture (you can return only relevant fields if needed)
-            return ResponseEntity.ok(updatedUser);
+    
+            // Convert profile picture to byte array
+            byte[] profilePictureBytes = profilePicture.getBytes();
+    
+            // Save the image in the user entity
+            existingUser.setProfilePicture(profilePictureBytes);
+            userService.saveUser(existingUser);
+    
+            // Convert the profile picture to base64 and return in the response
+            String base64Image = Base64.getEncoder().encodeToString(profilePictureBytes);
+            
+            return ResponseEntity.ok(Collections.singletonMap("profilePictureBase64", base64Image));
+    
         } catch (IOException e) {
             // Handle IO exceptions specifically
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
