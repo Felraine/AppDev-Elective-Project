@@ -2,6 +2,8 @@ package com.project.taskify.controllers;
 
 import java.util.Optional;
 import java.util.List;
+import java.util.Map;
+
 import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.taskify.models.TaskStatusEntity;
 import com.project.taskify.services.TaskStatusService;
+import com.project.taskify.repositories.*;
 
 @RestController
 @RequestMapping(method = RequestMethod.GET,path="/api/tasks/status")
@@ -28,6 +31,9 @@ public class TaskStatusController {
 	
 	@Autowired
 	private TaskStatusService tsServ;
+
+    @Autowired
+    private TaskStatusRepository tsRepo;
 	
 	public TaskStatusController() {
 		
@@ -60,6 +66,22 @@ public class TaskStatusController {
         List<TaskStatusEntity> taskStatuses = tsServ.getAllTaskStatuses();
         return ResponseEntity.ok(taskStatuses);
     }
+
+    @GetMapping("/statuses/count/{userId}")
+    public List<TaskStatusEntity> getTaskStatuses(@PathVariable int userId) {
+        return tsRepo.findAllByTask_User_UserId(userId);  // Ensure this returns a List<TaskStatusEntity>
+    }
+
+    /*@GetMapping("/statuses/count/{userId}")
+    public ResponseEntity<Map<String, Long>> countTaskStatusesByUser(@PathVariable int userId) {
+    try {
+        Map<String, Long> statusCounts = tsServ.countTaskStatusesByUser(userId);
+        return new ResponseEntity<>(statusCounts, HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    } 
+
+    }*/
 
 	//update task status
 	@PutMapping("/update/{statusId}")

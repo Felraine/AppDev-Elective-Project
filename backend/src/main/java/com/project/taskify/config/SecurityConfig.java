@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/archive/user/{userId}").permitAll() // Get archived tasks
                 .requestMatchers(HttpMethod.PUT, "/api/tasks/user/{userId}/task/{taskId}").permitAll() //edit task
                 .requestMatchers(HttpMethod.GET, "/api/tasks/status/statuses").permitAll() //get all status
+                .requestMatchers(HttpMethod.GET, "/api/tasks/status/statuses/count/{userId}").permitAll() //get all status
                 .anyRequest().authenticated()
             )
             .cors(); // Enable CORS globally
