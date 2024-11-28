@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import axios from "axios";
 import {
   Button,
@@ -9,15 +8,10 @@ import {
   InputLabel,
   FormControl,
   Box,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
 } from "@mui/material";
 import TaskEditDialog from "./TaskEditDialog";
 import editTaskIcon from "../../assets/images/editTaskIcon.png";
- 
+
 const Tasks = () => {
   const [task, setTask] = useState({
     title: "",
@@ -26,17 +20,17 @@ const Tasks = () => {
     creation_date: "",
     due_date: "",
   });
- 
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState({});
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
   const [buttonsVisible, setButtonsVisible] = useState(true);
- 
+
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
- 
+
   useEffect(() => {
     if (username && token) {
       viewTasks();
@@ -44,7 +38,7 @@ const Tasks = () => {
       setError("You need to be logged in to view tasks.");
     }
   }, []);
- 
+
   const viewTasks = async () => {
     try {
       const response = await axios.get(
@@ -60,7 +54,7 @@ const Tasks = () => {
       setError("Could not fetch tasks. Please try again later.");
     }
   };
-
+  //DELETE TASK
   const deleteTask = async (id) => {
     try {
       const response = await axios.delete(
@@ -72,7 +66,7 @@ const Tasks = () => {
           },
         }
       );
- 
+
       if (response.status === 204) {
         setTasks((prevTasks) =>
           prevTasks.filter((task) => task.task_ID !== id)
@@ -82,17 +76,17 @@ const Tasks = () => {
       console.error("Error in deleting a task: ", error);
     }
   };
- 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
   };
-
+    //ADD TASK
   const addTask = async (e) => {
     e.preventDefault();
     const currentDate = new Date().toISOString().split("T")[0];
     const taskWithDate = { ...task, creation_date: currentDate };
- 
+
     setError("");
     try {
       await axios.post(
@@ -110,7 +104,7 @@ const Tasks = () => {
       setError("Adding Task failed. Please try again.");
     }
   };
-
+  //EDIT TASK
   const editTask = async (editedTask) => {
     try {
       await axios.put(
@@ -126,23 +120,23 @@ const Tasks = () => {
       console.error("Error editing task:", error);
     }
   };
- 
+
   const handleEdit = (taskId) => {
     const taskToEdit = tasks.find((task) => task.task_ID === taskId);
     console.log("Editing task:", taskToEdit);
     setCurrentTask({ ...taskToEdit });
     setIsDialogOpen(true);
   };
- 
+
   const handleSave = (editedTask) => {
     const updatedTasks = tasks.map((task) =>
       task.task_ID === editedTask.task_ID ? editedTask : task
     );
     setTasks(updatedTasks);
- 
+
     editTask(editedTask);
   };
- 
+
   const sortedTasks = tasks.sort((a, b) => {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
@@ -150,7 +144,7 @@ const Tasks = () => {
     }
     return new Date(a.due_date) - new Date(b.due_date);
   });
- 
+
   const getPriorityStyle = (priority) => {
     switch (priority) {
       case "high":
@@ -163,27 +157,12 @@ const Tasks = () => {
         return {};
     }
   };
- 
+
   const priorityOptions = [
     { value: "high", label: "High", color: "red" },
     { value: "medium", label: "Medium", color: "#0056B3" },
     { value: "low", label: "Low", color: "green" },
   ];
-
-  const archiveTask = async (taskId) => {
-    try {
-      await axios.put(
-        `http://localhost:8080/api/archive/${taskId}/user/${userId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setTasks((prevTasks) =>
-        prevTasks.filter((task) => task.task_ID !== taskId)
-      );
-    } catch (error) {
-      console.error("Error archiving task:", error);
-    }
-  };
 
   return (
     <Box
@@ -227,7 +206,10 @@ const Tasks = () => {
             onChange={handleChange}
             fullWidth
             required
-            sx={{ marginBottom: 2, backgroundColor: "white" }}
+            sx={{
+              marginBottom: 2,
+              backgroundColor: "white",
+            }}
           />
           <TextField
             label="Short description here..."
@@ -268,7 +250,7 @@ const Tasks = () => {
                 ))}
               </Select>
             </FormControl>
- 
+
             <TextField
               label="Due Date"
               type="date"
@@ -287,13 +269,20 @@ const Tasks = () => {
             type="submit"
             variant="contained"
             color="primary"
-            sx={{ marginTop: 2 }}
+            sx={{
+              marginTop: 2,
+              backgroundColor: "#E29D3F",
+              width: "100%",
+              "&:hover": {
+                backgroundColor: "#C37A2C",
+              },
+            }}
           >
             Add Task
           </Button>
         </form>
       </Box>
- 
+
       <Box
         className="taskList"
         sx={{
@@ -324,7 +313,7 @@ const Tasks = () => {
             />
           </Button>
         </Box>
- 
+
         <Box
           className="scrollableTasks"
           sx={{ maxHeight: 400, overflowY: "auto" }}
@@ -361,7 +350,7 @@ const Tasks = () => {
                     <Button
                       onClick={() => handleEdit(task.task_ID)}
                       variant="contained"
-                      color="secondary"
+                      color="primary"
                       sx={{ marginRight: 1 }}
                     >
                       Edit
@@ -381,7 +370,6 @@ const Tasks = () => {
           ))}
         </Box>
       </Box>
- 
       <TaskEditDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
@@ -391,5 +379,5 @@ const Tasks = () => {
     </Box>
   );
 };
- 
+
 export default Tasks;
