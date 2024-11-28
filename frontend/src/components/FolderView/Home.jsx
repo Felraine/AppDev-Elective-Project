@@ -80,7 +80,7 @@ const Home = () => {
     }
   };
 
-  //For Complete Task Button
+  // For Complete Task Button
   const archiveTask = async (taskId) => {
     try {
       await axios.put(
@@ -182,7 +182,6 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
-        
           <Box sx={{ marginBottom: 2 }}>
             <Typography
               sx={{
@@ -214,7 +213,7 @@ const Home = () => {
               key={task.task_ID}
               sx={{
                 display: "flex",
-                alignItems: "center",
+                alignItems: "flex-start",
                 gap: 2,
                 backgroundColor: "#fff",
                 borderRadius: 2,
@@ -223,16 +222,36 @@ const Home = () => {
                 padding: 2,
               }}
             >
-              {/* Priority Circle */}
+              {/* Container for Checkbox and Priority Circle */}
               <Box
                 sx={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  backgroundColor: getPriorityColor(task.priority),
-                  flexShrink: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 1,
+                  marginRight: 1, // Space between checkbox and the rest
                 }}
-              ></Box>
+              >
+                {/* Complete Checkbox for Task */}
+                <Checkbox
+                  defaultChecked={false}
+                  onChange={() => archiveTask(task.task_ID)}
+                  sx={{
+                    padding: 0,
+                  }}
+                />
+                {/* Priority Circle */}
+                <Box
+                  sx={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    backgroundColor: getPriorityColor(task.priority),
+                    flexShrink: 0,
+                    marginTop: "10px"
+                  }}
+                ></Box>
+              </Box>
 
               {/* Task Details */}
               <Box
@@ -241,9 +260,8 @@ const Home = () => {
                   flexDirection: "column",
                   flexGrow: 1,
                   fontFamily: "monospace",
-                  marginRight: "10px",
-                }} 
-              >    
+                }}
+              >
                 <Typography
                   variant="h6"
                   sx={{
@@ -252,18 +270,7 @@ const Home = () => {
                     marginBottom: 1,
                     fontFamily: "monospace",
                   }}
-                > 
-                {/* Complete Checkbox for Task*/}
-                
-                  <Checkbox
-                  defaultChecked={false}
-                  onChange={() => archiveTask(task.task_ID)}
-                  sx={{
-                    padding: 0,         
-                    justifyContent: "flex-start",
-                    marginRight: "10px",              
-                  }}              
-                /> 
+                >
                   {task.title}
                 </Typography>
                 <Typography
@@ -274,7 +281,6 @@ const Home = () => {
                     fontFamily: "monospace",
                   }}
                 >
-                  
                   {task.description}
                 </Typography>
                 <Typography
@@ -284,7 +290,7 @@ const Home = () => {
                     fontStyle: "italic",
                   }}
                 >
-                  Due Date: {task.due_date}
+                  Due: {task.due_date}
                 </Typography>
               </Box>
             </Box>
