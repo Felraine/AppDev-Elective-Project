@@ -11,8 +11,10 @@ import settingsIcon from "../../assets/images/settings.png";
 import EditIcon from "@mui/icons-material/Edit";
 import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
-
+ 
 const Navbar = ({ theme, setTheme }) => {
+  const [notificationCount, setNotificationCount] = useState(1); // Reminder notifications
+  const [reminders, setReminders] = useState([]);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
@@ -31,7 +33,53 @@ const Navbar = ({ theme, setTheme }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    const checkReminders = () => {
+      const currentTime = new Date().toISOString();
+      const triggeredReminders = reminders.filter(
+        (reminder) => new Date(reminder.time).toISOString() <= currentTime && !reminder.notified
+      );
 
+      if (triggeredReminders.length > 0) {
+        setNotificationCount((prevCount) => prevCount + triggeredReminders.length);
+        setReminders((prevReminders) =>
+          prevReminders.map((reminder) =>
+            triggeredReminders.includes(reminder)
+              ? { ...reminder, notified: true }
+              : reminder
+          )
+        );
+      }
+    };
+
+    const interval = setInterval(checkReminders, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, [reminders]);
+
+  const handleNotificationClick = () => {
+    alert("You have new reminders!");
+    setNotificationCount(0); // Reset notification count
+  };
+
+  useEffect(() => {
+    const fetchReminders = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/reminders", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setReminders(response.data || []);
+      } catch (error) {
+        console.error("Error fetching reminders:", error);
+      }
+    };
+
+    if (token) {
+      fetchReminders();
+    }
+  }, [token]);
   useEffect(() => {
     const storedProfilePicture = localStorage.getItem("profilePicture");
     if (storedProfilePicture) {
@@ -40,7 +88,7 @@ const Navbar = ({ theme, setTheme }) => {
       setProfilePicture(defaultProfile);
     }
   }, []);
-
+ 
   useEffect(() => {
     const fetchProfilePicture = async () => {
       try {
@@ -66,20 +114,20 @@ const Navbar = ({ theme, setTheme }) => {
         console.error("Error fetching profile picture:", error);
       }
     };
-
+ 
     if (token) {
       fetchProfilePicture();
     }
   }, [token]);
-
+ 
   const toggleMode = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
-
+ 
   const toggleSettingsModal = () => {
     setIsSettingsModalOpen((prev) => !prev);
   };
-
+ 
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -88,21 +136,21 @@ const Navbar = ({ theme, setTheme }) => {
       setSelectedImage(file); // Store selected file
     }
   };
-
+ 
   const handleUpdateProfile = async () => {
     try {
       if (!token) {
         throw new Error("No auth token found");
       }
-
+ 
       const formData = new FormData();
       formData.append("username", newUsername);
       formData.append("email", newEmail);
-
+ 
       if (selectedImage) {
         formData.append("profilePicture", selectedImage);
       }
-
+ 
       const response = await axios.put(
         "http://localhost:8080/api/users/update",
         formData,
@@ -113,15 +161,15 @@ const Navbar = ({ theme, setTheme }) => {
           },
         }
       );
-
+ 
       if (response.status === 200) {
         alert("Profile updated successfully!");
-
+ 
         const updatedUser = response.data.user;
         const newToken = response.data.token;
         localStorage.setItem("username", updatedUser.username);
         localStorage.setItem("token", newToken);
-
+ 
         // Fetch the updated profile picture from the server
         const profilePictureResponse = await axios.get(
           `http://localhost:8080/api/users/profile-picture/${updatedUser._id}`,
@@ -131,11 +179,11 @@ const Navbar = ({ theme, setTheme }) => {
             },
           }
         );
-
+ 
         const updatedProfilePicture = profilePictureResponse.data
           ? `data:image/jpeg;base64,${profilePictureResponse.data}`
           : defaultProfile;
-
+ 
         setUsername(updatedUser.username);
         setProfilePicture(updatedProfilePicture); // Update profile picture from DB
         setIsEditProfileModalOpen(false);
@@ -145,7 +193,7 @@ const Navbar = ({ theme, setTheme }) => {
       alert("Error updating profile");
     }
   };
-
+ 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
@@ -153,16 +201,16 @@ const Navbar = ({ theme, setTheme }) => {
     setProfilePicture(defaultProfile);
     navigate("/");
   };
-
+ 
   const handleUpdateProfilePicture = async () => {
     if (!token) {
       alert("No auth token found");
       return;
     }
-
+ 
     const formData = new FormData();
     formData.append("profilePicture", selectedImage);
-
+ 
     try {
       const response = await axios.put(
         "http://localhost:8080/api/users/update-profile-picture",
@@ -174,25 +222,25 @@ const Navbar = ({ theme, setTheme }) => {
           },
         }
       );
-
+ 
       if (response.status === 200) {
         alert("Profile picture updated successfully!");
-
+ 
         // Assuming the response returns the updated profile picture as base64
         const updatedProfilePicture = response.data.profilePicture
           ? `data:image/jpeg;base64,${response.data.profilePicture}`
           : defaultProfile;
-
+ 
         // Force a refresh of the image with a timestamp
         const updatedProfilePictureWithTimestamp = `${updatedProfilePicture}?${new Date().getTime()}`;
-
+ 
         // Update state immediately with the new image (this should trigger a re-render)
         setProfilePicture(updatedProfilePictureWithTimestamp);
         localStorage.setItem(
           "profilePicture",
           updatedProfilePictureWithTimestamp
         ); // Update localStorage immediately
-
+ 
         // Optionally, re-fetch the profile picture to make sure it's up-to-date
         // (This will handle cases where the image URL needs to be revalidated)
         const fetchUpdatedProfilePicture = await axios.get(
@@ -205,11 +253,11 @@ const Navbar = ({ theme, setTheme }) => {
             },
           }
         );
-
+ 
         const newProfilePicture = fetchUpdatedProfilePicture.data
           ? `data:image/jpeg;base64,${fetchUpdatedProfilePicture.data}`
           : defaultProfile;
-
+ 
         setProfilePicture(newProfilePicture);
         localStorage.setItem("profilePicture", newProfilePicture); // Store in localStorage
       }
@@ -218,7 +266,7 @@ const Navbar = ({ theme, setTheme }) => {
       alert("Error updating profile picture.");
     }
   };
-
+ 
   return (
     <div className={`navbar ${theme}`}>
       <div className="logoAndName">
@@ -238,27 +286,30 @@ const Navbar = ({ theme, setTheme }) => {
           alt="profile"
           className="profilePicture"
         />
-
+ 
         <span className="accountName">{username}</span>
+        <div className="notif" onClick={handleNotificationClick}>
+  <img src={notif} alt="notification" className="notifIcon" />
+  {notificationCount > 0 && (
+    <div className="notificationBadge">{notificationCount}</div>
+  )}
+</div>
 
-        <div className="notif" onClick={() => alert("You have a reminder")}>
-          <img src={notif} alt="notification" className="notifIcon" />
-        </div>
-
+ 
         <div className="lightMode">
           <img
-            onClick={toggle_mode}
+            onClick={toggleMode}
             src={theme === "light" ? lightMode : darkMode}
             alt="mode toggle"
             className="lightModeIcon"
           />
         </div>
-
-        <div className="settings">
+ 
+        <div className="settings" onClick={toggleSettingsModal}>
           <img src={settingsIcon} alt="settings" className="settingsIcon" />
         </div>
       </div>
-
+ 
       {isSettingsModalOpen && (
         <div className="settingsModalOverlay" onClick={toggleSettingsModal}>
           <div
@@ -273,7 +324,7 @@ const Navbar = ({ theme, setTheme }) => {
               />
               <span className="profileInModalName">{username}</span>
             </div>
-
+ 
             <ul className="settingsOptions">
               <li onClick={() => setIsEditProfileModalOpen(true)}>
                 <EditIcon className="settingsOptionIcon" />
@@ -295,7 +346,7 @@ const Navbar = ({ theme, setTheme }) => {
           </div>
         </div>
       )}
-
+ 
       {isEditProfileModalOpen && (
         <div
           className="settingsModalOverlay"
@@ -313,7 +364,7 @@ const Navbar = ({ theme, setTheme }) => {
               />
               <span className="profileInModalName">{username}</span>
             </div>
-
+ 
             <input
               type="text"
               placeholder="New Username"
@@ -326,12 +377,12 @@ const Navbar = ({ theme, setTheme }) => {
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
             />
-
+ 
             <button onClick={handleUpdateProfile}>Save Changes</button>
           </div>
         </div>
       )}
-
+ 
       {isChangePasswordModalOpen && (
         <div
           className="settingsModalOverlay"
@@ -359,12 +410,12 @@ const Navbar = ({ theme, setTheme }) => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-
+ 
             <button onClick={handleChangePassword}>Change Password</button>
           </div>
         </div>
       )}
-
+ 
       {isUpdateProfilePictureModalOpen && (
         <div
           className="settingsModalOverlay"
@@ -388,5 +439,5 @@ const Navbar = ({ theme, setTheme }) => {
     </div>
   );
 };
-
+ 
 export default Navbar;

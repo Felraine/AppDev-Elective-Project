@@ -12,7 +12,7 @@ import {
 import TaskEditDialog from "./TaskEditDialog";
 import editTaskIcon from "../../assets/images/editTaskIcon.png";
 
-const Tasks = () => {
+const Tasks = ({ updateNotificationCount }) => {
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -30,7 +30,18 @@ const Tasks = () => {
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    const checkReminders = () => {
+      const now = new Date();
+      const dueTasks = tasks.filter(
+        (task) => new Date(task.set_reminder) <= now
+      );
+      updateNotificationCount(dueTasks.length);
+    };
 
+    const interval = setInterval(checkReminders, 1000); // Check every second
+    return () => clearInterval(interval); // Clean up on unmount
+  }, [tasks, updateNotificationCount]);
   useEffect(() => {
     if (username && token) {
       viewTasks();
@@ -39,6 +50,18 @@ const Tasks = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const checkReminders = () => {
+      const now = new Date();
+      const dueTasks = tasks.filter(
+        (task) => new Date(task.set_reminder) <= now
+      );
+      updateNotificationCount(dueTasks.length);
+    };
+
+    const interval = setInterval(checkReminders, 1000); // Check every second
+    return () => clearInterval(interval); // Clean up on unmount
+  }, [tasks, updateNotificationCount]);
   const viewTasks = async () => {
     try {
       const response = await axios.get(

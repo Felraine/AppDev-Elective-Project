@@ -1,38 +1,246 @@
-.notifModal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: #e29d3f;
+  color: white;
+  transition: 0.5s;
+}
+
+.navbar.dark {
+  background: #333;
+  color: #fff;
+}
+
+.logo {
+  max-width: 3rem;
+  max-height: 3rem;
+  border-radius: 45px;
+  margin-right: 10px;
+}
+
+.appName {
+  font-size: 2rem;
+}
+
+.logoAndName {
+  display: flex;
+  align-items: center;
+}
+
+.rightArea {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  position: relative;
+}
+
+.profilePicture {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.accountName {
+  padding-left: 10px;
+  font-size: 20px;
+}
+
+.notifIcon,
+.lightModeIcon,
+.settingsIcon {
+  max-height: 25px;
+  cursor: pointer;
+  margin: 0 20px 0;
   
-  .notifContent {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
+}
+
+.editOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.profile:hover .editOverlay {
+  opacity: 1;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modalButtons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.settingsModal {
+  background: #e29d3f;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 299px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1001;
+  overflow-y: auto;
+}
+
+.settingsModal.dark {
+  background: #333;
+  color: #fff;
+}
+
+.settingsModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.settingsModalOverlay.hidden {
+  display: none;
+}
+
+.settingsOptions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.settingsOptions li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.settingsOptions li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.settingsOptionIcon {
+  margin-right: 10px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.settingsModal.dark .settingsOptions li:hover {
+  background: #555;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .settingsModal {
+    width: 80%;
   }
-  
-  .notifContent h2 {
-    margin-bottom: 15px;
-  }
-  
-  .notifContent button {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .notifContent button:hover {
-    background-color: #0056b3;
-  }
-  
+}
+
+.profileInModal {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profileInModalImage {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.profileInModalName {
+  font-size: 24px;
+  color: #fff;
+}
+
+.settingsIcon {
+  transition: transform 1.5s ease-in-out;
+}
+
+.settingsIcon:hover {
+  cursor: pointer;
+  transform: rotate(360deg);
+}
+.notificationBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.notifIcon {
+  position: relative; /* Ensure the badge can be positioned relative to the icon */
+}
+
+.notificationBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
-
+ 
 const Home = () => {
   const [completedTasks, setCompletedTasks] = useState(0);
   const [totalTasks, setTotalTasks] = useState(0);
@@ -52,7 +52,7 @@ const Home = () => {
       );
       const statuses = response.data;
       setTaskStatuses(statuses);
-
+ 
       setPendingCount(
         statuses.filter((task) => task.status === "Pending").length
       );
@@ -79,7 +79,7 @@ const Home = () => {
         return "#ccc"; // Gray for unknown priority
     }
   };
-
+ 
   //For Complete Task Button
   const archiveTask = async (taskId) => {
     try {
@@ -95,7 +95,7 @@ const Home = () => {
       console.error("Error archiving task:", error);
     }
   };
-
+ 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
  
   return (
@@ -182,7 +182,7 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
-        
+       
           <Box sx={{ marginBottom: 2 }}>
             <Typography
               sx={{
@@ -208,7 +208,7 @@ const Home = () => {
               }}
             />
           </Box>
-
+ 
           {tasks.map((task) => (
             <Box
               key={task.task_ID}
@@ -242,7 +242,7 @@ const Home = () => {
                   flexGrow: 1,
                   fontFamily: "monospace",
                   marginRight: "10px",
-                }} 
+                }}
               >    
                 <Typography
                   variant="h6"
@@ -252,18 +252,18 @@ const Home = () => {
                     marginBottom: 1,
                     fontFamily: "monospace",
                   }}
-                > 
+                >
                 {/* Complete Checkbox for Task*/}
-                
+               
                   <Checkbox
                   defaultChecked={false}
                   onChange={() => archiveTask(task.task_ID)}
                   sx={{
-                    padding: 0,         
+                    padding: 0,        
                     justifyContent: "flex-start",
                     marginRight: "10px",              
                   }}              
-                /> 
+                />
                   {task.title}
                 </Typography>
                 <Typography
@@ -274,7 +274,7 @@ const Home = () => {
                     fontFamily: "monospace",
                   }}
                 >
-                  
+                 
                   {task.description}
                 </Typography>
                 <Typography

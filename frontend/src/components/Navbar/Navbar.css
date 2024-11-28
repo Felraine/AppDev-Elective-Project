@@ -59,6 +59,7 @@
   max-height: 25px;
   cursor: pointer;
   margin: 0 20px 0;
+  
 }
 
 .editOverlay {
@@ -208,4 +209,23 @@ button {
 .settingsIcon:hover {
   cursor: pointer;
   transform: rotate(360deg);
+}
+.notif {
+  position: relative; /* Ensure the badge is positioned relative to the icon */
+}
+
+.notificationBadge {
+  position: absolute;
+  top: -5px; /* Adjust to place it on top of the bell icon */
+  right: -5px; /* Adjust to place it slightly off the right edge */
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 20px; /* Adjust size as needed */
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
