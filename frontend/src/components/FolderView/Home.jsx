@@ -160,7 +160,7 @@ const Home = () => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          backgroundColor: "#fff",
+          backgroundColor: "#ffe79f",
           borderRadius: 2,
           padding: 3,
           width: "50%", // Adjusted to 50%
