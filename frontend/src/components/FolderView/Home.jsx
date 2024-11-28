@@ -203,7 +203,7 @@ const Home = () => {
                 borderRadius: 1,
                 backgroundColor: "#e0e0e0",
                 "& .MuiLinearProgress-bar": {
-                  backgroundColor: "#ffa500",
+                  backgroundColor: "#008000",
                 },
               }}
             />
