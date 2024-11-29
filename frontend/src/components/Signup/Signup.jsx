@@ -149,8 +149,7 @@ const Signup = () => {
               required
               sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
               width: "80%",
-              height: "50px",
-              padding: "4px",
+              height: "50%",
                 "& .MuiOutlinedInput-root": {
             "& fieldset": {
               border: "none", 

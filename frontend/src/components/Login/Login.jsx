@@ -59,6 +59,7 @@ const Login = ({ onLogin }) => {
         backgroundPosition: "center",
       }}
     >
+      
       <Paper
   elevation={6}
   sx={{
@@ -232,7 +233,7 @@ const Login = ({ onLogin }) => {
         backgroundImage: `url('src/assets/images/loginImage.png')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        marginBottom:"70px",
+        marginBottom:"55px",
       }}
     >
       <Typography
@@ -243,15 +244,15 @@ const Login = ({ onLogin }) => {
         zIndex: 1, //text appears above the image
         position: "relative",
         color: "#514538",
-        fontWeight:"bold",
         position: "absolute",
         bottom: 0, 
-        marginLeft: "30px",
-        marginBottom: "-35px",
+        marginLeft: "40px",
+        marginBottom: "-50px",
          }}
       >
        Where Tasks Meet Simplicity.
       </Typography>
+      
     </Box>
   </Box>
 </Paper>
