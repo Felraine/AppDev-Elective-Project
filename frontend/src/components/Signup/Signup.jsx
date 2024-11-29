@@ -66,179 +66,185 @@ const Signup = () => {
       <Paper
         elevation={6}
         sx={{
-          padding: "2rem",
+          display: "flex",
+          flexDirection: "row",
           width: "100%",
-          maxWidth: 400,
+          maxWidth: 800,
+          height: "500px",
           backgroundColor: "rgba(255, 250, 157, 0.9)",
           borderRadius: "20px",
+          overflow: "hidden",
         }}
       >
-        <Typography
-          variant="h4"
-          textAlign="center"
-          mb={2}
-          fontFamily="Helvetica"
-        >
-          Sign Up
-        </Typography>
-        {error && (
-          <Typography color="error" mb={2} textAlign="center">
-            {error}
-          </Typography>
-        )}
-        <form
-          onSubmit={handleSignup}
-          style={{
+        {/* Left Side: Image */}
+        <Box
+          sx={{
+            width: "50%",
+            backgroundImage: `url('src/assets/images/signupImage.png')`,
+            backgroundPosition: "center",
+            backgroundColor: "white",
+            backgroundSize: '380px 380px',
+            backgroundRepeat: "no-repeat", 
+          }}
+        />
+
+        {/* Right Side: Form */}
+        <Box
+          sx={{
+            width: "50%",
             display: "flex",
             flexDirection: "column",
-            gap: "1rem",
-            alignItems: "center",
+            justifyContent: "center",
+            padding: "2rem",
           }}
         >
-          <TextField
-            label="Username"
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            sx={{
-              backgroundColor: "white",
-              width: "90%",
-              borderRadius: "20px",
-              "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              border: "none", 
-            },
-            "&:hover fieldset": {
-              border: "none", 
-            },
-            "&.Mui-focused fieldset": {
-              border: "none", 
-            },
-          },
-            }}
-          />
-          <TextField
-            label="Email"
-            type="email"
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "4px",
-              width: "90%",
-              borderRadius: "20px",
-              "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              border: "none", 
-            },
-            "&:hover fieldset": {
-              border: "none", 
-            },
-            "&.Mui-focused fieldset": {
-              border: "none", 
-            },
-          },
-            }}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "4px",
-              width: "90%",
-              borderRadius: "20px",
-              "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              border: "none", 
-            },
-            "&:hover fieldset": {
-              border: "none", 
-            },
-            "&.Mui-focused fieldset": {
-              border: "none", 
-            },
-          },
-            }}
-          />
-          <TextField
-            label="Confirm Password"
-            type="password"
-            variant="outlined"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "4px",
-              width: "90%",
-              borderRadius: "20px",
-              "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              border: "none", 
-            },
-            "&:hover fieldset": {
-              border: "none", 
-            },
-            "&.Mui-focused fieldset": {
-              border: "none", 
-            },
-          },
-            }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{
-              textTransform: "none",
-              backgroundColor: "#e29d3f",
-              "&:hover": {
-                backgroundColor: "#C37A2C",
-              },
-              width: "90%",
-              borderRadius: "20px",
-              "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              border: "none", 
-            },
-            "&:hover fieldset": {
-              border: "none", 
-            },
-            "&.Mui-focused fieldset": {
-              border: "none", 
-            },
-          },
-            }}
+          <Typography
+            variant="h4"
+            textAlign="center"
+            mb={2}
+            fontFamily="Helvetica"
           >
             Sign Up
-          </Button>
-        </form>
-        <Box mt={2} textAlign="center">
-          <Typography variant="body2">
-            Already have an account?{" "}
-            <Link
-              component="button"
-              onClick={() => navigate("/")}
+          </Typography>
+          {error && (
+            <Typography color="error" mb={2} textAlign="center">
+              {error}
+            </Typography>
+          )}
+          <form
+            onSubmit={handleSignup}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              label="Username"
+              variant="outlined"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+                "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
+               }}
+            />
+            <TextField
+              label="Email"
+              type="email"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+                "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
+               }}
+            />
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+                "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
+               }}
+            />
+            <TextField
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+                "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
+               }}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
               sx={{
-                textDecoration: "underline",
-                cursor: "pointer",
+                textTransform: "none",
+                backgroundColor: "#e29d3f",
+                "&:hover": { backgroundColor: "#C37A2C" },
+                width: "90%",
+                borderRadius: "20px",
+                "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
               }}
             >
-              Log in
-            </Link>
-          </Typography>
+              Sign Up
+            </Button>
+          </form>
+          <Box mt={2} textAlign="center">
+            <Typography variant="body2">
+              Already have an account?{" "}
+              <Link
+                component="button"
+                onClick={() => navigate("/")}
+                sx={{ textDecoration: "underline", cursor: "pointer" }}
+              >
+                Log in
+              </Link>
+            </Typography>
+          </Box>
         </Box>
       </Paper>
 
-      {/* Snackbar for password mismatch */}
+      {/* Snackbar */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
