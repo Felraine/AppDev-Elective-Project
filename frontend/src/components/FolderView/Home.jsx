@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Grid } from '@mui/material';
+
 import axios from "axios";
 import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
 
@@ -130,11 +132,59 @@ const Home = () => {
           Progress Tracker
         </Typography>
 
-        <Typography>Tasks Completed: {completedTasks}</Typography>
-        {/*<Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
-        <Typography>Completed: {completedCount}</Typography>*/}
-        <Typography>Pending: {pendingCount}</Typography>
-        <Typography>Overdue: {overdueCount}</Typography>
+        <Grid container spacing={2} justifyContent="center" alignItems="stretch">
+          <Grid item xs={3} sx={{ 
+            backgroundColor: 'grey', 
+            color: 'white', 
+            padding: 2, 
+            borderRadius: 2, 
+            textAlign: 'center', 
+            height: '150px', 
+            display: 'flex', 
+            flexDirection: 'column',
+            justifyContent: 'center',
+            margin: 1
+          }}>
+            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Pending</Typography>
+            <Typography variant="h4">{pendingCount}</Typography>
+          </Grid>
+          <Grid item xs={3} sx={{ 
+            backgroundColor: 'red', 
+            color: 'white', 
+            padding: 2, 
+            borderRadius: 2, 
+            textAlign: 'center', 
+            height: '150px', 
+            display: 'flex', 
+            flexDirection: 'column',
+            justifyContent: 'center',
+            margin: 1
+          }}>
+            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Overdue</Typography>
+            <Typography variant="h4">{overdueCount}</Typography>
+          </Grid>
+          <Grid item xs={3} sx={{ 
+            backgroundColor: 'green', 
+            color: 'white', 
+            padding: 2, 
+            borderRadius: 2, 
+            textAlign: 'center', 
+            height: '150px', 
+            display: 'flex', 
+            flexDirection: 'column',
+            justifyContent: 'center',
+            margin: 1
+          }}>
+            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Completed</Typography>
+            <Typography variant="h4">{completedTasks}</Typography>
+          </Grid>
+      </Grid>
+
+
+
+
+
+
         
         {progress === 100 ? (
           <Typography
@@ -149,7 +199,7 @@ const Home = () => {
             🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
           </Typography>
         )}
-        <LinearProgress
+        {/*<LinearProgress
           variant="determinate"
           value={progress}
           sx={{
@@ -160,7 +210,7 @@ const Home = () => {
               backgroundColor: "#ffa500",
             },
           }}
-        />
+        />*/}
       </Box>
 
       {/* To-Do List */}
@@ -191,6 +241,31 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
+	      <Box sx={{ marginBottom: 2 }}>
+            <Typography
+              sx={{
+                fontSize: "1rem",
+                fontWeight: "bold",
+                textAlign: "center",
+                marginBottom: 1,
+                fontFamily: "monospace",
+              }}
+            >
+              {progress.toFixed(1)}% Completed
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={progress}
+              sx={{
+                height: 15,
+                borderRadius: 1,
+                backgroundColor: "#e0e0e0",
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor: "#ffa500",
+                },
+              }}
+            />
+          </Box>
           {tasks.map((task) => (
             <Box
               key={task.task_ID}
@@ -217,21 +292,40 @@ const Home = () => {
               ></Box>
 
               {/* Task Details */}
-              <Box sx={{ flexGrow: 1 }}>
+              <Box sx={{ 
+		              display: "flex",
+                  flexDirection: "column",
+                  flexGrow: 1,
+                  fontFamily: "monospace",
+                  marginRight: "10px",
+
+ }}>
                 <Typography
                   variant="h6"
                   sx={{
-                    fontSize: "1rem",
+                    fontSize: "1.1rem",
                     fontWeight: "bold",
+		                marginBottom: 1,
                     fontFamily: "monospace",
                   }}
                 >
+		        {/* Checkbox */}
+              <Checkbox
+                  defaultChecked={false}
+                  onChange={() => archiveTask(task.task_ID)}
+                  sx={{
+                   padding: 0,
+                  justifyContent: "flex-start",
+                  marginRight: "10px",
+                  }}
+              />
                   {task.title}
                 </Typography>
                 <Typography
                   sx={{
-                    fontSize: "0.9rem",
+                    fontSize: "1rem",
                     color: "#555",
+			              marginBottom: 1,
                     fontFamily: "monospace",
                   }}
                 >
@@ -247,17 +341,6 @@ const Home = () => {
                   Due Date: {task.due_date}
                 </Typography>
               </Box>
-
-              {/* Checkbox */}
-              <Checkbox
-                  defaultChecked={false}
-                  onChange={() => archiveTask(task.task_ID)}
-                  sx={{
-                   padding: 0,
-                  justifyContent: "flex-start",
-                  marginRight: "10px",
-                  }}
-              />
             </Box>
           ))}
         </Box>
