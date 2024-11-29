@@ -64,7 +64,11 @@ public class TaskService {
 
     // UPDATE
     public TaskEntity putTaskDetails(int id, TaskEntity newTaskDetails) throws NameNotFoundException {
-        TaskEntity task;
+        TaskEntity task = taskRepository.findById(id)
+            .orElseThrow(() -> new NameNotFoundException("Task with ID " + id + " not found"));
+
+    boolean dueDateChanged = isDueDateChanged(task, newTaskDetails);
+
         try {
             task = taskRepository.findById(id).get();
             task.setTitle(newTaskDetails.getTitle());
@@ -72,6 +76,17 @@ public class TaskService {
             task.setPriority(newTaskDetails.getPriority());
             task.setCreation_date(newTaskDetails.getCreation_date());
             task.setDue_date(newTaskDetails.getDue_date());
+
+            if (dueDateChanged) {
+                TaskStatusEntity taskStatus = taskStatusRepository.findByTask(task)
+                        .orElseThrow(() -> new NameNotFoundException("Task status not found for task ID: " + id));
+        
+                // Recalculate the status
+                String newStatus = taskStatusService.determineTaskStatus(task);
+                taskStatus.setStatus(newStatus);
+                taskStatus.setLast_updated(new Date());
+                taskStatusRepository.save(taskStatus);
+            }
         } catch (NoSuchElementException nex) {
             throw new NameNotFoundException("Task with ID " + id + " not found");
         }
@@ -111,5 +126,12 @@ public void archiveTask(int taskId, int userId) throws NameNotFoundException {
     archiveService.saveArchivedTask(archivedTask);
 
     taskRepository.delete(task);
+}
+
+private boolean isDueDateChanged(TaskEntity existingTask, TaskEntity newTaskDetails) {
+    if (existingTask.getDue_date() == null || newTaskDetails.getDue_date() == null) {
+        return false; // No change if either date is null
+    }
+    return !existingTask.getDue_date().equals(newTaskDetails.getDue_date());
 }
 }
