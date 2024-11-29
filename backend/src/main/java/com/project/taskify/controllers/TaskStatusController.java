@@ -60,15 +60,17 @@ public class TaskStatusController {
         }
     }
    
+    //get all status
     @GetMapping("/statuses")
     public ResponseEntity<List<TaskStatusEntity>> getAllTaskStatuses() {
         List<TaskStatusEntity> taskStatuses = tsServ.getAllTaskStatuses();
         return ResponseEntity.ok(taskStatuses);
     }
 
+    //Get status per user
     @GetMapping("/statuses/count/{userId}")
     public List<TaskStatusEntity> getTaskStatuses(@PathVariable int userId) {
-        return tsRepo.findAllByTask_User_UserId(userId);  // Ensure this returns a List<TaskStatusEntity>
+        return tsRepo.findAllByTask_User_UserId(userId);  
     }
 
 	//update task status
