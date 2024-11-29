@@ -61,94 +61,192 @@ const Login = ({ onLogin }) => {
       }}
     >
       <Paper
-        elevation={6}
+  elevation={6}
+  sx={{
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    height: "100%",
+    maxWidth: 800,
+    maxHeight: 500,
+    borderRadius: "20px",
+    position: "relative",
+  }}
+>
+  {/* Left Section */}
+  <Box
+    sx={{
+      flex: 1,
+      padding: "2rem",
+      backgroundColor: "rgba(255, 250, 157, 0.9)",
+      borderTopLeftRadius: "20px",
+      borderBottomLeftRadius: "20px",
+    }}
+  >
+    <Typography variant="h5" textAlign="left" mb={1} fontFamily="Helvetica " fontWeight="bold">
+      Hello,
+    </Typography>
+    <Typography variant="h5" textAlign="left" mb={3} fontFamily="Helvetica " fontWeight="bold">
+      Welcome back
+    </Typography>
+    {errorMessage && (
+      <Typography color="error" mb={2} textAlign="center">
+        {errorMessage}
+      </Typography>
+    )}
+    <form
+      onSubmit={handleSubmit}
+      style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+    >
+      <TextField
+        label="Username"
+        variant="outlined"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        fullWidth
+        required
         sx={{
-          padding: "2rem",
-          width: "100%",
-          maxWidth: 450,
-          backgroundColor: "rgba(255, 250, 157, 0.9)",
+          backgroundColor: "white",
           borderRadius: "20px",
+          marginTop: "10px",
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
+        }}
+      />
+      <TextField
+        label="Password"
+        type={showPassword ? "text" : "password"}
+        variant="outlined"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        fullWidth
+        required
+        sx={{
+          backgroundColor: "white",
+          borderRadius: "4px",
+          borderRadius: "20px",
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={togglePasswordVisibility} edge="end">
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{
+          textTransform: "none",
+          fontSize:"16px",
+          fontWeight:"bold",
+          backgroundColor: "#e29d3f",
+          padding: "10px",
+          "&:hover": {
+            backgroundColor: "#C37A2C",
+          },
+          borderRadius: "20px",
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
+          marginTop: "20px",
         }}
       >
-        <Typography
-          variant="h4"
-          textAlign="center"
-          mb={2}
-          fontFamily="Helvetica "
+        Login
+      </Button>
+    </form>
+    <Box textAlign="center" mt={2}>
+      <Typography>
+        Don&apos;t have an account?{" "}
+        <Link
+          onClick={() => navigate("/signup")}
+          sx={{ cursor: "pointer", textDecoration: "underline" }}
         >
-          Login
-        </Typography>
-        {errorMessage && (
-          <Typography color="error" mb={2} textAlign="center">
-            {errorMessage}
-          </Typography>
-        )}
-        <form
-          onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-        >
-          <TextField
-            label="Username"
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            fullWidth
-            required
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "4px",
-            }}
-          />
-          <TextField
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            required
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "4px",
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={togglePasswordVisibility} edge="end">
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{
-              textTransform: "none",
-              backgroundColor: "#e29d3f",
-              "&:hover": {
-                backgroundColor: "#C37A2C",
-              },
-            }}
-          >
-            Login
-          </Button>
-        </form>
-        <Box textAlign="center" mt={2}>
-          <Typography>
-            Don&apos;t have an account?{" "}
-            <Link
-              onClick={() => navigate("/signup")}
-              sx={{ cursor: "pointer", textDecoration: "underline" }}
-            >
-              Sign up
-            </Link>
-          </Typography>
-        </Box>
-      </Paper>
+          Sign up
+        </Link>
+      </Typography>
+    </Box>
+  </Box>
+
+  {/* Right Section */}
+  <Box
+    sx={{
+      flex: 1,
+      backgroundColor: "rgba(255, 255, 255, 0.7)",
+      borderTopRightRadius: "20px",
+      borderBottomRightRadius: "20px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      
+    }}
+  >
+    <Box
+      sx={{
+        width: "80%",
+        height: "80%",
+       // backgroundColor: "#ffffff",
+        borderRadius: "10px",
+        backgroundImage: `url('src/assets/images/loginImage.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        marginBottom:"30px",
+      }}
+    >
+      <Typography
+        variant="body1"
+        textAlign="center"
+        color="text.secondary"
+        sx={{ lineHeight: "200px",
+        zIndex: 1, //text appears above the image
+        position: "relative",
+        color: "#514538",
+        fontWeight:"bold",
+        position: "absolute",
+        bottom: 0, 
+        marginLeft: "30px",
+        marginBottom: "-50px",
+         }}
+      >
+       Where Tasks Meet Simplicity.
+      </Typography>
+    </Box>
+  </Box>
+</Paper>
+
     </Box>
   );
 };
