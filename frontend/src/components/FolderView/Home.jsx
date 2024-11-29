@@ -10,15 +10,23 @@ const Home = () => {
   const [overdueCount, setOverdueCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [taskStatuses, setTaskStatuses] = useState([]);
- 
+  
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
- 
+
+  // Fetch tasks and statuses initially and set up polling
   useEffect(() => {
     fetchTasksData();
     fetchTaskStatuses();
+
+    const intervalId = setInterval(() => {
+      fetchTasksData();
+      fetchTaskStatuses();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
- 
+
   const fetchTasksData = async () => {
     try {
       const archivedResponse = await axios.get(
@@ -28,7 +36,7 @@ const Home = () => {
         }
       );
       setCompletedTasks(archivedResponse.data.length);
- 
+
       const tasksResponse = await axios.get(
         `http://localhost:8080/api/tasks/user/${userId}`,
         {
@@ -41,7 +49,7 @@ const Home = () => {
       console.error("Error fetching tasks data:", error);
     }
   };
- 
+
   const fetchTaskStatuses = async () => {
     try {
       const response = await axios.get(
@@ -52,7 +60,7 @@ const Home = () => {
       );
       const statuses = response.data;
       setTaskStatuses(statuses);
- 
+
       setPendingCount(statuses.filter((task) => task.status === "Pending").length);
       setOverdueCount(statuses.filter((task) => task.status === "Overdue").length);
       setCompletedCount(statuses.filter((task) => task.status === "Completed").length);
@@ -60,7 +68,7 @@ const Home = () => {
       console.error("Error fetching task statuses:", error);
     }
   };
- 
+
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "high":
@@ -74,7 +82,7 @@ const Home = () => {
     }
   };
 
-  //For Complete Task Button
+  // Archive task on completion
   const archiveTask = async (taskId) => {
     try {
       await axios.put(
@@ -82,16 +90,16 @@ const Home = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setTasks((prevTasks) =>
-        prevTasks.filter((task) => task.task_ID !== taskId)
-      );
+      // Update tasks and counts after task completion
+      setTasks((prevTasks) => prevTasks.filter((task) => task.task_ID !== taskId));
+      setCompletedTasks((prevCount) => prevCount + 1);
     } catch (error) {
       console.error("Error archiving task:", error);
     }
   };
 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
- 
+
   return (
     <Box
       sx={{
@@ -127,7 +135,7 @@ const Home = () => {
         >
           Progress Tracker
         </Typography>
- 
+
         <Typography>Tasks Completed: {completedTasks}</Typography>
         <Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
         <Typography>Pending: {pendingCount}</Typography>
@@ -147,7 +155,7 @@ const Home = () => {
           </Typography>
         )}
       </Box>
- 
+
       {/* To-Do List on the Right */}
       <Box
         sx={{
@@ -176,7 +184,6 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
-        
           <Box sx={{ marginBottom: 2 }}>
             <Typography
               sx={{
@@ -227,7 +234,7 @@ const Home = () => {
                   flexShrink: 0,
                 }}
               ></Box>
- 
+
               {/* Task Details */}
               <Box
                 sx={{
@@ -236,8 +243,8 @@ const Home = () => {
                   flexGrow: 1,
                   fontFamily: "monospace",
                   marginRight: "10px",
-                }} 
-              >    
+                }}
+              >
                 <Typography
                   variant="h6"
                   sx={{
@@ -246,40 +253,15 @@ const Home = () => {
                     marginBottom: 1,
                     fontFamily: "monospace",
                   }}
-                > 
-                {/* Complete Checkbox for Task*/}
-                
+                >
+                  {/* Complete Checkbox for Task*/}
                   <Checkbox
-                  defaultChecked={false}
-                  onChange={() => archiveTask(task.task_ID)}
-                  sx={{
-                    padding: 0,         
-                    justifyContent: "flex-start",
-                    marginRight: "10px",              
-                  }}              
-                /> 
+                    defaultChecked={task.status === "Completed"}
+                    onChange={() => archiveTask(task.task_ID)}
+                  />
                   {task.title}
                 </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "1rem",
-                    color: "#555",
-                    marginBottom: 1,
-                    fontFamily: "monospace",
-                  }}
-                >
-                  
-                  {task.description}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "0.8rem",
-                    color: "#888",
-                    fontStyle: "italic",
-                  }}
-                >
-                  Due Date: {task.due_date}
-                </Typography>
+                <Typography>{task.description}</Typography>
               </Box>
             </Box>
           ))}
@@ -288,5 +270,5 @@ const Home = () => {
     </Box>
   );
 };
- 
+
 export default Home;

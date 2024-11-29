@@ -81,7 +81,6 @@ public class TaskService {
                 TaskStatusEntity taskStatus = taskStatusRepository.findByTask(task)
                         .orElseThrow(() -> new NameNotFoundException("Task status not found for task ID: " + id));
         
-                // Recalculate the status
                 String newStatus = taskStatusService.determineTaskStatus(task);
                 taskStatus.setStatus(newStatus);
                 taskStatus.setLast_updated(new Date());
@@ -130,7 +129,7 @@ public void archiveTask(int taskId, int userId) throws NameNotFoundException {
 
 private boolean isDueDateChanged(TaskEntity existingTask, TaskEntity newTaskDetails) {
     if (existingTask.getDue_date() == null || newTaskDetails.getDue_date() == null) {
-        return false; // No change if either date is null
+        return false; 
     }
     return !existingTask.getDue_date().equals(newTaskDetails.getDue_date());
 }
