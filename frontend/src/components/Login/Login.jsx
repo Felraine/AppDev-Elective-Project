@@ -53,7 +53,8 @@ const Login = ({ onLogin }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundImage: `url("./src/assets/images/loginBackground.jpg")`,
+        backgroundColor: "#E29D3F",
+       /* backgroundImage: `url("./src/assets/images/loginBackground.jpg")`,*/
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
@@ -73,7 +74,7 @@ const Login = ({ onLogin }) => {
           variant="h4"
           textAlign="center"
           mb={2}
-          fontFamily="monospace"
+          fontFamily="Helvetica "
         >
           Login
         </Typography>
