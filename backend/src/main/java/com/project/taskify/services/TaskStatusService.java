@@ -3,7 +3,9 @@ package com.project.taskify.services;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.NameNotFoundException;
 
@@ -94,4 +96,15 @@ public class TaskStatusService {
 	public List<TaskStatusEntity> getAllTaskStatuses() {
 		return tsrepo.findAll();
 	}
+
+	public Map<String, Long> countTaskStatusesByUser(int userId) {
+    List<TaskStatusEntity> userTasks = tsrepo.findAllByTask_User_UserId(userId);
+
+    Map<String, Long> statusCounts = new HashMap<>();
+    statusCounts.put("Pending", userTasks.stream().filter(task -> "Pending".equals(task.getStatus())).count());
+    statusCounts.put("Overdue", userTasks.stream().filter(task -> "Overdue".equals(task.getStatus())).count());
+    statusCounts.put("Completed", userTasks.stream().filter(task -> "Completed".equals(task.getStatus())).count());
+
+    return statusCounts;
+}
 }

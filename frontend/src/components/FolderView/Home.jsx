@@ -10,15 +10,15 @@ const Home = () => {
   const [overdueCount, setOverdueCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [taskStatuses, setTaskStatuses] = useState([]);
-
+ 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+ 
   useEffect(() => {
     fetchTasksData();
     fetchTaskStatuses();
   }, []);
-
+ 
   const fetchTasksData = async () => {
     try {
       const archivedResponse = await axios.get(
@@ -28,7 +28,7 @@ const Home = () => {
         }
       );
       setCompletedTasks(archivedResponse.data.length);
-
+ 
       const tasksResponse = await axios.get(
         `http://localhost:8080/api/tasks/user/${userId}`,
         {
@@ -41,32 +41,26 @@ const Home = () => {
       console.error("Error fetching tasks data:", error);
     }
   };
-
+ 
   const fetchTaskStatuses = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/tasks/status/statuses",
+        `http://localhost:8080/api/tasks/status/statuses/count/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       const statuses = response.data;
       setTaskStatuses(statuses);
-
-      setPendingCount(
-        statuses.filter((task) => task.status === "Pending").length
-      );
-      setOverdueCount(
-        statuses.filter((task) => task.status === "Overdue").length
-      );
-      setCompletedCount(
-        statuses.filter((task) => task.status === "Completed").length
-      );
+ 
+      setPendingCount(statuses.filter((task) => task.status === "Pending").length);
+      setOverdueCount(statuses.filter((task) => task.status === "Overdue").length);
+      setCompletedCount(statuses.filter((task) => task.status === "Completed").length);
     } catch (error) {
       console.error("Error fetching task statuses:", error);
     }
   };
-
+ 
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "high":
@@ -97,7 +91,7 @@ const Home = () => {
   };
 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
+ 
   return (
     <Box
       sx={{
@@ -133,7 +127,7 @@ const Home = () => {
         >
           Progress Tracker
         </Typography>
-
+ 
         <Typography>Tasks Completed: {completedTasks}</Typography>
         <Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
         <Typography>Pending: {pendingCount}</Typography>
@@ -153,7 +147,7 @@ const Home = () => {
           </Typography>
         )}
       </Box>
-
+ 
       {/* To-Do List on the Right */}
       <Box
         sx={{
@@ -233,7 +227,7 @@ const Home = () => {
                   flexShrink: 0,
                 }}
               ></Box>
-
+ 
               {/* Task Details */}
               <Box
                 sx={{
@@ -294,5 +288,5 @@ const Home = () => {
     </Box>
   );
 };
-
+ 
 export default Home;
