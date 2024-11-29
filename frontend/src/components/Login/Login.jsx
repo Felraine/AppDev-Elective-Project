@@ -83,10 +83,10 @@ const Login = ({ onLogin }) => {
       borderBottomLeftRadius: "20px",
     }}
   >
-    <Typography variant="h5" textAlign="left" mb={1} fontFamily="Helvetica " fontWeight="bold">
+    <Typography variant="h5" textAlign="left" mb={0} fontFamily="Helvetica " fontWeight="bold" marginLeft="20px">
       Hello,
     </Typography>
-    <Typography variant="h5" textAlign="left" mb={3} fontFamily="Helvetica " fontWeight="bold">
+    <Typography variant="h5" textAlign="left" mb={3} fontFamily="Helvetica " fontWeight="bold" marginLeft="20px">
       Welcome back
     </Typography>
     {errorMessage && (
@@ -109,6 +109,9 @@ const Login = ({ onLogin }) => {
           backgroundColor: "white",
           borderRadius: "20px",
           marginTop: "10px",
+          marginLeft:"20px",
+          width: "300px",
+          height: "55px",
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
               border: "none", 
@@ -134,6 +137,10 @@ const Login = ({ onLogin }) => {
           backgroundColor: "white",
           borderRadius: "4px",
           borderRadius: "20px",
+          marginTop: "10px",
+          marginLeft:"20px",
+          width: "300px",
+          height: "55px",
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
               border: "none", 
@@ -167,6 +174,10 @@ const Login = ({ onLogin }) => {
           fontWeight:"bold",
           backgroundColor: "#e29d3f",
           padding: "10px",
+          marginTop: "10px",
+          marginLeft:"20px",
+          width: "300px",
+          height: "55px",
           "&:hover": {
             backgroundColor: "#C37A2C",
           },
@@ -189,7 +200,7 @@ const Login = ({ onLogin }) => {
       </Button>
     </form>
     <Box textAlign="center" mt={2}>
-      <Typography>
+      <Typography marginRight="30px" marginTop="65px">
         Don&apos;t have an account?{" "}
         <Link
           onClick={() => navigate("/signup")}
@@ -218,12 +229,11 @@ const Login = ({ onLogin }) => {
       sx={{
         width: "80%",
         height: "80%",
-       // backgroundColor: "#ffffff",
         borderRadius: "10px",
         backgroundImage: `url('src/assets/images/loginImage.png')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        marginBottom:"30px",
+        marginBottom:"70px",
       }}
     >
       <Typography
@@ -238,7 +248,7 @@ const Login = ({ onLogin }) => {
         position: "absolute",
         bottom: 0, 
         marginLeft: "30px",
-        marginBottom: "-50px",
+        marginBottom: "-35px",
          }}
       >
        Where Tasks Meet Simplicity.
