@@ -16,7 +16,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -36,7 +36,9 @@ const Login = ({ onLogin }) => {
       onLogin(response.data);
       navigate("/home");
     } catch (error) {
-      setErrorMessage("Login failed. Please check your credentials.");
+      const errorMsg =
+        error.response?.data || "Login failed. Please check your credentials.";
+      setErrorMessage(errorMsg);
     }
   };
 

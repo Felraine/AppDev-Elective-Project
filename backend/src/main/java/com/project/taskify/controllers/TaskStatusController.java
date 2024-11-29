@@ -2,7 +2,6 @@ package com.project.taskify.controllers;
 
 import java.util.Optional;
 import java.util.List;
-import java.util.Map;
 
 import javax.naming.NameNotFoundException;
 
@@ -71,17 +70,6 @@ public class TaskStatusController {
     public List<TaskStatusEntity> getTaskStatuses(@PathVariable int userId) {
         return tsRepo.findAllByTask_User_UserId(userId);  // Ensure this returns a List<TaskStatusEntity>
     }
-
-    /*@GetMapping("/statuses/count/{userId}")
-    public ResponseEntity<Map<String, Long>> countTaskStatusesByUser(@PathVariable int userId) {
-    try {
-        Map<String, Long> statusCounts = tsServ.countTaskStatusesByUser(userId);
-        return new ResponseEntity<>(statusCounts, HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    } 
-
-    }*/
 
 	//update task status
 	@PutMapping("/update/{statusId}")

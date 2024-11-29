@@ -54,7 +54,7 @@ const Tasks = () => {
       setError("Could not fetch tasks. Please try again later.");
     }
   };
-
+  //DELETE TASK
   const deleteTask = async (id) => {
     try {
       const response = await axios.delete(
@@ -81,7 +81,7 @@ const Tasks = () => {
     const { name, value } = e.target;
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
   };
-
+    //ADD TASK
   const addTask = async (e) => {
     e.preventDefault();
     const currentDate = new Date().toISOString().split("T")[0];
@@ -104,7 +104,7 @@ const Tasks = () => {
       setError("Adding Task failed. Please try again.");
     }
   };
-
+  //EDIT TASK
   const editTask = async (editedTask) => {
     try {
       await axios.put(
@@ -163,21 +163,6 @@ const Tasks = () => {
     { value: "medium", label: "Medium", color: "#0056B3" },
     { value: "low", label: "Low", color: "green" },
   ];
-
-  const archiveTask = async (taskId) => {
-    try {
-      await axios.put(
-        `http://localhost:8080/api/archive/${taskId}/user/${userId}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setTasks((prevTasks) =>
-        prevTasks.filter((task) => task.task_ID !== taskId)
-      );
-    } catch (error) {
-      console.error("Error archiving task:", error);
-    }
-  };
 
   return (
     <Box
@@ -380,13 +365,7 @@ const Tasks = () => {
                   </Box>
                 )}
               </Box>
-              <Button
-                variant="outlined"
-                onClick={() => archiveTask(task.task_ID)}
-                sx={{ marginTop: 2 }}
-              >
-                Complete Task
-              </Button>
+              
             </Box>
           ))}
         </Box>
