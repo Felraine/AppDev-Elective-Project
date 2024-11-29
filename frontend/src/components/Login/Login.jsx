@@ -170,7 +170,7 @@ const Login = ({ onLogin }) => {
         fullWidth
         sx={{
           textTransform: "none",
-          fontSize:"16px",
+          fontSize:"18px",
           fontWeight:"bold",
           backgroundColor: "#e29d3f",
           padding: "10px",
