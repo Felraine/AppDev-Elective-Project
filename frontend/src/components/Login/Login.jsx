@@ -54,7 +54,6 @@ const Login = ({ onLogin }) => {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#E29D3F",
-       /* backgroundImage: `url("./src/assets/images/loginBackground.jpg")`,*/
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
@@ -177,7 +176,7 @@ const Login = ({ onLogin }) => {
           marginTop: "10px",
           marginLeft:"20px",
           width: "300px",
-          height: "55px",
+          height: "40px",
           "&:hover": {
             backgroundColor: "#C37A2C",
           },

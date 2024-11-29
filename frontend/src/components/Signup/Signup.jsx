@@ -63,6 +63,22 @@ const Signup = () => {
         backgroundPosition: "center",
       }}
     >
+     <Typography
+        variant="body1"
+        textAlign="center"
+        color="text.secondary"
+        sx={{ lineHeight: "200px",
+        zIndex: 1, //text appears above the image
+        position: "relative",
+        color: "#514538",
+        fontWeight:"bold",
+        position: "absolute",
+        bottom: 50,
+        marginLeft: "-400px",
+         }}
+      >
+       From To-Do to Done, the Easy Way.
+      </Typography> 
       <Paper
         elevation={6}
         sx={{
@@ -75,6 +91,7 @@ const Signup = () => {
           borderRadius: "20px",
           overflow: "hidden",
         }}
+        
       >
         {/* Left Side: Image */}
         <Box
@@ -85,6 +102,7 @@ const Signup = () => {
             backgroundColor: "white",
             backgroundSize: '380px 380px',
             backgroundRepeat: "no-repeat", 
+            backgroundPosition: "10px 40px",
           }}
         />
 
@@ -99,12 +117,15 @@ const Signup = () => {
           }}
         >
           <Typography
-            variant="h4"
+            variant="h5"
             textAlign="center"
             mb={2}
             fontFamily="Helvetica"
+            fontSize="20px"
+            fontWeight="bold"
+            marginTop="-15px"
           >
-            Sign Up
+            Create a new account
           </Typography>
           {error && (
             <Typography color="error" mb={2} textAlign="center">
@@ -127,6 +148,9 @@ const Signup = () => {
               onChange={(e) => setUsername(e.target.value)}
               required
               sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+              width: "80%",
+              height: "50px",
+              padding: "4px",
                 "& .MuiOutlinedInput-root": {
             "& fieldset": {
               border: "none", 
@@ -148,6 +172,8 @@ const Signup = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+              width: "80%",
+              height: "80%",
                 "& .MuiOutlinedInput-root": {
             "& fieldset": {
               border: "none", 
@@ -169,6 +195,8 @@ const Signup = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+              width: "80%",
+              height: "80%",
                 "& .MuiOutlinedInput-root": {
             "& fieldset": {
               border: "none", 
@@ -190,6 +218,8 @@ const Signup = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+                width: "80%",
+                height: "80%",
                 "& .MuiOutlinedInput-root": {
             "& fieldset": {
               border: "none", 
@@ -211,7 +241,8 @@ const Signup = () => {
                 textTransform: "none",
                 backgroundColor: "#e29d3f",
                 "&:hover": { backgroundColor: "#C37A2C" },
-                width: "90%",
+                width: "80%",
+                height: "80%",
                 borderRadius: "20px",
                 "& .MuiOutlinedInput-root": {
             "& fieldset": {
@@ -230,7 +261,7 @@ const Signup = () => {
             </Button>
           </form>
           <Box mt={2} textAlign="center">
-            <Typography variant="body2">
+            <Typography variant="body2" marginTop="20px">
               Already have an account?{" "}
               <Link
                 component="button"
