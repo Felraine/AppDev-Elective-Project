@@ -23,8 +23,8 @@ const Tasks = () => {
   const [buttonsVisible, setButtonsVisible] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
-  const [EditDialogOpen, setEditDialogOpen] = useState(false);
-  const [taskToUpdate, setTaskToUpdate] = useState(null);
+  //const [editDialogOpen, setEditDialogOpen] = useState(false);
+  //const [taskToUpdate, setTaskToUpdate] = useState(null);
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -131,7 +131,7 @@ const Tasks = () => {
       task.task_ID === editedTask.task_ID ? editedTask : task
     );
     setTasks(updatedTasks);
-
+    setIsDialogOpen(false);
     editTask(editedTask);
   };
 
@@ -154,24 +154,6 @@ const Tasks = () => {
     setDeleteDialogOpen(false);
   };
 
-  //dialog for update/edit
-  const handleOpenEditDialog = (taskId) => {
-    setTaskToUpdate(taskId);
-    setEditDialogOpen(true);
-  };
-
-  const handleCloseEditDialog = () => {
-    setTaskToUpdate(null);
-    setEditDialogOpen(false);
-  };
-
-  const handleConfirmEdit = () => {
-    if (taskToUpdate) {
-      editTask(C);
-      setTaskToUpdate(null);
-    }
-    setEditDialogOpen(false);
-  };
   const sortedTasks = tasks.sort((a, b) => {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
