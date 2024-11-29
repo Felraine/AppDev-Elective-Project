@@ -58,7 +58,6 @@ const Signup = () => {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#E29D3F",
-       /* backgroundImage: `url('./src/assets/images/loginBackground.jpg')`,*/
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
@@ -104,8 +103,19 @@ const Signup = () => {
             required
             sx={{
               backgroundColor: "white",
-              borderRadius: "4px",
               width: "90%",
+              borderRadius: "20px",
+              "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
             }}
           />
           <TextField
@@ -119,6 +129,18 @@ const Signup = () => {
               backgroundColor: "white",
               borderRadius: "4px",
               width: "90%",
+              borderRadius: "20px",
+              "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
             }}
           />
           <TextField
@@ -132,6 +154,18 @@ const Signup = () => {
               backgroundColor: "white",
               borderRadius: "4px",
               width: "90%",
+              borderRadius: "20px",
+              "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
             }}
           />
           <TextField
@@ -145,6 +179,18 @@ const Signup = () => {
               backgroundColor: "white",
               borderRadius: "4px",
               width: "90%",
+              borderRadius: "20px",
+              "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
             }}
           />
           <Button
@@ -158,6 +204,18 @@ const Signup = () => {
                 backgroundColor: "#C37A2C",
               },
               width: "90%",
+              borderRadius: "20px",
+              "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none", 
+            },
+            "&:hover fieldset": {
+              border: "none", 
+            },
+            "&.Mui-focused fieldset": {
+              border: "none", 
+            },
+          },
             }}
           >
             Sign Up

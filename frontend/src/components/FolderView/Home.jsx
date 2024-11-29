@@ -10,21 +10,13 @@ const Home = () => {
   const [overdueCount, setOverdueCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [taskStatuses, setTaskStatuses] = useState([]);
-  
+
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
-  // Fetch tasks and statuses initially and set up polling
   useEffect(() => {
     fetchTasksData();
     fetchTaskStatuses();
-
-    const intervalId = setInterval(() => {
-      fetchTasksData();
-      fetchTaskStatuses();
-    }, 1000);
-
-    return () => clearInterval(intervalId);
   }, []);
 
   const fetchTasksData = async () => {
@@ -82,7 +74,7 @@ const Home = () => {
     }
   };
 
-  // Archive task on completion
+  // Update task counts and progress dynamically
   const archiveTask = async (taskId) => {
     try {
       await axios.put(
@@ -90,13 +82,15 @@ const Home = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Update tasks and counts after task completion
-      setTasks((prevTasks) => prevTasks.filter((task) => task.task_ID !== taskId));
-      setCompletedTasks((prevCount) => prevCount + 1);
+  
+      // Refetch the tasks and statuses after updating the backend
+      fetchTasksData();
+      fetchTaskStatuses();
     } catch (error) {
       console.error("Error archiving task:", error);
     }
   };
+  
 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
@@ -116,7 +110,7 @@ const Home = () => {
         borderBottomRightRadius: 20,
       }}
     >
-      {/* Progress Tracker on the Left */}
+      {/* Progress Tracker */}
       <Box
         sx={{
           display: "flex",
@@ -137,10 +131,11 @@ const Home = () => {
         </Typography>
 
         <Typography>Tasks Completed: {completedTasks}</Typography>
-        <Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
+        {/*<Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
+        <Typography>Completed: {completedCount}</Typography>*/}
         <Typography>Pending: {pendingCount}</Typography>
         <Typography>Overdue: {overdueCount}</Typography>
-        <Typography>Completed: {completedCount}</Typography>
+        
         {progress === 100 ? (
           <Typography
             sx={{ color: "green", fontWeight: "bold", fontSize: "1.2em" }}
@@ -154,9 +149,21 @@ const Home = () => {
             🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
           </Typography>
         )}
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          sx={{
+            height: 15,
+            borderRadius: 1,
+            backgroundColor: "#e0e0e0",
+            "& .MuiLinearProgress-bar": {
+              backgroundColor: "#ffa500",
+            },
+          }}
+        />
       </Box>
 
-      {/* To-Do List on the Right */}
+      {/* To-Do List */}
       <Box
         sx={{
           display: "flex",
@@ -165,7 +172,7 @@ const Home = () => {
           backgroundColor: "#fff",
           borderRadius: 2,
           padding: 3,
-          width: "50%", // Adjusted to 50%
+          width: "50%",
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
@@ -184,32 +191,6 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
-          <Box sx={{ marginBottom: 2 }}>
-            <Typography
-              sx={{
-                fontSize: "1rem",
-                fontWeight: "bold",
-                textAlign: "center",
-                marginBottom: 1,
-                fontFamily: "monospace",
-              }}
-            >
-              {progress.toFixed(1)}% Completed
-            </Typography>
-            <LinearProgress
-              variant="determinate"
-              value={progress}
-              sx={{
-                height: 15,
-                borderRadius: 1,
-                backgroundColor: "#e0e0e0",
-                "& .MuiLinearProgress-bar": {
-                  backgroundColor: "#ffa500",
-                },
-              }}
-            />
-          </Box>
-
           {tasks.map((task) => (
             <Box
               key={task.task_ID}
@@ -224,7 +205,7 @@ const Home = () => {
                 padding: 2,
               }}
             >
-              {/* Priority Circle */}
+              {/* Priority Indicator */}
               <Box
                 sx={{
                   width: 12,
@@ -236,33 +217,47 @@ const Home = () => {
               ></Box>
 
               {/* Task Details */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  flexGrow: 1,
-                  fontFamily: "monospace",
-                  marginRight: "10px",
-                }}
-              >
+              <Box sx={{ flexGrow: 1 }}>
                 <Typography
                   variant="h6"
                   sx={{
-                    fontSize: "1.1rem",
+                    fontSize: "1rem",
                     fontWeight: "bold",
-                    marginBottom: 1,
                     fontFamily: "monospace",
                   }}
                 >
-                  {/* Complete Checkbox for Task*/}
-                  <Checkbox
-                    defaultChecked={task.status === "Completed"}
-                    onChange={() => archiveTask(task.task_ID)}
-                  />
                   {task.title}
                 </Typography>
-                <Typography>{task.description}</Typography>
+                <Typography
+                  sx={{
+                    fontSize: "0.9rem",
+                    color: "#555",
+                    fontFamily: "monospace",
+                  }}
+                >
+                  {task.description}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "0.8rem",
+                    color: "#888",
+                    fontStyle: "italic",
+                  }}
+                >
+                  Due Date: {task.due_date}
+                </Typography>
               </Box>
+
+              {/* Checkbox */}
+              <Checkbox
+                  defaultChecked={false}
+                  onChange={() => archiveTask(task.task_ID)}
+                  sx={{
+                   padding: 0,
+                  justifyContent: "flex-start",
+                  marginRight: "10px",
+                  }}
+              />
             </Box>
           ))}
         </Box>

@@ -23,8 +23,6 @@ const Tasks = () => {
   const [buttonsVisible, setButtonsVisible] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
-  //const [editDialogOpen, setEditDialogOpen] = useState(false);
-  //const [taskToUpdate, setTaskToUpdate] = useState(null);
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -299,7 +297,6 @@ const Tasks = () => {
           </Button>
         </form>
       </Box>
-
       <Box
         className="taskList"
         sx={{
@@ -406,7 +403,6 @@ const Tasks = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
       <TaskEditDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
