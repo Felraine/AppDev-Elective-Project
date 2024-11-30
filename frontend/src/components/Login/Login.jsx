@@ -248,6 +248,7 @@ const Login = ({ onLogin }) => {
         bottom: 0, 
         marginLeft: "40px",
         marginBottom: "-50px",
+        fontWeight: "bold",
          }}
       >
        Where Tasks Meet Simplicity.
