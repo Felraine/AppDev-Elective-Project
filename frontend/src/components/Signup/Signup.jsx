@@ -69,7 +69,6 @@ const Signup = () => {
         color="text.secondary"
         sx={{ lineHeight: "200px",
         zIndex: 1, //text appears above the image
-        position: "relative",
         color: "#514538",
         fontWeight:"bold",
         position: "absolute",
@@ -98,7 +97,6 @@ const Signup = () => {
           sx={{
             width: "50%",
             backgroundImage: `url('src/assets/images/signupImage.png')`,
-            backgroundPosition: "center",
             backgroundColor: "white",
             backgroundSize: '380px 380px',
             backgroundRepeat: "no-repeat", 
@@ -147,7 +145,7 @@ const Signup = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+              sx={{ backgroundColor: "white", borderRadius: "20px",
               width: "80%",
               height: "50%",
                 "& .MuiOutlinedInput-root": {
@@ -170,7 +168,7 @@ const Signup = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+              sx={{ backgroundColor: "white", borderRadius: "20px",
               width: "80%",
               height: "80%",
                 "& .MuiOutlinedInput-root": {
@@ -193,7 +191,7 @@ const Signup = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+              sx={{ backgroundColor: "white", borderRadius: "20px",
               width: "80%",
               height: "80%",
                 "& .MuiOutlinedInput-root": {
@@ -216,7 +214,7 @@ const Signup = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              sx={{ backgroundColor: "white", width: "90%", borderRadius: "20px",
+              sx={{ backgroundColor: "white", borderRadius: "20px",
                 width: "80%",
                 height: "80%",
                 "& .MuiOutlinedInput-root": {

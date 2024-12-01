@@ -135,7 +135,6 @@ const Login = ({ onLogin }) => {
         required
         sx={{
           backgroundColor: "white",
-          borderRadius: "4px",
           borderRadius: "20px",
           marginTop: "10px",
           marginLeft:"20px",
@@ -174,7 +173,6 @@ const Login = ({ onLogin }) => {
           fontWeight:"bold",
           backgroundColor: "#e29d3f",
           padding: "10px",
-          marginTop: "10px",
           marginLeft:"20px",
           width: "300px",
           height: "40px",
@@ -242,7 +240,6 @@ const Login = ({ onLogin }) => {
         color="text.secondary"
         sx={{ lineHeight: "200px",
         zIndex: 1, //text appears above the image
-        position: "relative",
         color: "#514538",
         position: "absolute",
         bottom: 0, 

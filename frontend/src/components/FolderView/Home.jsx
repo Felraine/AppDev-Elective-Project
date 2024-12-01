@@ -128,19 +128,12 @@ const Home = () => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          backgroundColor: "#fff",
+          backgroundColor: "#FFFA9D",
           borderRadius: 2,
           padding: 3,
           width: "50%",
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <Typography
-          variant="h5"
-          sx={{ textAlign: "center", marginBottom: 2, fontFamily: "monospace" }}
-        >
-          Progress Tracker
-        </Typography>
 
         <Grid container spacing={2} justifyContent="center" alignItems="stretch">
           <Grid item xs={3} sx={{ 
@@ -189,26 +182,6 @@ const Home = () => {
             <Typography variant="h4">{completedTasks}</Typography>
           </Grid>
       </Grid>
-
-
-
-
-
-
-        
-        {progress === 100 ? (
-          <Typography
-            sx={{ color: "green", fontWeight: "bold", fontSize: "1.2em" }}
-          >
-            🎉 Congratulations! You've completed all tasks!
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ color: "orange", fontWeight: "bold", fontSize: "1.2em" }}
-          >
-            🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
-          </Typography>
-        )}
         {/*<LinearProgress
           variant="determinate"
           value={progress}
