@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from '@mui/material';
-
+import './calendar.css';
 import axios from "axios";
 import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 
 const Home = () => {
@@ -103,6 +105,13 @@ const Home = () => {
     }
   };
   
+  const [date, setDate] = useState(new Date());
+
+  const handleDateChange = (newDate) => {
+    setDate(newDate);
+  };
+
+  const customHeight = '200px';
 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
@@ -112,7 +121,7 @@ const Home = () => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 3,
+        padding: 2,
         backgroundColor: "#fffa9d",
         minHeight: "calc(100vh - 160px)",
         maxHeight: "calc(100vh - 160px)",
@@ -130,128 +139,134 @@ const Home = () => {
           gap: 2,
           backgroundColor: "#FFFA9D",
           borderRadius: 2,
-          padding: 3,
+          padding: 2,
           width: "50%",
         }}
       >
-        <Typography
-          variant="h5"
-          sx={{ textAlign: "center", marginBottom: 2, fontFamily: "monospace" }}
-        >
-          Progress Tracker
-        </Typography>
-
         {/* TaskStatus count */}
-<Grid container spacing={2} justifyContent="center" alignItems="stretch">
-  <Grid
-    item
-    xs={3}
-    sx={{
-      backgroundColor: 'grey',
-      color: 'white',
-      padding: 1,
-      borderRadius: 2,
-      textAlign: 'center',
-      height: '120px',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      margin: 0.5,
-      fontFamily: 'Helvetica', // Updated to Helvetica
-    }}
-  >
-    <Typography
-      variant="h6"
-      sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
-    >
-      Pending
-    </Typography>
-    <Typography
-      variant="h4"
-      sx={{ fontFamily: 'Helvetica', fontWeight: 'bold'}}// Helvetica
-      
-    >
-      {pendingCount}
-    </Typography>
-  </Grid>
-  <Grid
-    item
-    xs={3}
-    sx={{
-      backgroundColor: 'red',
-      color: 'white',
-      padding: 1,
-      borderRadius: 2,
-      textAlign: 'center',
-      height: '120px',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      margin: 0.5,
-      fontFamily: 'Helvetica', // Helvetica
-    }}
-  >
-    <Typography
-      variant="h6"
-      sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
-    >
-      Overdue
-    </Typography>
-    <Typography
-      variant="h4"
-      sx={{ fontFamily: 'Helvetica',  fontWeight: 'bold' }} // Helvetica
-    >
-      {overdueCount}
-    </Typography>
-  </Grid>
-  <Grid
-    item
-    xs={3}
-    sx={{
-      backgroundColor: 'green',
-      color: 'white',
-      padding: 1,
-      borderRadius: 2,
-      textAlign: 'center',
-      height: '120px',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      margin: 0.5,
-      fontFamily: 'Helvetica', // Helvetica
-    }}
-  >
-    <Typography
-      variant="h6"
-      sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
-    >
-      Completed
-    </Typography>
-    <Typography
-      variant="h4"
-      sx={{ fontFamily: 'Helvetica',  fontWeight: 'bold' }} // Helvetica
-    >
-      {completedTasks}
-    </Typography>
-  </Grid>
-</Grid>
-
-
-     
-        {progress === 100 ? (
-          <Typography
-            sx={{ color: "green", fontWeight: "bold", fontSize: "1.2em" }}
+        <Grid container spacing={2} justifyContent="center" alignItems="stretch">
+          <Grid
+            item
+            xs={3}
+            sx={{
+              backgroundColor: '#B2BEB5',
+              color: 'white',
+              padding: 1.5,
+              borderRadius: 2,
+              textAlign: 'center',
+              height: '110px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              margin: 0.8,
+              fontFamily: 'Helvetica', // Updated to Helvetica
+            }}
           >
-            🎉 Congratulations! You've completed all tasks!
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ color: "orange", fontWeight: "bold", fontSize: "1.2em" }}
+            <Typography
+              variant="h6"
+              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
+            >
+              Pending
+            </Typography>
+            <Typography
+              variant="h4"
+              sx={{ fontFamily: 'Helvetica', fontWeight: 'bold'}}// Helvetica
+              
+            >
+              {pendingCount}
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={3}
+            sx={{
+              backgroundColor: '#D22B2B',
+              color: 'white',
+              padding: 1.5,
+              borderRadius: 2,
+              textAlign: 'center',
+              height: '110px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              margin: 0.5,
+              fontFamily: 'Helvetica', // Helvetica
+            }}
           >
-            🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
-          </Typography>
-        )}
+            <Typography
+              variant="h6"
+              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
+            >
+              Overdue
+            </Typography>
+            <Typography
+              variant="h4"
+              sx={{ fontFamily: 'Helvetica',  fontWeight: 'bold' }} // Helvetica
+            >
+              {overdueCount}
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={3}
+            sx={{
+              backgroundColor: '#228B22',
+              color: 'white',
+              padding: 1.5,
+              borderRadius: 2,
+              textAlign: 'center',
+              height: '110px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              margin: 0.5,
+              fontFamily: 'Helvetica', // Helvetica
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
+            >
+              Completed
+            </Typography>
+            <Typography
+              variant="h4"
+              sx={{ fontFamily: 'Helvetica',  fontWeight: 'bold' }} // Helvetica
+            >
+              {completedTasks}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: 'auto',
+              textAlign: 'center',
+              paddingRight: '10px',
+            }}
+          >
+<Calendar
+  onChange={handleDateChange}
+  value={date}
+  tileContent={({ date, view }) => {
+    if (view === 'month') {
+      const formattedDate = formatDate(date);
+      const hasTask = tasks.some(task => formatDate(task.due_date) === formattedDate);
+  
+      if (hasTask) {
+        return <span style={{ color: 'red', position: 'relative', bottom: '10px', left: '12px'}}>●</span>; // Render a red dot
+      }
+    }
+    return null;
+  }}
+/>
+    </Box>
+
       </Box>
+
 
 {/* To-Do List */}
 <Box
@@ -278,7 +293,7 @@ const Home = () => {
       flexDirection: "column",
       gap: 2,
       maxHeight: "calc(100vh - 240px)",
-      overflowY: "auto",
+      overflowY: "none",
     }}
   >
     <Box>
@@ -319,12 +334,18 @@ const Home = () => {
         }}
       >
         {progress === 100
-    ? "Well done!"
+    ? "Well Done! All Tasks Completed!"
     : progress === 0
     ? "Nothing done 0%"
     : `Keep going! You’re ${progress.toFixed(0)}% done. Almost there!`}
       </Typography>
+      </Box>
     </Box>
+    <Box sx={{display: "flex",
+      flexDirection: "column",
+      gap: 2,
+      overflowY: 'auto',
+      paddingRight: '16px',}}>
     {tasks.map((task) => (
       <Box
         key={task.task_ID}
@@ -410,7 +431,7 @@ const Home = () => {
         </Box>
       </Box>
     ))}
-  </Box>
+    </Box>
 </Box>
 
 
