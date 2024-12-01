@@ -6,27 +6,27 @@
   }
   
 .react-calendar__navigation{
-  background-color: #4169E1;
+  background-color: #E29D3F;
 }
 
 .react-calendar__navigation__label{
-  color: white;
+  color: black;
 }
 
 .react-calendar__navigation__prev2-button{
-  color: white;
+  color: black;
 }
 
 .react-calendar__navigation__prev-button{
-  color: white;
+  color: black;
 }
 
 .react-calendar__navigation__next-button{
-  color: white;
+  color: black;
 }
 
 .react-calendar__navigation__next2-button{
-  color: white;
+  color: black;
 }
 
   .react-calendar__tile {
