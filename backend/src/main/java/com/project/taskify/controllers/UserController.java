@@ -58,22 +58,18 @@ public class UserController {
 
     @PutMapping("/update")
     public ResponseEntity<UpdateProfileResponse> updateUserProfile(
-            @RequestBody UserEntity updatedUser,
+            @RequestBody UserEntity updateRequest,
             @RequestHeader("Authorization") String token) {
         try {
             String username = jwtUtil.extractUsername(token.substring(7));
             UserEntity existingUser = userService.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
-                existingUser.setUsername(updatedUser.getUsername());
+            if (updateRequest.getUsername() != null && !updateRequest.getUsername().isEmpty()) {
+                existingUser.setUsername(updateRequest.getUsername());
             }
-            if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
-                existingUser.setEmail(updatedUser.getEmail());
-            }
-
-            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            if (updateRequest.getEmail() != null && !updateRequest.getEmail().isEmpty()) {
+                existingUser.setEmail(updateRequest.getEmail());
             }
 
             UserEntity savedUser = userService.saveUser(existingUser);
