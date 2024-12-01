@@ -5,9 +5,9 @@ import Tasks from "./Tasks";
 import Archive from "./ArchivedTasks";
 import Home from "./Home";
 import { useLocation } from "react-router-dom";
-import HomeIcon from '@mui/icons-material/Home';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import TaskIcon from '@mui/icons-material/Assignment';
+import HomeIcon from '@mui/icons-material/CottageOutlined';
+import ArchiveIcon from '@mui/icons-material/ArchiveOutlined';
+import TaskIcon from '@mui/icons-material/AssignmentOutlined';
 
 const FolderView = () => {
   const location = useLocation();

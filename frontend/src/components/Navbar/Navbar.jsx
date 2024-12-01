@@ -84,8 +84,8 @@ const Navbar = ({ theme, setTheme }) => {
     const file = event.target.files[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
-      setProfilePicture(imageURL); // Show preview
-      setSelectedImage(file); // Store selected file
+      setProfilePicture(imageURL); 
+      setSelectedImage(file); 
     }
   };
 
@@ -131,6 +131,7 @@ const Navbar = ({ theme, setTheme }) => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+    localStorage.removeItem("profilePicture");
     setUsername("User");
     setProfilePicture(defaultProfile);
     navigate("/");
