@@ -12,8 +12,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
  
-const Navbar = ({ theme, setTheme }) => {
-  const [notificationCount, setNotificationCount] = useState(1); // Reminder notifications
+const Navbar = ({ theme, setTheme,checkReminder }) => {
+  const [reminderDue, setReminderDue] = useState(true);
+  const [reminderTime, setReminderTime] = useState(null);
+ const [notificationCount, setNotificationCount] = useState(1); // Reminder notifications
   const [reminders, setReminders] = useState([]);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
@@ -35,28 +37,29 @@ const Navbar = ({ theme, setTheme }) => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    const checkReminders = () => {
-      const currentTime = new Date().toISOString();
-      const triggeredReminders = reminders.filter(
-        (reminder) => new Date(reminder.time).toISOString() <= currentTime && !reminder.notified
-      );
+    if (!reminderTime) return;
 
-      if (triggeredReminders.length > 0) {
-        setNotificationCount((prevCount) => prevCount + triggeredReminders.length);
-        setReminders((prevReminders) =>
-          prevReminders.map((reminder) =>
-            triggeredReminders.includes(reminder)
-              ? { ...reminder, notified: true }
-              : reminder
-          )
-        );
+    // Function to check if the reminder time has passed
+    const checkReminder = () => {
+      const currentTime = new Date();
+      const reminderDate = new Date(reminderTime);
+      if (reminderDate <= currentTime) {
+        setReminderDue(true);
       }
     };
 
-    const interval = setInterval(checkReminders, 60000); // Check every minute
-    return () => clearInterval(interval);
-  }, [reminders]);
+    // Check immediately on mount
+    checkReminder();
 
+    // Set an interval to check every minute
+    const interval = setInterval(() => {
+      checkReminder();
+    }, 60000); // 60,000ms = 1 minute
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
+  }, [reminderTime]);
+  
   const handleNotificationClick = () => {
     alert("You have new reminders!");
     setNotificationCount(0); // Reset notification count
@@ -286,14 +289,16 @@ const Navbar = ({ theme, setTheme }) => {
           alt="profile"
           className="profilePicture"
         />
- 
-        <span className="accountName">{username}</span>
-        <div className="notif" onClick={handleNotificationClick}>
+ <span className="accountName">{username}</span>
+<div className="notif" onClick={handleNotificationClick}>
   <img src={notif} alt="notification" className="notifIcon" />
-  {notificationCount > 0 && (
-    <div className="notificationBadge">{notificationCount}</div>
+  {reminderDue && (
+    <div className="notificationBadge">
+      1
+    </div>
   )}
 </div>
+
 
  
         <div className="lightMode">

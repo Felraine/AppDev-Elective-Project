@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Button,TextField,MenuItem,Select,InputLabel,FormControl,Box,
-  Dialog,DialogTitle,DialogContent,DialogContentText,DialogActions,
+  Button,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Box,
 } from "@mui/material";
 import TaskEditDialog from "./TaskEditDialog";
 import editTaskIcon from "../../assets/images/editTaskIcon.png";
 
-const Tasks = ({ updateNotificationCount }) => {
+const Tasks = () => {
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -21,23 +26,11 @@ const Tasks = ({ updateNotificationCount }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
   const [buttonsVisible, setButtonsVisible] = useState(true);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [taskToDelete, setTaskToDelete] = useState(null);
+  const [reminderDue, setReminderDue] = useState(false);
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  useEffect(() => {
-    const checkReminders = () => {
-      const now = new Date();
-      const dueTasks = tasks.filter(
-        (task) => new Date(task.set_reminder) <= now
-      );
-      updateNotificationCount(dueTasks.length);
-    };
 
-    const interval = setInterval(checkReminders, 1000); // Check every second
-    return () => clearInterval(interval); // Clean up on unmount
-  }, [tasks, updateNotificationCount]);
   useEffect(() => {
     if (username && token) {
       viewTasks();
@@ -45,19 +38,21 @@ const Tasks = ({ updateNotificationCount }) => {
       setError("You need to be logged in to view tasks.");
     }
   }, []);
-
   useEffect(() => {
-    const checkReminders = () => {
-      const now = new Date();
-      const dueTasks = tasks.filter(
-        (task) => new Date(task.set_reminder) <= now
-      );
-      updateNotificationCount(dueTasks.length);
-    };
-
-    const interval = setInterval(checkReminders, 1000); // Check every second
-    return () => clearInterval(interval); // Clean up on unmount
-  }, [tasks, updateNotificationCount]);
+    if (task.set_reminder) {
+      const reminderTime = new Date(task.set_reminder);
+      const interval = setInterval(() => {
+        const currentTime = new Date();
+        if (currentTime >= reminderTime) {
+          setReminderDue(true);
+        } else {
+          setReminderDue(false);
+        }
+      }, 1000); // Check every second
+  
+      return () => clearInterval(interval); // Cleanup on unmount
+    }
+  }, [task.set_reminder]);
   const viewTasks = async () => {
     try {
       const response = await axios.get(
@@ -101,28 +96,50 @@ const Tasks = ({ updateNotificationCount }) => {
     setTask((prevTask) => ({ ...prevTask, [name]: value }));
   };
     //ADD TASK
-  const addTask = async (e) => {
-    e.preventDefault();
-    const currentDate = new Date().toISOString().split("T")[0];
-    const taskWithDate = { ...task, creation_date: currentDate };
+    const [reminderTime, setReminderTime] = useState(null); // Store reminder time
 
-    setError("");
-    try {
-      await axios.post(
-        `http://localhost:8080/api/tasks/user/${userId}/task`,
-        taskWithDate,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setTask({ title: "", description: "", priority: "", due_date: "" });
-      viewTasks();
-    } catch (error) {
-      setError("Adding Task failed. Please try again.");
-    }
-  };
+    const addTask = async (e) => {
+      e.preventDefault();
+    
+      const currentDate = new Date().toISOString().split("T")[0];
+      const taskWithDate = { ...task, creation_date: currentDate };
+    
+      // Check if the reminder has passed
+      const checkReminder = (reminderTime) => {
+        const currentTime = new Date();
+        const reminderDate = new Date(reminderTime);
+        
+        // If the reminder time is in the past, we should show the notification
+        return reminderDate <= currentTime;
+      };
+    
+      // If there is a reminder set and the reminder time has passed, set reminderDue to true
+      if (taskWithDate.set_reminder && checkReminder(taskWithDate.set_reminder)) {
+        setReminderDue(true);
+        setReminderTime(taskWithDate.set_reminder); // Save reminder time
+      } else {
+        setReminderDue(false);
+      }
+    
+      setError("");
+      try {
+        await axios.post(
+          `http://localhost:8080/api/tasks/user/${userId}/task`,
+          taskWithDate,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setTask({ title: "", description: "", priority: "", due_date: "" });
+        viewTasks();
+      } catch (error) {
+        setError("Adding Task failed. Please try again.");
+      }
+    };
+    
+
   //EDIT TASK
   const editTask = async (editedTask) => {
     try {
@@ -152,27 +169,8 @@ const Tasks = ({ updateNotificationCount }) => {
       task.task_ID === editedTask.task_ID ? editedTask : task
     );
     setTasks(updatedTasks);
-    setIsDialogOpen(false);
+
     editTask(editedTask);
-  };
-
-  //dialog for delete
-  const handleOpenDeleteDialog = (taskId) => {
-    setTaskToDelete(taskId);
-    setDeleteDialogOpen(true);
-  };
-
-  const handleCloseDeleteDialog = () => {
-    setTaskToDelete(null);
-    setDeleteDialogOpen(false);
-  };
-
-  const handleConfirmDelete = () => {
-    if (taskToDelete) {
-      deleteTask(C);
-      setTaskToDelete(null);
-    }
-    setDeleteDialogOpen(false);
   };
 
   const sortedTasks = tasks.sort((a, b) => {
@@ -320,6 +318,7 @@ const Tasks = ({ updateNotificationCount }) => {
           </Button>
         </form>
       </Box>
+
       <Box
         className="taskList"
         sx={{
@@ -393,39 +392,20 @@ const Tasks = ({ updateNotificationCount }) => {
                       Edit
                     </Button>
                     <Button
-                     onClick={() => handleOpenDeleteDialog(task.task_ID)}
+                      onClick={() => deleteTask(task.task_ID)}
                       variant="contained"
                       color="error"
                     >
                       Delete
-                    </Button>                 
+                    </Button>
                   </Box>
                 )}
               </Box>
+              
             </Box>
           ))}
         </Box>
       </Box>
-      {/* Delete  Dialog */}
-      <Dialog
-        open={deleteDialogOpen}
-        onClose={handleCloseDeleteDialog}
-        aria-labelledby="delete-dialog-title"
-        aria-describedby="delete-dialog-description"
-      >
-        <DialogTitle id="delete-dialog-title">Delete Task</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="delete-dialog-description">
-            Are you sure you want to delete this task? 
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
-          <Button onClick={handleConfirmDelete} color="error" autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
       <TaskEditDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
