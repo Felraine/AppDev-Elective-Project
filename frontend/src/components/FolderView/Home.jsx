@@ -159,18 +159,18 @@ const Home = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               margin: 0.8,
-              fontFamily: 'Helvetica', // Updated to Helvetica
+              fontFamily: 'Arial',
             }}
           >
             <Typography
               variant="h6"
-              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
+              sx={{ fontSize: '1rem', fontFamily: 'Arial' }} 
             >
               Pending
             </Typography>
             <Typography
               variant="h4"
-              sx={{ fontFamily: 'Helvetica', fontWeight: 'bold'}}// Helvetica
+              sx={{ fontFamily: 'Arial', fontWeight: 'bold'}}
              
             >
               {pendingCount}
@@ -190,18 +190,18 @@ const Home = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               margin: 0.5,
-              fontFamily: 'Helvetica', 
+              fontFamily: 'Arial', 
             }}
           >
             <Typography
               variant="h6"
-              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} 
+              sx={{ fontSize: '1rem', fontFamily: 'Arial' }} 
             >
               Overdue
             </Typography>
             <Typography
               variant="h4"
-              sx={{ fontFamily: 'Helvetica',  fontWeight: 'bold' }} 
+              sx={{ fontFamily: 'Arial',  fontWeight: 'bold' }} 
             >
               {overdueCount}
             </Typography>
@@ -225,13 +225,13 @@ const Home = () => {
           >
             <Typography
               variant="h6"
-              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} 
+              sx={{ fontSize: '1rem', fontFamily: 'Arial' }} 
             >
               Completed
             </Typography>
             <Typography
               variant="h4"
-              sx={{ fontFamily: 'Helvetica',  fontWeight: 'bold' }} 
+              sx={{ fontFamily: 'Arial',  fontWeight: 'bold' }} 
             >
               {completedTasks}
             </Typography>
@@ -283,7 +283,7 @@ const Home = () => {
 >
   <Typography
     variant="h5"
-    sx={{ textAlign: "center", marginBottom: -1, fontFamily: "Helvitica" }}
+    sx={{ textAlign: "center", marginBottom: -1, fontFamily: "Arial" }}
   >
     To Do List
   </Typography>
@@ -302,7 +302,7 @@ const Home = () => {
           sx={{
             fontSize: "0.9rem",
             fontWeight: "bold",
-            fontFamily: "helvitica",
+            fontFamily: "Arial",
             color: progress === 0 ? "#000" : "#000",
           }}
         >
@@ -329,7 +329,7 @@ const Home = () => {
           fontWeight: "bold",
           textAlign: "center",
           marginTop: 1,
-          fontFamily: "helvitica",
+          fontFamily: "Arial",
           color: progress === 100 ? "#000" : "#000",
         }}
       >
@@ -379,7 +379,7 @@ const Home = () => {
             display: "flex",
             alignItems: "flex-start",
             gap: 2,
-            fontFamily: "Helvitica",
+            fontFamily: "Arial",
           }}
         >
           {/* Checkbox */}
@@ -397,20 +397,21 @@ const Home = () => {
             <Typography
               variant="h6"
               sx={{
-                fontSize: "1.2rem",
+                fontSize: "0.9rem",
                 marginBottom: 0.2,
-                fontFamily: "Helvitica",
-                marginLeft: "0px",  
+                fontFamily: "Arial",
+                marginLeft: "0px", 
+                fontWeight: "bold", 
               }}
             >
             {task.title}
             </Typography>
             <Typography
               sx={{
-                fontSize: "1rem",
+                fontSize: "0.80rem",
                 color: "#555",
                 marginBottom: 2,
-                fontFamily: "Helvitica",
+                fontFamily: "Arial",
                 marginLeft: "0px",
               }}
             >
@@ -418,11 +419,9 @@ const Home = () => {
             </Typography>
             <Typography
               sx={{
-                fontSize: "0.9rem",
+                fontSize: "0.8rem",
                 color: "#000000",
-                fontStyle: "italic",
-                fontWeight: "bold",
-                fontFamily: "Helvitica",
+                fontFamily: "Arial",
                 marginLeft: "0px",
               }}
             >
