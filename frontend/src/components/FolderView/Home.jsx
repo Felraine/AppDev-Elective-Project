@@ -3,6 +3,8 @@ import { Grid } from '@mui/material';
 
 import axios from "axios";
 import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 
 const Home = () => {
@@ -103,6 +105,11 @@ const Home = () => {
     }
   };
   
+  const [date, setDate] = useState(new Date());
+
+  const handleDateChange = (newDate) => {
+    setDate(newDate);
+  };
 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
@@ -124,65 +131,82 @@ const Home = () => {
     >
       {/* Progress Tracker */}
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          backgroundColor: "#FFFA9D",
-          borderRadius: 2,
-          padding: 3,
-          width: "50%",
-        }}
-      >
+  sx={{
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+    backgroundColor: "#FFFA9D",
+    borderRadius: 2,
+    padding: 3,
+    width: "50%",
+    height: "auto", // Ensure the height of the Box adjusts to the content
+    overflow: "hidden", // Prevent the content from overflowing
+  }}
+>
+  <Grid container spacing={2} justifyContent="center" alignItems="stretch">
+    <Grid item xs={3} sx={{ 
+      backgroundColor: 'grey', 
+      color: 'white', 
+      padding: 2, 
+      borderRadius: 2, 
+      textAlign: 'center', 
+      height: '150px', 
+      display: 'flex', 
+      flexDirection: 'column',
+      justifyContent: 'center',
+      margin: 1
+    }}>
+      <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Pending</Typography>
+      <Typography variant="h4">{pendingCount}</Typography>
+    </Grid>
+    <Grid item xs={3} sx={{ 
+      backgroundColor: 'red', 
+      color: 'white', 
+      padding: 2, 
+      borderRadius: 2, 
+      textAlign: 'center', 
+      height: '150px', 
+      display: 'flex', 
+      flexDirection: 'column',
+      justifyContent: 'center',
+      margin: 1
+    }}>
+      <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Overdue</Typography>
+      <Typography variant="h4">{overdueCount}</Typography>
+    </Grid>
+    <Grid item xs={3} sx={{ 
+      backgroundColor: 'green', 
+      color: 'white', 
+      padding: 2, 
+      borderRadius: 2, 
+      textAlign: 'center', 
+      height: '150px', 
+      display: 'flex', 
+      flexDirection: 'column',
+      justifyContent: 'center',
+      margin: 1
+    }}>
+      <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Completed</Typography>
+      <Typography variant="h4">{completedTasks}</Typography>
+    </Grid>
+  </Grid>
 
-        <Grid container spacing={2} justifyContent="center" alignItems="stretch">
-          <Grid item xs={3} sx={{ 
-            backgroundColor: 'grey', 
-            color: 'white', 
-            padding: 2, 
-            borderRadius: 2, 
-            textAlign: 'center', 
-            height: '150px', 
-            display: 'flex', 
-            flexDirection: 'column',
-            justifyContent: 'center',
-            margin: 1
-          }}>
-            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Pending</Typography>
-            <Typography variant="h4">{pendingCount}</Typography>
-          </Grid>
-          <Grid item xs={3} sx={{ 
-            backgroundColor: 'red', 
-            color: 'white', 
-            padding: 2, 
-            borderRadius: 2, 
-            textAlign: 'center', 
-            height: '150px', 
-            display: 'flex', 
-            flexDirection: 'column',
-            justifyContent: 'center',
-            margin: 1
-          }}>
-            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Overdue</Typography>
-            <Typography variant="h4">{overdueCount}</Typography>
-          </Grid>
-          <Grid item xs={3} sx={{ 
-            backgroundColor: 'green', 
-            color: 'white', 
-            padding: 2, 
-            borderRadius: 2, 
-            textAlign: 'center', 
-            height: '150px', 
-            display: 'flex', 
-            flexDirection: 'column',
-            justifyContent: 'center',
-            margin: 1
-          }}>
-            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Completed</Typography>
-            <Typography variant="h4">{completedTasks}</Typography>
-          </Grid>
-      </Grid>
-      </Box>
+  <Box sx={{ 
+    width: '100%', 
+    height: 'auto',  // Ensure the calendar fits within the Box
+    overflow: 'hidden' // Add overflow control if necessary
+  }}>
+    <Calendar 
+      onChange={handleDateChange} 
+      value={date}
+      style={{
+        width: '100%',  // Ensure the calendar takes up full width of the parent Box
+        height: 'auto', // Set height to auto so it scales
+      }}
+    />
+  </Box>
+</Box>
+
 
 {/* To-Do List */}
 <Box
