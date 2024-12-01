@@ -129,7 +129,6 @@ const Home = () => {
           flexDirection: "column",
           gap: 2,
           backgroundColor: "#FFFA9D",
-          backgroundColor: "#FFFA9D",
           borderRadius: 2,
           padding: 3,
           width: "50%",

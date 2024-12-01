@@ -5,6 +5,9 @@ import Tasks from "./Tasks";
 import Archive from "./ArchivedTasks";
 import Home from "./Home";
 import { useLocation } from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import TaskIcon from '@mui/icons-material/Assignment';
 
 const FolderView = () => {
   const location = useLocation();
@@ -51,7 +54,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home/tasks"
-              label="Tasks"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <TaskIcon sx={{ marginRight: '8px'}} />
+                  <span style={{ fontSize: '16px'}}>Tasks</span>
+                </div>
+              }
               className="tasks-tab"
               sx={{
                 width: "8rem",
@@ -79,7 +87,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home/archive"
-              label="Archive"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <ArchiveIcon sx={{ marginRight: '8px'}} />
+                  <span style={{ fontSize: '16px'}}>Archive</span>
+                </div>
+              }
               className="archive-tab"
               sx={{
                 width: "8rem",
@@ -106,7 +119,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home"
-              label="Home"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <HomeIcon sx={{ marginRight: '8px' }} />
+                  <span style={{ fontSize: '16px' }}>Home</span>
+                </div>
+              }
               className="home-tab"
               sx={{
                 width: "12rem",
@@ -167,7 +185,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home"
-              label="Home"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <HomeIcon sx={{ marginRight: '8px' }} />
+                  <span style={{ fontSize: '16px' }}>Home</span>
+                </div>
+              }
               className="home-tab"
               sx={{
                 width: "8rem",
@@ -195,7 +218,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home/archive"
-              label="Archive"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <ArchiveIcon sx={{ marginRight: '8px'}} />
+                  <span style={{ fontSize: '16px'}}>Archive</span>
+                </div>
+              }
               className="archive-tab"
               sx={{
                 width: "8rem",
@@ -223,7 +251,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home/tasks"
-              label="Tasks"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <TaskIcon sx={{ marginRight: '8px'}} />
+                  <span style={{ fontSize: '16px'}}>Tasks</span>
+                </div>
+              }
               className="tasks-tab"
               sx={{
                 width: "12rem",
@@ -285,7 +318,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home"
-              label="Home"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <HomeIcon sx={{ marginRight: '8px' }} />
+                  <span style={{ fontSize: '16px' }}>Home</span>
+                </div>
+              }
               className="home-tab"
               sx={{
                 width: "8rem",
@@ -313,7 +351,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home/tasks"
-              label="Tasks"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <TaskIcon sx={{ marginRight: '8px'}} />
+                  <span style={{ fontSize: '16px'}}>Tasks</span>
+                </div>
+              }
               className="tasks-tab"
               sx={{
                 width: "8rem",
@@ -341,7 +384,12 @@ const FolderView = () => {
             <Tab
               component={Link}
               to="/home/archive"
-              label="Archive"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <ArchiveIcon sx={{ marginRight: '8px'}} />
+                  <span style={{ fontSize: '16px'}}>Archive</span>
+                </div>
+              }
               className="archive-tab"
               sx={{
                 width: "12rem",
