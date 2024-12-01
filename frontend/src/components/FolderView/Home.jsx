@@ -164,8 +164,10 @@ const Home = () => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              margin: 0.8,
+              margin: 0.5,
+              marginRight: '10px',
               fontFamily: 'Arial',
+              border: '3px solid #E29D3F'
             }}
           >
             <Typography
@@ -196,7 +198,9 @@ const Home = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               margin: 0.5,
-              fontFamily: 'Arial', 
+              fontFamily: 'Arial',
+              marginRight: '10px',
+              border: '3px solid #E29D3F'
             }}
           >
             <Typography
@@ -227,6 +231,7 @@ const Home = () => {
               justifyContent: 'center',
               margin: 0.5,
               fontFamily: 'Arial', // Helvetica
+              border: '3px solid #E29D3F'
             }}
           >
             <Typography
