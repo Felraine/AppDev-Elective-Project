@@ -3,6 +3,7 @@
     max-height: 315px !important;
     width: 400px !important;
     overflow: auto;
+    border-radius: 15px;
   }
   
 .react-calendar__navigation{

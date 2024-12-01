@@ -11,6 +11,7 @@ import settingsIcon from "../../assets/images/settings.png";
 import EditIcon from "@mui/icons-material/Edit";
 import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { fontGrid } from "@mui/material/styles/cssUtils";
 
 const Navbar = ({ theme, setTheme }) => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -327,20 +328,95 @@ const Navbar = ({ theme, setTheme }) => {
               <span className="profileInModalName">{username}</span>
             </div>
 
-            <input
-              type="text"
-              placeholder="New Username"
-              value={newUsername}
-              onChange={(e) => setNewUsername(e.target.value)}
-            />
+            <div
+              style={{
+                display: "flex",  
+                alignItems: "center",
+                width: "100%", 
+                justifyContent: "flex-start", 
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  color: "#fff",
+                  marginRight: "10px",
+                }}
+              >
+              Username:
+              </span>
+              <input
+                type="text"
+                placeholder="New Username"
+                value={newUsername}
+                onChange={(e) => setNewUsername(e.target.value)}
+                style={{
+                  padding: "10px",
+                  border: "1px transparent",
+                  borderRadius: "15px",
+                  width: '2rem',
+                  flexGrow: 1, 
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                display: "flex",  
+                alignItems: "center",
+                width: "100%",  // Ensure it takes the full width of the parent container
+                justifyContent: "flex-start",  // Ensures items align to the left
+              }}
+            >
+            <span
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+                color: "#fff",
+                marginRight: "45px",
+              }}
+            >
+              Email:
+            </span>
             <input
               type="email"
               placeholder="New Email"
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
+              style={{
+                padding: "10px",
+                border: "1px transparent",
+                borderRadius: "15px",
+                width: '10.4rem',
+              }}
             />
+            </div>
 
-            <button onClick={handleUpdateProfile}>Save Changes</button>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center", 
+                alignItems: "center",             
+              }}
+            >
+              <button
+                onClick={handleUpdateProfile}
+                style={{
+                  padding: "10px",
+                  border: "1px transparent",
+                  borderRadius: "15px",
+                  color: "#fff",
+                  backgroundColor: "#C77C2D",
+                  marginTop: "8px",
+                  width: "10rem",
+                  textAlign: "center",       
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+
           </div>
         </div>
       )}
@@ -354,26 +430,127 @@ const Navbar = ({ theme, setTheme }) => {
             className={`settingsModal ${theme}`}
             onClick={(e) => e.stopPropagation()}
           >
+            <div className="profileInModal">
+              <img
+                src={profilePicture || defaultProfile}
+                alt="profile"
+                className="profileInModalImage"
+              />
+              <span className="profileInModalName">{username}</span>
+            </div>
+
+            <div
+              style={{
+                display: "flex",  
+                alignItems: "center",
+                width: "100%", 
+                justifyContent: "flex-start", 
+              }}
+            >
+            <span
+              style={{
+                fontSize: "15px",
+                fontWeight: "bold",
+                color: "#fff",
+                marginRight: "16px",
+              }}
+            >
+              Old Password:
+            </span>
             <input
               type="password"
-              placeholder="Current Password"
+              placeholder="Old Password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
+              style={{
+                padding: "10px",
+                border: "1px transparent",
+                borderRadius: "15px",
+                width: '8.5rem',}}
             />
+            </div>
+
+            <div
+              style={{
+                display: "flex",  
+                alignItems: "center",
+                width: "100%", 
+                justifyContent: "flex-start", 
+              }}
+            >
+            <span
+              style={{
+                fontSize: "15px",
+                fontWeight: "bold",
+                color: "#fff",
+                marginRight: "10px",
+              }}
+            >
+              New Password:
+            </span>
             <input
               type="password"
               placeholder="New Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
+              style={{
+                padding: "10px",
+                border: "1px transparent",
+                borderRadius: "15px",
+                width: '8.5rem',
+              }}
             />
+            </div>
+
+            <div
+              style={{
+                display: "flex",  
+                alignItems: "center",
+                width: "100%", 
+                justifyContent: "flex-start", 
+              }}
+            >
+            <span
+              style={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                color: "#fff",
+                marginRight: "10px",
+              }}
+            >
+            Confirm Password:
+            </span>
             <input
               type="password"
-              placeholder="Confirm New Password"
+              placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              style={{
+                padding: "10px",
+                border: "1px transparent",
+                borderRadius: "15px",
+                width: '8.5rem',
+              }}
             />
-
-            <button onClick={handleChangePassword}>Change Password</button>
+            </div>
+            
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center", 
+                alignItems: "center",             
+              }}
+            >
+            <button onClick={handleChangePassword}
+            style={{padding: "10px",
+              border: "1px transparent",
+              borderRadius: "15px",
+              color: "#fff",
+              backgroundColor: "#C77C2D",
+              marginTop: "8px",
+              width: "10rem",
+              textAlign: "center",}}>Change Password</button>
+            </div>
           </div>
         </div>
       )}
@@ -387,14 +564,52 @@ const Navbar = ({ theme, setTheme }) => {
             className={`settingsModal ${theme}`}
             onClick={(e) => e.stopPropagation()}
           >
+            
+            <div className="profileInModal">
+              <img
+                src={profilePicture || defaultProfile}
+                alt="profile"
+                className="profileInModalImage"
+              />
+              <span className="profileInModalName">{username}</span>
+            </div>
+
+        <div style={{                
+          border: "1px solid",
+          borderRadius: "15px",}}>
             <input
               type="file"
               accept="image/*"
               onChange={handleProfilePictureChange}
+              style={{padding: "10px",
+                color: "#fff",
+                marginTop: "8px",
+                width: "15rem",
+                textAlign: "center",}}
             />
-            <button onClick={handleUpdateProfilePicture}>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center", 
+                alignItems: "center",             
+              }}
+            >
+            <button onClick={handleUpdateProfilePicture}
+            style={{padding: "10px",
+              border: "1px transparent",
+              borderRadius: "15px",
+              color: "#fff",
+              backgroundColor: "#C77C2D",
+              marginTop: "8px",
+              marginBottom: "16px",
+              width: "10rem",
+              textAlign: "center",}}
+              >
               Update Profile Picture
             </button>
+            </div>
+            </div>
           </div>
         </div>
       )}
