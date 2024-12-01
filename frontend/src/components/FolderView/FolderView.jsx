@@ -118,10 +118,6 @@ const FolderView = () => {
                 color: "black",
                 textDecoration: "none",
                 marginLeft: "33.3rem",
-                "&:hover": {
-                  backgroundColor: "#e29d3f",
-                  color: "#fff",
-                },
                 ...(activeTab === 0 && {
                   color: "#fff",
                   backgroundColor: "#fffa9d",
@@ -230,7 +226,7 @@ const FolderView = () => {
               label="Tasks"
               className="tasks-tab"
               sx={{
-                width: "8rem",
+                width: "12rem",
                 fontSize: "16px",
                 padding: "10px",
                 backgroundColor: "#ffe79f",
@@ -238,11 +234,7 @@ const FolderView = () => {
                 borderTopLeftRadius: "10px",
                 borderTopRightRadius: "10px",
                 textDecoration: "none",
-                marginLeft: "37.3rem",
-                "&:hover": {
-                  backgroundColor: "#e29d3f",
-                  color: "#fff",
-                },
+                marginLeft: "33.3rem",
                 ...(activeTab === 1 && {
                   color: "#fff",
                   backgroundColor: "#ffe79f",
@@ -352,7 +344,7 @@ const FolderView = () => {
               label="Archive"
               className="archive-tab"
               sx={{
-                width: "8rem",
+                width: "12rem",
                 fontSize: "16px",
                 padding: "10px",
                 backgroundColor: "#cc915c",
@@ -360,11 +352,7 @@ const FolderView = () => {
                 borderTopRightRadius: "10px",
                 color: "black",
                 textDecoration: "none",
-                marginLeft: "37.3rem",
-                "&:hover": {
-                  backgroundColor: "#e29d3f",
-                  color: "#fff",
-                },
+                marginLeft: "33.3rem",
                 ...(activeTab === 2 && {
                   color: "#fff",
                   backgroundColor: "#cc915c",

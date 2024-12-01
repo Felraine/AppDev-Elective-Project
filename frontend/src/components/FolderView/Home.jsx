@@ -4,7 +4,17 @@ import { Grid } from '@mui/material';
 import axios from "axios";
 import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
 
+
 const Home = () => {
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month and format it as mm
+    const day = String(date.getDate()).padStart(2, '0'); // Get day and format it as dd
+    const year = date.getFullYear(); // Get the full year
+  
+    return `${month}/${day}/${year}`; // Return in mm/dd/yyyy format
+  }
   const [completedTasks, setCompletedTasks] = useState(0);
   const [totalTasks, setTotalTasks] = useState(0);
   const [tasks, setTasks] = useState([]);
@@ -107,7 +117,7 @@ const Home = () => {
         minHeight: "calc(100vh - 160px)",
         maxHeight: "calc(100vh - 160px)",
         borderTopLeftRadius: 0,
-        borderTopRightRadius: 20,
+        borderTopRightRadius: 0,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
       }}
@@ -118,6 +128,7 @@ const Home = () => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
+          backgroundColor: "#FFFA9D",
           backgroundColor: "#FFFA9D",
           borderRadius: 2,
           padding: 3,
@@ -172,165 +183,169 @@ const Home = () => {
             <Typography variant="h4">{completedTasks}</Typography>
           </Grid>
       </Grid>
-        {/*<LinearProgress
+      </Box>
+
+{/* To-Do List */}
+<Box
+  sx={{
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+    backgroundColor: "#ffe79f",
+    borderRadius: 2,
+    padding: 3,
+    width: "50%",
+    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+  }}
+>
+  <Typography
+    variant="h5"
+    sx={{ textAlign: "center", marginBottom: -1, fontFamily: "monospace" }}
+  >
+    To Do List
+  </Typography>
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      gap: 2,
+      maxHeight: "calc(100vh - 240px)",
+      overflowY: "auto",
+    }}
+  >
+    <Box>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Typography
+          sx={{
+            fontSize: "0.9rem",
+            fontWeight: "bold",
+            fontFamily: "monospace",
+            color: progress === 0 ? "#000" : "#000",
+          }}
+        >
+          {progress.toFixed(0)}%
+        </Typography>
+        <LinearProgress
           variant="determinate"
           value={progress}
           sx={{
-            height: 15,
-            borderRadius: 1,
-            backgroundColor: "#e0e0e0",
+            flexGrow: 1,
+            height: 20,
+            borderRadius: 12,
+            backgroundColor: "#fff",
             "& .MuiLinearProgress-bar": {
-              backgroundColor: "#ffa500",
+              backgroundColor: progress === 0 ? "#E29D3F" : "#E29D3F",
             },
           }}
-        />*/}
+        />
       </Box>
-
-      {/* To-Do List */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-          backgroundColor: "#FFE79F",
-          borderRadius: 2,
-          padding: 2,
-          width: "50%",
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <Typography
-          variant="h5"
-          sx={{ textAlign: "center", fontFamily: "monospace" , fontWeight: "bold"}}
-        >
-          To Do List
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 3,
-            maxHeight: "calc(100vh - 240px)",
-            overflowY: "auto",
-          }}
-        >
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      {/* Completion message below the bar */}
       <Typography
         sx={{
           fontSize: "1rem",
           fontWeight: "bold",
+          textAlign: "center",
+          marginTop: 1,
           fontFamily: "monospace",
-          whiteSpace: "nowrap",
+          color: progress === 100 ? "#000" : "#000",
         }}
       >
-        {progress.toFixed(1)}%
+        {progress === 100
+    ? "Well done!"
+    : progress === 0
+    ? "Nothing done 0%"
+    : `Keep going! You’re ${progress.toFixed(0)}% done. Almost there!`}
       </Typography>
-      <LinearProgress
-        variant="determinate"
-        value={progress}
-        sx={{
-          flex: 1,
-          height: 15,
-          borderRadius: 1,
-          backgroundColor: "#fff",
-          "& .MuiLinearProgress-bar": {
-            backgroundColor: "#ffa500",
-          },
-        }}
-      />
     </Box>
-          {progress === 100 ? (
-          <Typography
-            sx={{ color: "green", fontWeight: "bold", fontSize: "1.1rem" }}
-          >
-            🎉 Congratulations! You've completed all tasks!
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ color: "black", fontWeight: "bold", fontSize: "1.1rem" }}
-          >
-            🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
-          </Typography>
-        )}
-          {tasks.map((task) => (
-            <Box
-              key={task.task_ID}
+    {tasks.map((task) => (
+      <Box
+        key={task.task_ID}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+          backgroundColor: "#fff",
+          borderRadius: 2,
+          border: "1px solid #ccc", // Same border
+          padding: 2,
+          width: "100%", // Adjust the width as needed
+          minHeight: "135px", // Increase the height
+        }}
+      >
+        {/* Priority Indicator (Oval Shape, Color Only) */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 15,
+            right: 20,
+            padding: "7px 14px",
+            borderRadius: 12,
+            backgroundColor: getPriorityColor(task.priority),
+          }}
+        />
+
+        {/* Task Details */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 2,
+            fontFamily: "monospace",
+          }}
+        >
+          {/* Checkbox */}
+          <Checkbox
+            defaultChecked={false}
+            onChange={() => archiveTask(task.task_ID)}
+            sx={{
+              padding: .1,
+              color: "#E29D3F",
+              borderRadius: '4px',
+              "&.Mui-checked": { color: "#f8b400" }
+               }}
+          />
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography
+              variant="h6"
               sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                backgroundColor: "#fff",
-                borderRadius: 2,
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                border: "1px solid #ccc",
-                padding: 2,
+                fontSize: "1.1rem",
+                marginBottom: 0.2,
+                fontFamily: "monospace",
+                marginLeft: "0px",  // Adjust the value to move it to the left
               }}
             >
-              {/* Priority Indicator */}
-              <Box
-                sx={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  backgroundColor: getPriorityColor(task.priority),
-                  flexShrink: 0,
-                }}
-              ></Box>
-
-              {/* Task Details */}
-              <Box sx={{ 
-		              display: "flex",
-                  flexDirection: "column",
-                  flexGrow: 1,
-                  fontFamily: "monospace",
-                  marginRight: "10px",
-
- }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: "1.1rem",
-                    fontWeight: "bold",
-		                marginBottom: 1,
-                    fontFamily: "monospace",
-                  }}
-                >
-		        {/* Checkbox */}
-              <Checkbox
-                  defaultChecked={false}
-                  onChange={() => archiveTask(task.task_ID)}
-                  sx={{
-                   padding: 0,
-                  justifyContent: "flex-start",
-                  marginRight: "10px",
-                  }}
-              />
-                  {task.title}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "1rem",
-                    color: "#555",
-			              marginBottom: 1,
-                    fontFamily: "monospace",
-                  }}
-                >
-                  {task.description}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "0.8rem",
-                    color: "#888",
-                    fontStyle: "italic",
-                  }}
-                >
-                  Due Date: {task.due_date}
-                </Typography>
-              </Box>
-            </Box>
-          ))}
+            {"\"" + task.title + "\""}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.85rem",
+                color: "#555",
+                marginBottom: 2,
+                fontFamily: "monospace",
+                marginLeft: "7px",
+              }}
+            >
+              {task.description}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "0.75rem",
+                color: "#000000",
+                fontStyle: "italic",
+                fontWeight: "bold",
+                marginLeft: "7px",
+              }}
+            >
+              Due: {formatDate(task.due_date)} {/* Format the due date */}
+            </Typography>
+          </Box>
         </Box>
       </Box>
+    ))}
+  </Box>
+</Box>
+
+
     </Box>
   );
 };
