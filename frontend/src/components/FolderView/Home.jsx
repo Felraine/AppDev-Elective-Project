@@ -201,7 +201,7 @@ const Home = () => {
       >
         <Typography
           variant="h5"
-          sx={{ textAlign: "center", fontFamily: "monospace" }}
+          sx={{ textAlign: "center", fontFamily: "monospace" , fontWeight: "bold"}}
         >
           To Do List
         </Typography>
@@ -247,7 +247,7 @@ const Home = () => {
           </Typography>
         ) : (
           <Typography
-            sx={{ color: "orange", fontWeight: "bold", fontSize: "1.1rem" }}
+            sx={{ color: "black", fontWeight: "bold", fontSize: "1.1rem" }}
           >
             🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
           </Typography>

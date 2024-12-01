@@ -48,8 +48,8 @@ const ArchivedTasks = () => {
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "start", mb: 2 }}>
-        <Typography variant="h5" sx={{ color: "#514538", ml: 1 }}>
-          Archived Tasks
+        <Typography variant="h5" sx={{ color: "#000", ml: 1 , fontWeight: "Bold"}}>
+          Task Archive
         </Typography>
       </Box>
 
