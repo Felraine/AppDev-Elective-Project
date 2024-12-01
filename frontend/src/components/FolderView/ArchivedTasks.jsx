@@ -36,7 +36,7 @@ const ArchivedTasks = () => {
         padding: 3,
         backgroundColor: "#cc915c",
         borderTopLeftRadius: 0,
-        borderTopRightRadius: 20,
+        borderTopRightRadius: 0,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         maxWidth: "100%",
