@@ -49,7 +49,13 @@ const Home = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setTasks(tasksResponse.data);
+
+       // Sort by priority
+    const sortedTasks = tasksResponse.data.sort((a, b) => {
+      const priorityOrder = { high: 1, medium: 2, low: 3 };
+      return priorityOrder[a.priority] - priorityOrder[b.priority];
+    });
+      setTasks(sortedTasks);
       setTotalTasks(archivedResponse.data.length + tasksResponse.data.length);
     } catch (error) {
       console.error("Error fetching tasks data:", error);
