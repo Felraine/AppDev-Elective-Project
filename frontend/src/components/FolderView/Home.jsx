@@ -132,6 +132,7 @@ const Home = () => {
           Progress Tracker
         </Typography>
 
+        {/* TaskStatus count */}
         <Grid container spacing={2} justifyContent="center" alignItems="stretch">
           <Grid item xs={3} sx={{ 
             backgroundColor: 'grey', 
@@ -179,13 +180,7 @@ const Home = () => {
             <Typography variant="h4">{completedTasks}</Typography>
           </Grid>
       </Grid>
-
-
-
-
-
-
-        
+     
         {progress === 100 ? (
           <Typography
             sx={{ color: "green", fontWeight: "bold", fontSize: "1.2em" }}
@@ -199,18 +194,6 @@ const Home = () => {
             🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
           </Typography>
         )}
-        {/*<LinearProgress
-          variant="determinate"
-          value={progress}
-          sx={{
-            height: 15,
-            borderRadius: 1,
-            backgroundColor: "#e0e0e0",
-            "& .MuiLinearProgress-bar": {
-              backgroundColor: "#ffa500",
-            },
-          }}
-        />*/}
       </Box>
 
       {/* To-Do List */}
@@ -299,7 +282,7 @@ const Home = () => {
                   fontFamily: "monospace",
                   marginRight: "10px",
 
- }}>
+              }}>
                 <Typography
                   variant="h6"
                   sx={{
@@ -309,7 +292,7 @@ const Home = () => {
                     fontFamily: "monospace",
                   }}
                 >
-		        {/* Checkbox */}
+		           {/* Checkbox */}
               <Checkbox
                   defaultChecked={false}
                   onChange={() => archiveTask(task.task_ID)}
