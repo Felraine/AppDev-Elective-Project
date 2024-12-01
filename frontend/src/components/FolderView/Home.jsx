@@ -5,16 +5,16 @@ import axios from "axios";
 import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-
-
+ 
+ 
 const Home = () => {
-
+ 
   function formatDate(dateString) {
     const date = new Date(dateString);
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month and format it as mm
     const day = String(date.getDate()).padStart(2, '0'); // Get day and format it as dd
     const year = date.getFullYear(); // Get the full year
-  
+ 
     return `${month}/${day}/${year}`; // Return in mm/dd/yyyy format
   }
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -24,15 +24,15 @@ const Home = () => {
   const [overdueCount, setOverdueCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [taskStatuses, setTaskStatuses] = useState([]);
-
+ 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+ 
   useEffect(() => {
     fetchTasksData();
     fetchTaskStatuses();
   }, []);
-
+ 
   const fetchTasksData = async () => {
     try {
       const archivedResponse = await axios.get(
@@ -42,20 +42,26 @@ const Home = () => {
         }
       );
       setCompletedTasks(archivedResponse.data.length);
-
+ 
       const tasksResponse = await axios.get(
         `http://localhost:8080/api/tasks/user/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setTasks(tasksResponse.data);
+
+       // Sort by priority
+    const sortedTasks = tasksResponse.data.sort((a, b) => {
+      const priorityOrder = { high: 1, medium: 2, low: 3 };
+      return priorityOrder[a.priority] - priorityOrder[b.priority];
+    });
+      setTasks(sortedTasks);
       setTotalTasks(archivedResponse.data.length + tasksResponse.data.length);
     } catch (error) {
       console.error("Error fetching tasks data:", error);
     }
   };
-
+ 
   const fetchTaskStatuses = async () => {
     try {
       const response = await axios.get(
@@ -66,7 +72,7 @@ const Home = () => {
       );
       const statuses = response.data;
       setTaskStatuses(statuses);
-
+ 
       setPendingCount(statuses.filter((task) => task.status === "Pending").length);
       setOverdueCount(statuses.filter((task) => task.status === "Overdue").length);
       setCompletedCount(statuses.filter((task) => task.status === "Completed").length);
@@ -74,7 +80,7 @@ const Home = () => {
       console.error("Error fetching task statuses:", error);
     }
   };
-
+ 
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "high":
@@ -87,7 +93,7 @@ const Home = () => {
         return "#ccc"; // Gray for unknown priority
     }
   };
-
+ 
   // Update task counts and progress dynamically
   const archiveTask = async (taskId) => {
     try {
@@ -96,7 +102,7 @@ const Home = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
+ 
       // Refetch the tasks and statuses after updating the backend
       fetchTasksData();
       fetchTaskStatuses();
@@ -104,17 +110,17 @@ const Home = () => {
       console.error("Error archiving task:", error);
     }
   };
-  
+ 
   const [date, setDate] = useState(new Date());
-
+ 
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
-
+ 
   const customHeight = '200px';
-
+ 
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
+ 
   return (
     <Box
       sx={{
@@ -158,22 +164,20 @@ const Home = () => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              margin: 0.5,
-              fontFamily: 'Helvetica', // Helvetica
-              border: '3px solid #E29D3F',
-              marginRight: '10px'
+              margin: 0.8,
+              fontFamily: 'Arial',
             }}
           >
             <Typography
               variant="h6"
-              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
+              sx={{ fontSize: '1rem', fontFamily: 'Arial' }} 
             >
               Pending
             </Typography>
             <Typography
               variant="h4"
-              sx={{ fontFamily: 'Helvetica', fontWeight: 'bold'}}// Helvetica
-              
+              sx={{ fontFamily: 'Arial', fontWeight: 'bold'}}
+             
             >
               {pendingCount}
             </Typography>
@@ -192,20 +196,18 @@ const Home = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               margin: 0.5,
-              fontFamily: 'Helvetica', // Helvetica
-              border: '3px solid #E29D3F',
-              marginRight: '10px',
+              fontFamily: 'Arial', 
             }}
           >
             <Typography
               variant="h6"
-              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
+              sx={{ fontSize: '1rem', fontFamily: 'Arial' }} 
             >
               Overdue
             </Typography>
             <Typography
               variant="h4"
-              sx={{ fontFamily: 'Helvetica',  fontWeight: 'bold' }} // Helvetica
+              sx={{ fontFamily: 'Arial',  fontWeight: 'bold' }} 
             >
               {overdueCount}
             </Typography>
@@ -224,19 +226,18 @@ const Home = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               margin: 0.5,
-              fontFamily: 'Helvetica', // Helvetica
-              border: '3px solid #E29D3F'
+              fontFamily: 'Arial', // Helvetica
             }}
           >
             <Typography
               variant="h6"
-              sx={{ fontSize: '1rem', fontFamily: 'Helvetica' }} // Helvetica
+              sx={{ fontSize: '1rem', fontFamily: 'Arial' }} 
             >
               Completed
             </Typography>
             <Typography
               variant="h4"
-              sx={{ fontFamily: 'Helvetica',  fontWeight: 'bold' }} // Helvetica
+              sx={{ fontFamily: 'Arial',  fontWeight: 'bold' }} 
             >
               {completedTasks}
             </Typography>
@@ -269,10 +270,10 @@ const Home = () => {
             }}
           />
     </Box>
-
+ 
       </Box>
-
-
+ 
+ 
 {/* To-Do List */}
 <Box
   sx={{
@@ -288,7 +289,7 @@ const Home = () => {
 >
   <Typography
     variant="h5"
-    sx={{ textAlign: "center", marginBottom: -1, fontFamily: "helvitica" }}
+    sx={{ textAlign: "center", marginBottom: -1, fontFamily: "Arial" }}
   >
     To Do List
   </Typography>
@@ -307,7 +308,7 @@ const Home = () => {
           sx={{
             fontSize: "0.9rem",
             fontWeight: "bold",
-            fontFamily: "helvitica",
+            fontFamily: "Arial",
             color: progress === 0 ? "#000" : "#000",
           }}
         >
@@ -334,7 +335,7 @@ const Home = () => {
           fontWeight: "bold",
           textAlign: "center",
           marginTop: 1,
-          fontFamily: "helvitica",
+          fontFamily: "Arial",
           color: progress === 100 ? "#000" : "#000",
         }}
       >
@@ -377,14 +378,14 @@ const Home = () => {
             backgroundColor: getPriorityColor(task.priority),
           }}
         />
-
+ 
         {/* Task Details */}
         <Box
           sx={{
             display: "flex",
             alignItems: "flex-start",
             gap: 2,
-            fontFamily: "Helvitica",
+            fontFamily: "Arial",
           }}
         >
           {/* Checkbox */}
@@ -402,20 +403,21 @@ const Home = () => {
             <Typography
               variant="h6"
               sx={{
-                fontSize: "1.2rem",
+                fontSize: "0.9rem",
                 marginBottom: 0.2,
-                fontFamily: "helvitica",
-                marginLeft: "0px",  // Adjust the value to move it to the left
+                fontFamily: "Arial",
+                marginLeft: "0px", 
+                fontWeight: "bold", 
               }}
             >
             {task.title}
             </Typography>
             <Typography
               sx={{
-                fontSize: "1rem",
+                fontSize: "0.80rem",
                 color: "#555",
                 marginBottom: 2,
-                fontFamily: "helvitica",
+                fontFamily: "Arial",
                 marginLeft: "0px",
               }}
             >
@@ -423,11 +425,9 @@ const Home = () => {
             </Typography>
             <Typography
               sx={{
-                fontSize: "0.9rem",
+                fontSize: "0.8rem",
                 color: "#000000",
-                fontStyle: "italic",
-                fontWeight: "bold",
-                fontFamily: "helvitica",
+                fontFamily: "Arial",
                 marginLeft: "0px",
               }}
             >
@@ -439,10 +439,10 @@ const Home = () => {
     ))}
     </Box>
 </Box>
-
-
+ 
+ 
     </Box>
   );
 };
-
+ 
 export default Home;

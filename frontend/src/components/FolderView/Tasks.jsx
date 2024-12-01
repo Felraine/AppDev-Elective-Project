@@ -20,7 +20,7 @@ const Tasks = () => {
   const [currentTask, setCurrentTask] = useState({});
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
-  const [buttonsVisible, setButtonsVisible] = useState(true);
+  const [buttonsVisible, setButtonsVisible] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
   const username = localStorage.getItem("username");
@@ -208,7 +208,7 @@ const Tasks = () => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          padding: 2,
+          padding: 3,
         }}
       >
         <h3>Create New Task</h3>
@@ -222,7 +222,7 @@ const Tasks = () => {
             fullWidth
             required
             sx={{
-              marginBottom: 2,
+              marginBottom: "20px",
               backgroundColor: "white",
             }}
           />
