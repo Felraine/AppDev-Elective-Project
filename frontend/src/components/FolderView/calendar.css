@@ -1,0 +1,36 @@
+.react-calendar {
+    height: auto !important;
+    max-height: 315px !important;
+    width: 400px !important;
+    overflow: auto;
+  }
+  
+.react-calendar__navigation{
+  background-color: #4169E1;
+}
+
+.react-calendar__navigation__label{
+  color: white;
+}
+
+.react-calendar__navigation__prev2-button{
+  color: white;
+}
+
+.react-calendar__navigation__prev-button{
+  color: white;
+}
+
+.react-calendar__navigation__next-button{
+  color: white;
+}
+
+.react-calendar__navigation__next2-button{
+  color: white;
+}
+
+  .react-calendar__tile {
+    height: 35px !important; 
+    line-height: 35px !important; 
+    padding: 0 !important; 
+}
