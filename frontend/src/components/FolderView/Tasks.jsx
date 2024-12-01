@@ -146,7 +146,7 @@ const Tasks = () => {
 
   const handleConfirmDelete = () => {
     if (taskToDelete) {
-      deleteTask(C);
+      deleteTask(taskToDelete);
       setTaskToDelete(null);
     }
     setDeleteDialogOpen(false);
@@ -190,7 +190,7 @@ const Tasks = () => {
         backgroundColor: "#ffe79f",
         padding: 2,
         borderTopLeftRadius: 0,
-        borderTopRightRadius: 20,
+        borderTopRightRadius: 0,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         maxWidth: "100%",

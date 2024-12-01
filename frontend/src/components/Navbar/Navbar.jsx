@@ -84,8 +84,8 @@ const Navbar = ({ theme, setTheme }) => {
     const file = event.target.files[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
-      setProfilePicture(imageURL); // Show preview
-      setSelectedImage(file); // Store selected file
+      setProfilePicture(imageURL); 
+      setSelectedImage(file); 
     }
   };
 
@@ -95,20 +95,17 @@ const Navbar = ({ theme, setTheme }) => {
         throw new Error("No auth token found");
       }
 
-      const formData = new FormData();
-      formData.append("username", newUsername);
-      formData.append("email", newEmail);
-
-      if (selectedImage) {
-        formData.append("profilePicture", selectedImage);
-      }
+      const updateData = {
+        username: newUsername,
+        email: newEmail
+      };
 
       const response = await axios.put(
         "http://localhost:8080/api/users/update",
-        formData,
+        updateData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -122,33 +119,19 @@ const Navbar = ({ theme, setTheme }) => {
         localStorage.setItem("username", updatedUser.username);
         localStorage.setItem("token", newToken);
 
-        // Fetch the updated profile picture from the server
-        const profilePictureResponse = await axios.get(
-          `http://localhost:8080/api/users/profile-picture/${updatedUser._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const updatedProfilePicture = profilePictureResponse.data
-          ? `data:image/jpeg;base64,${profilePictureResponse.data}`
-          : defaultProfile;
-
         setUsername(updatedUser.username);
-        setProfilePicture(updatedProfilePicture); // Update profile picture from DB
         setIsEditProfileModalOpen(false);
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("Error updating profile:", error.response ? error.response.data : error);
       alert("Error updating profile");
     }
-  };
+};
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+    localStorage.removeItem("profilePicture");
     setUsername("User");
     setProfilePicture(defaultProfile);
     navigate("/");
@@ -216,6 +199,37 @@ const Navbar = ({ theme, setTheme }) => {
     } catch (error) {
       console.error("Error updating profile picture:", error);
       alert("Error updating profile picture.");
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      alert("New password and confirm password do not match.");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        "http://localhost:8080/api/users/change-password",
+        { currentPassword, newPassword },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Password changed successfully!");
+        setIsChangePasswordModalOpen(false);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+      alert("Error changing password.");
     }
   };
 

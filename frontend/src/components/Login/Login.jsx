@@ -54,12 +54,12 @@ const Login = ({ onLogin }) => {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#E29D3F",
-       /* backgroundImage: `url("./src/assets/images/loginBackground.jpg")`,*/
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
       }}
     >
+      
       <Paper
   elevation={6}
   sx={{
@@ -135,7 +135,6 @@ const Login = ({ onLogin }) => {
         required
         sx={{
           backgroundColor: "white",
-          borderRadius: "4px",
           borderRadius: "20px",
           marginTop: "10px",
           marginLeft:"20px",
@@ -174,10 +173,9 @@ const Login = ({ onLogin }) => {
           fontWeight:"bold",
           backgroundColor: "#e29d3f",
           padding: "10px",
-          marginTop: "10px",
           marginLeft:"20px",
           width: "300px",
-          height: "55px",
+          height: "40px",
           "&:hover": {
             backgroundColor: "#C37A2C",
           },
@@ -233,7 +231,7 @@ const Login = ({ onLogin }) => {
         backgroundImage: `url('src/assets/images/loginImage.png')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        marginBottom:"70px",
+        marginBottom:"55px",
       }}
     >
       <Typography
@@ -242,17 +240,17 @@ const Login = ({ onLogin }) => {
         color="text.secondary"
         sx={{ lineHeight: "200px",
         zIndex: 1, //text appears above the image
-        position: "relative",
         color: "#514538",
-        fontWeight:"bold",
         position: "absolute",
         bottom: 0, 
-        marginLeft: "30px",
-        marginBottom: "-35px",
+        marginLeft: "40px",
+        marginBottom: "-50px",
+        fontWeight: "bold",
          }}
       >
        Where Tasks Meet Simplicity.
       </Typography>
+      
     </Box>
   </Box>
 </Paper>
