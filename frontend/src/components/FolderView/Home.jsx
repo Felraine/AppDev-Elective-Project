@@ -382,7 +382,7 @@ const Home = () => {
                 marginLeft: "0px",  // Adjust the value to move it to the left
               }}
             >
-            {"\"" + task.title + "\""}
+            {task.title}
             </Typography>
             <Typography
               sx={{
