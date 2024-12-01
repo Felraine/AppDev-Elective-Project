@@ -118,19 +118,12 @@ const Home = () => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          backgroundColor: "#fff",
+          backgroundColor: "#FFFA9D",
           borderRadius: 2,
           padding: 3,
           width: "50%",
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <Typography
-          variant="h5"
-          sx={{ textAlign: "center", marginBottom: 2, fontFamily: "monospace" }}
-        >
-          Progress Tracker
-        </Typography>
 
         <Grid container spacing={2} justifyContent="center" alignItems="stretch">
           <Grid item xs={3} sx={{ 
@@ -179,26 +172,6 @@ const Home = () => {
             <Typography variant="h4">{completedTasks}</Typography>
           </Grid>
       </Grid>
-
-
-
-
-
-
-        
-        {progress === 100 ? (
-          <Typography
-            sx={{ color: "green", fontWeight: "bold", fontSize: "1.2em" }}
-          >
-            🎉 Congratulations! You've completed all tasks!
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ color: "orange", fontWeight: "bold", fontSize: "1.2em" }}
-          >
-            🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
-          </Typography>
-        )}
         {/*<LinearProgress
           variant="determinate"
           value={progress}
@@ -218,17 +191,17 @@ const Home = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 2,
-          backgroundColor: "#fff",
+          gap: 1,
+          backgroundColor: "#FFE79F",
           borderRadius: 2,
-          padding: 3,
+          padding: 2,
           width: "50%",
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
         <Typography
           variant="h5"
-          sx={{ textAlign: "center", marginBottom: 2, fontFamily: "monospace" }}
+          sx={{ textAlign: "center", fontFamily: "monospace" }}
         >
           To Do List
         </Typography>
@@ -241,31 +214,44 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
-	      <Box sx={{ marginBottom: 2 }}>
-            <Typography
-              sx={{
-                fontSize: "1rem",
-                fontWeight: "bold",
-                textAlign: "center",
-                marginBottom: 1,
-                fontFamily: "monospace",
-              }}
-            >
-              {progress.toFixed(1)}% Completed
-            </Typography>
-            <LinearProgress
-              variant="determinate"
-              value={progress}
-              sx={{
-                height: 15,
-                borderRadius: 1,
-                backgroundColor: "#e0e0e0",
-                "& .MuiLinearProgress-bar": {
-                  backgroundColor: "#ffa500",
-                },
-              }}
-            />
-          </Box>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Typography
+        sx={{
+          fontSize: "1rem",
+          fontWeight: "bold",
+          fontFamily: "monospace",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {progress.toFixed(1)}%
+      </Typography>
+      <LinearProgress
+        variant="determinate"
+        value={progress}
+        sx={{
+          flex: 1,
+          height: 15,
+          borderRadius: 1,
+          backgroundColor: "#fff",
+          "& .MuiLinearProgress-bar": {
+            backgroundColor: "#ffa500",
+          },
+        }}
+      />
+    </Box>
+          {progress === 100 ? (
+          <Typography
+            sx={{ color: "green", fontWeight: "bold", fontSize: "1.1rem" }}
+          >
+            🎉 Congratulations! You've completed all tasks!
+          </Typography>
+        ) : (
+          <Typography
+            sx={{ color: "orange", fontWeight: "bold", fontSize: "1.1rem" }}
+          >
+            🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
+          </Typography>
+        )}
           {tasks.map((task) => (
             <Box
               key={task.task_ID}
