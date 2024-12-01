@@ -146,7 +146,7 @@ const Tasks = () => {
 
   const handleConfirmDelete = () => {
     if (taskToDelete) {
-      deleteTask(C);
+      deleteTask(taskToDelete);
       setTaskToDelete(null);
     }
     setDeleteDialogOpen(false);
