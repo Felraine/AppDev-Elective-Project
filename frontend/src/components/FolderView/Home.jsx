@@ -283,7 +283,7 @@ const Home = () => {
 >
   <Typography
     variant="h5"
-    sx={{ textAlign: "center", marginBottom: -1, fontFamily: "monospace" }}
+    sx={{ textAlign: "center", marginBottom: -1, fontFamily: "helvitica" }}
   >
     To Do List
   </Typography>
@@ -302,7 +302,7 @@ const Home = () => {
           sx={{
             fontSize: "0.9rem",
             fontWeight: "bold",
-            fontFamily: "monospace",
+            fontFamily: "helvitica",
             color: progress === 0 ? "#000" : "#000",
           }}
         >
@@ -329,7 +329,7 @@ const Home = () => {
           fontWeight: "bold",
           textAlign: "center",
           marginTop: 1,
-          fontFamily: "monospace",
+          fontFamily: "helvitica",
           color: progress === 100 ? "#000" : "#000",
         }}
       >
@@ -379,7 +379,7 @@ const Home = () => {
             display: "flex",
             alignItems: "flex-start",
             gap: 2,
-            fontFamily: "monospace",
+            fontFamily: "helvitica",
           }}
         >
           {/* Checkbox */}
@@ -397,9 +397,9 @@ const Home = () => {
             <Typography
               variant="h6"
               sx={{
-                fontSize: "1.1rem",
+                fontSize: "1.2rem",
                 marginBottom: 0.2,
-                fontFamily: "monospace",
+                fontFamily: "helvitica",
                 marginLeft: "0px",  // Adjust the value to move it to the left
               }}
             >
@@ -407,22 +407,23 @@ const Home = () => {
             </Typography>
             <Typography
               sx={{
-                fontSize: "0.85rem",
+                fontSize: "1rem",
                 color: "#555",
                 marginBottom: 2,
-                fontFamily: "monospace",
-                marginLeft: "7px",
+                fontFamily: "helvitica",
+                marginLeft: "0px",
               }}
             >
               {task.description}
             </Typography>
             <Typography
               sx={{
-                fontSize: "0.75rem",
+                fontSize: "0.9rem",
                 color: "#000000",
                 fontStyle: "italic",
                 fontWeight: "bold",
-                marginLeft: "7px",
+                fontFamily: "helvitica",
+                marginLeft: "0px",
               }}
             >
               Due: {formatDate(task.due_date)} {/* Format the due date */}
