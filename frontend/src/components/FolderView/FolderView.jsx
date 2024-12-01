@@ -51,6 +51,36 @@ const FolderView = () => {
             }}
           >
 
+            
+            <Tab
+              component={Link}
+              to="/home"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <HomeIcon sx={{ marginRight: '8px' }} />
+                  <span style={{ fontSize: '16px' }}>Home</span>
+                </div>
+              }
+              className="home-tab"
+              sx={{
+                width: "12rem",
+                fontSize: "16px",
+                padding: "10px",
+                backgroundColor: "#fffa9d",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+                color: "black",
+                textDecoration: "none",
+                marginRight: "33.3rem",
+                ...(activeTab === 0 && {
+                  color: "#fff",
+                  backgroundColor: "#fffa9d",
+                }),
+                "&.MuiTab-root": {
+                  color: "black",
+                },
+              }}
+            />
             <Tab
               component={Link}
               to="/home/tasks"
@@ -110,35 +140,6 @@ const FolderView = () => {
                 ...(activeTab === 2 && {
                   color: "#fff",
                   backgroundColor: "#cc915c",
-                }),
-                "&.MuiTab-root": {
-                  color: "black",
-                },
-              }}
-            />
-            <Tab
-              component={Link}
-              to="/home"
-              label={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <HomeIcon sx={{ marginRight: '8px' }} />
-                  <span style={{ fontSize: '16px' }}>Home</span>
-                </div>
-              }
-              className="home-tab"
-              sx={{
-                width: "12rem",
-                fontSize: "16px",
-                padding: "10px",
-                backgroundColor: "#fffa9d",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                color: "black",
-                textDecoration: "none",
-                marginLeft: "33.3rem",
-                ...(activeTab === 0 && {
-                  color: "#fff",
-                  backgroundColor: "#fffa9d",
                 }),
                 "&.MuiTab-root": {
                   color: "black",
@@ -182,6 +183,37 @@ const FolderView = () => {
               },
             }}
           >
+
+            <Tab
+              component={Link}
+              to="/home/tasks"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <TaskIcon sx={{ marginRight: '8px'}} />
+                  <span style={{ fontSize: '16px'}}>Tasks</span>
+                </div>
+              }
+              className="tasks-tab"
+              sx={{
+                width: "12rem",
+                fontSize: "16px",
+                padding: "10px",
+                backgroundColor: "#ffe79f",
+                color: "black",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+                textDecoration: "none",
+                marginRight: "33.3rem",
+                ...(activeTab === 1 && {
+                  color: "#fff",
+                  backgroundColor: "#ffe79f",
+                }),
+                "&.MuiTab-root": {
+                  color: "black",
+                },
+              }}
+            />
+
             <Tab
               component={Link}
               to="/home"
@@ -241,36 +273,6 @@ const FolderView = () => {
                 ...(activeTab === 2 && {
                   color: "#fff",
                   backgroundColor: "#cc915c",
-                }),
-                "&.MuiTab-root": {
-                  color: "black",
-                },
-              }}
-            />
-
-            <Tab
-              component={Link}
-              to="/home/tasks"
-              label={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <TaskIcon sx={{ marginRight: '8px'}} />
-                  <span style={{ fontSize: '16px'}}>Tasks</span>
-                </div>
-              }
-              className="tasks-tab"
-              sx={{
-                width: "12rem",
-                fontSize: "16px",
-                padding: "10px",
-                backgroundColor: "#ffe79f",
-                color: "black",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                textDecoration: "none",
-                marginLeft: "33.3rem",
-                ...(activeTab === 1 && {
-                  color: "#fff",
-                  backgroundColor: "#ffe79f",
                 }),
                 "&.MuiTab-root": {
                   color: "black",
@@ -315,6 +317,37 @@ const FolderView = () => {
               },
             }}
           >
+
+            <Tab
+              component={Link}
+              to="/home/archive"
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <ArchiveIcon sx={{ marginRight: '8px'}} />
+                  <span style={{ fontSize: '16px'}}>Archive</span>
+                </div>
+              }
+              className="archive-tab"
+              sx={{
+                width: "12rem",
+                fontSize: "16px",
+                padding: "10px",
+                backgroundColor: "#cc915c",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+                color: "black",
+                textDecoration: "none",
+                marginRight: "33.3rem",
+                ...(activeTab === 2 && {
+                  color: "#fff",
+                  backgroundColor: "#cc915c",
+                }),
+                "&.MuiTab-root": {
+                  color: "black",
+                },
+              }}
+            />
+
             <Tab
               component={Link}
               to="/home"
@@ -374,36 +407,6 @@ const FolderView = () => {
                 ...(activeTab === 1 && {
                   color: "#fff",
                   backgroundColor: "#ffe79f",
-                }),
-                "&.MuiTab-root": {
-                  color: "black",
-                },
-              }}
-            />
-
-            <Tab
-              component={Link}
-              to="/home/archive"
-              label={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <ArchiveIcon sx={{ marginRight: '8px'}} />
-                  <span style={{ fontSize: '16px'}}>Archive</span>
-                </div>
-              }
-              className="archive-tab"
-              sx={{
-                width: "12rem",
-                fontSize: "16px",
-                padding: "10px",
-                backgroundColor: "#cc915c",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                color: "black",
-                textDecoration: "none",
-                marginLeft: "33.3rem",
-                ...(activeTab === 2 && {
-                  color: "#fff",
-                  backgroundColor: "#cc915c",
                 }),
                 "&.MuiTab-root": {
                   color: "black",
