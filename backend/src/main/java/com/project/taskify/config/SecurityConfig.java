@@ -29,6 +29,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/tasks/{id}").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/api/archive/{taskId}/user/{userId}").permitAll() // Archive task
                 .requestMatchers(HttpMethod.GET, "/api/archive/user/{userId}").permitAll() // Get archived tasks
+                .requestMatchers(HttpMethod.PUT, "/api/tasks/user/{userId}/task/{taskId}").permitAll() //edit task
+                .requestMatchers(HttpMethod.GET, "/api/tasks/status/statuses").permitAll() //get all status
+                .requestMatchers(HttpMethod.GET, "/api/tasks/status/statuses/count/{userId}").permitAll() //get all status
                 .requestMatchers(HttpMethod.PUT, "/api/tasks/user/{userId}/task/{taskId}").permitAll() // Edit task
                 .requestMatchers(HttpMethod.GET, "/api/tasks/status/statuses").permitAll() // Get all statuses
                 .requestMatchers(HttpMethod.PUT, "/api/users/update").permitAll()

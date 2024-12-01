@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Grid } from '@mui/material';
+
 import axios from "axios";
 import { Box, Typography, LinearProgress, Checkbox } from "@mui/material";
  
@@ -45,23 +47,17 @@ const Home = () => {
   const fetchTaskStatuses = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/tasks/status/statuses",
+        `http://localhost:8080/api/tasks/status/statuses/count/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       const statuses = response.data;
       setTaskStatuses(statuses);
- 
-      setPendingCount(
-        statuses.filter((task) => task.status === "Pending").length
-      );
-      setOverdueCount(
-        statuses.filter((task) => task.status === "Overdue").length
-      );
-      setCompletedCount(
-        statuses.filter((task) => task.status === "Completed").length
-      );
+
+      setPendingCount(statuses.filter((task) => task.status === "Pending").length);
+      setOverdueCount(statuses.filter((task) => task.status === "Overdue").length);
+      setCompletedCount(statuses.filter((task) => task.status === "Completed").length);
     } catch (error) {
       console.error("Error fetching task statuses:", error);
     }
@@ -79,8 +75,8 @@ const Home = () => {
         return "#ccc"; // Gray for unknown priority
     }
   };
- 
-  //For Complete Task Button
+
+  // Update task counts and progress dynamically
   const archiveTask = async (taskId) => {
     try {
       await axios.put(
@@ -88,14 +84,16 @@ const Home = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setTasks((prevTasks) =>
-        prevTasks.filter((task) => task.task_ID !== taskId)
-      );
+  
+      // Refetch the tasks and statuses after updating the backend
+      fetchTasksData();
+      fetchTaskStatuses();
     } catch (error) {
       console.error("Error archiving task:", error);
     }
   };
- 
+  
+
   const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
  
   return (
@@ -114,7 +112,7 @@ const Home = () => {
         borderBottomRightRadius: 20,
       }}
     >
-      {/* Progress Tracker on the Left */}
+      {/* Progress Tracker */}
       <Box
         sx={{
           display: "flex",
@@ -133,12 +131,61 @@ const Home = () => {
         >
           Progress Tracker
         </Typography>
- 
-        <Typography>Tasks Completed: {completedTasks}</Typography>
-        <Typography>Remaining Tasks: {totalTasks - completedTasks}</Typography>
-        <Typography>Pending: {pendingCount}</Typography>
-        <Typography>Overdue: {overdueCount}</Typography>
-        <Typography>Completed: {completedCount}</Typography>
+
+        <Grid container spacing={2} justifyContent="center" alignItems="stretch">
+          <Grid item xs={3} sx={{ 
+            backgroundColor: 'grey', 
+            color: 'white', 
+            padding: 2, 
+            borderRadius: 2, 
+            textAlign: 'center', 
+            height: '150px', 
+            display: 'flex', 
+            flexDirection: 'column',
+            justifyContent: 'center',
+            margin: 1
+          }}>
+            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Pending</Typography>
+            <Typography variant="h4">{pendingCount}</Typography>
+          </Grid>
+          <Grid item xs={3} sx={{ 
+            backgroundColor: 'red', 
+            color: 'white', 
+            padding: 2, 
+            borderRadius: 2, 
+            textAlign: 'center', 
+            height: '150px', 
+            display: 'flex', 
+            flexDirection: 'column',
+            justifyContent: 'center',
+            margin: 1
+          }}>
+            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Overdue</Typography>
+            <Typography variant="h4">{overdueCount}</Typography>
+          </Grid>
+          <Grid item xs={3} sx={{ 
+            backgroundColor: 'green', 
+            color: 'white', 
+            padding: 2, 
+            borderRadius: 2, 
+            textAlign: 'center', 
+            height: '150px', 
+            display: 'flex', 
+            flexDirection: 'column',
+            justifyContent: 'center',
+            margin: 1
+          }}>
+            <Typography variant="h6" sx={{ fontSize: '0.875rem' }}>Completed</Typography>
+            <Typography variant="h4">{completedTasks}</Typography>
+          </Grid>
+      </Grid>
+
+
+
+
+
+
+        
         {progress === 100 ? (
           <Typography
             sx={{ color: "green", fontWeight: "bold", fontSize: "1.2em" }}
@@ -152,9 +199,21 @@ const Home = () => {
             🔄 Keep going! You’re {progress.toFixed(1)}% done. Almost there!
           </Typography>
         )}
+        {/*<LinearProgress
+          variant="determinate"
+          value={progress}
+          sx={{
+            height: 15,
+            borderRadius: 1,
+            backgroundColor: "#e0e0e0",
+            "& .MuiLinearProgress-bar": {
+              backgroundColor: "#ffa500",
+            },
+          }}
+        />*/}
       </Box>
- 
-      {/* To-Do List on the Right */}
+
+      {/* To-Do List */}
       <Box
         sx={{
           display: "flex",
@@ -163,7 +222,7 @@ const Home = () => {
           backgroundColor: "#fff",
           borderRadius: 2,
           padding: 3,
-          width: "50%", // Adjusted to 50%
+          width: "50%",
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
@@ -182,8 +241,7 @@ const Home = () => {
             overflowY: "auto",
           }}
         >
-       
-          <Box sx={{ marginBottom: 2 }}>
+	      <Box sx={{ marginBottom: 2 }}>
             <Typography
               sx={{
                 fontSize: "1rem",
@@ -208,7 +266,6 @@ const Home = () => {
               }}
             />
           </Box>
- 
           {tasks.map((task) => (
             <Box
               key={task.task_ID}
@@ -223,7 +280,7 @@ const Home = () => {
                 padding: 2,
               }}
             >
-              {/* Priority Circle */}
+              {/* Priority Indicator */}
               <Box
                 sx={{
                   width: 12,
@@ -235,46 +292,43 @@ const Home = () => {
               ></Box>
  
               {/* Task Details */}
-              <Box
-                sx={{
-                  display: "flex",
+              <Box sx={{ 
+		              display: "flex",
                   flexDirection: "column",
                   flexGrow: 1,
                   fontFamily: "monospace",
                   marginRight: "10px",
-                }}
-              >    
+
+ }}>
                 <Typography
                   variant="h6"
                   sx={{
                     fontSize: "1.1rem",
                     fontWeight: "bold",
-                    marginBottom: 1,
+		                marginBottom: 1,
                     fontFamily: "monospace",
                   }}
                 >
-                {/* Complete Checkbox for Task*/}
-               
-                  <Checkbox
+		        {/* Checkbox */}
+              <Checkbox
                   defaultChecked={false}
                   onChange={() => archiveTask(task.task_ID)}
                   sx={{
-                    padding: 0,        
-                    justifyContent: "flex-start",
-                    marginRight: "10px",              
-                  }}              
-                />
+                   padding: 0,
+                  justifyContent: "flex-start",
+                  marginRight: "10px",
+                  }}
+              />
                   {task.title}
                 </Typography>
                 <Typography
                   sx={{
                     fontSize: "1rem",
                     color: "#555",
-                    marginBottom: 1,
+			              marginBottom: 1,
                     fontFamily: "monospace",
                   }}
                 >
-                 
                   {task.description}
                 </Typography>
                 <Typography

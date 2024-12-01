@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Button,
-  TextField,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Box,
+  Button,TextField,MenuItem,Select,InputLabel,FormControl,Box,
+  Dialog,DialogTitle,DialogContent,DialogContentText,DialogActions,
 } from "@mui/material";
 import TaskEditDialog from "./TaskEditDialog";
 import editTaskIcon from "../../assets/images/editTaskIcon.png";
@@ -26,7 +21,8 @@ const Tasks = ({ updateNotificationCount }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
   const [buttonsVisible, setButtonsVisible] = useState(true);
-
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -156,8 +152,27 @@ const Tasks = ({ updateNotificationCount }) => {
       task.task_ID === editedTask.task_ID ? editedTask : task
     );
     setTasks(updatedTasks);
-
+    setIsDialogOpen(false);
     editTask(editedTask);
+  };
+
+  //dialog for delete
+  const handleOpenDeleteDialog = (taskId) => {
+    setTaskToDelete(taskId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setTaskToDelete(null);
+    setDeleteDialogOpen(false);
+  };
+
+  const handleConfirmDelete = () => {
+    if (taskToDelete) {
+      deleteTask(C);
+      setTaskToDelete(null);
+    }
+    setDeleteDialogOpen(false);
   };
 
   const sortedTasks = tasks.sort((a, b) => {
@@ -305,7 +320,6 @@ const Tasks = ({ updateNotificationCount }) => {
           </Button>
         </form>
       </Box>
-
       <Box
         className="taskList"
         sx={{
@@ -379,20 +393,39 @@ const Tasks = ({ updateNotificationCount }) => {
                       Edit
                     </Button>
                     <Button
-                      onClick={() => deleteTask(task.task_ID)}
+                     onClick={() => handleOpenDeleteDialog(task.task_ID)}
                       variant="contained"
                       color="error"
                     >
                       Delete
-                    </Button>
+                    </Button>                 
                   </Box>
                 )}
               </Box>
-              
             </Box>
           ))}
         </Box>
       </Box>
+      {/* Delete  Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">Delete Task</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            Are you sure you want to delete this task? 
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
       <TaskEditDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
@@ -404,3 +437,4 @@ const Tasks = ({ updateNotificationCount }) => {
 };
 
 export default Tasks;
+

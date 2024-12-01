@@ -2,6 +2,7 @@ package com.project.taskify.controllers;
 
 import java.util.Optional;
 import java.util.List;
+
 import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.taskify.models.TaskStatusEntity;
 import com.project.taskify.services.TaskStatusService;
+import com.project.taskify.repositories.*;
 
 @RestController
 @RequestMapping(method = RequestMethod.GET,path="/api/tasks/status")
@@ -28,6 +30,9 @@ public class TaskStatusController {
 	
 	@Autowired
 	private TaskStatusService tsServ;
+
+    @Autowired
+    private TaskStatusRepository tsRepo;
 	
 	public TaskStatusController() {
 		
@@ -55,10 +60,17 @@ public class TaskStatusController {
         }
     }
    
+    //get all status
     @GetMapping("/statuses")
     public ResponseEntity<List<TaskStatusEntity>> getAllTaskStatuses() {
         List<TaskStatusEntity> taskStatuses = tsServ.getAllTaskStatuses();
         return ResponseEntity.ok(taskStatuses);
+    }
+
+    //Get status per user
+    @GetMapping("/statuses/count/{userId}")
+    public List<TaskStatusEntity> getTaskStatuses(@PathVariable int userId) {
+        return tsRepo.findAllByTask_User_UserId(userId);  
     }
 
 	//update task status
