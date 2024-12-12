@@ -11,18 +11,15 @@ import settingsIcon from "../../assets/images/settings.png";
 import EditIcon from "@mui/icons-material/Edit";
 import LockIcon from "@mui/icons-material/Lock";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Snackbar } from "@mui/material";
 import { fontGrid } from "@mui/material/styles/cssUtils";
 
 const Navbar = ({ theme, setTheme }) => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
-  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
-    useState(false);
-  const [isUpdateProfilePictureModalOpen, setIsUpdateProfilePictureModalOpen] =
-    useState(false);
-  const [username, setUsername] = useState(
-    localStorage.getItem("username") || "User"
-  );
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
+  const [isUpdateProfilePictureModalOpen, setIsUpdateProfilePictureModalOpen] = useState(false);
+  const [username, setUsername] = useState(localStorage.getItem("username") || "User");
   const [profilePicture, setProfilePicture] = useState(defaultProfile);
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -30,6 +27,8 @@ const Navbar = ({ theme, setTheme }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -90,17 +89,26 @@ const Navbar = ({ theme, setTheme }) => {
     }
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
   const handleUpdateProfile = async () => {
     try {
       if (!token) {
         throw new Error("No auth token found");
       }
-
+  
       const updateData = {
         username: newUsername,
         email: newEmail
       };
-
+  
       const response = await axios.put(
         "http://localhost:8080/api/users/update",
         updateData,
@@ -111,23 +119,24 @@ const Navbar = ({ theme, setTheme }) => {
           },
         }
       );
-
+  
       if (response.status === 200) {
-        alert("Profile updated successfully!");
 
+        
         const updatedUser = response.data.user;
         const newToken = response.data.token;
         localStorage.setItem("username", updatedUser.username);
         localStorage.setItem("token", newToken);
-
-        setUsername(updatedUser.username);
-        setIsEditProfileModalOpen(false);
+  
+        setUsername(updatedUser.username); // Directly update the username
+        setIsEditProfileModalOpen(false);  // Close modal immediately
+        showSnackbar("Profile updated successfully!");
       }
     } catch (error) {
       console.error("Error updating profile:", error.response ? error.response.data : error);
-      alert("Error updating profile");
+      showSnackbar("Error updating profile");
     }
-};
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -140,7 +149,7 @@ const Navbar = ({ theme, setTheme }) => {
 
   const handleUpdateProfilePicture = async () => {
     if (!token) {
-      alert("No auth token found");
+      showSnackbar("No auth token found");
       return;
     }
 
@@ -160,7 +169,7 @@ const Navbar = ({ theme, setTheme }) => {
       );
 
       if (response.status === 200) {
-        alert("Profile picture updated successfully!");
+        showSnackbar("Profile picture updated successfully!");
 
         // Assuming the response returns the updated profile picture as base64
         const updatedProfilePicture = response.data.profilePicture
@@ -199,16 +208,21 @@ const Navbar = ({ theme, setTheme }) => {
       }
     } catch (error) {
       console.error("Error updating profile picture:", error);
-      alert("Error updating profile picture.");
+      showSnackbar("Error updating profile picture.");
     }
   };
 
   const handleChangePassword = async () => {
-    if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match.");
+    if (newPassword === currentPassword) {
+      showSnackbar("New password cannot be the same as the old password.");
       return;
     }
-
+  
+    if (newPassword !== confirmPassword) {
+      showSnackbar("New password and confirm password do not match.");
+      return;
+    }
+  
     try {
       const response = await axios.put(
         "http://localhost:8080/api/users/change-password",
@@ -220,9 +234,9 @@ const Navbar = ({ theme, setTheme }) => {
           },
         }
       );
-
+  
       if (response.status === 200) {
-        alert("Password changed successfully!");
+        showSnackbar("Password changed successfully!");
         setIsChangePasswordModalOpen(false);
         setCurrentPassword("");
         setNewPassword("");
@@ -230,12 +244,26 @@ const Navbar = ({ theme, setTheme }) => {
       }
     } catch (error) {
       console.error("Error changing password:", error);
-      alert("Error changing password.");
+      showSnackbar("Old Password doesn't match.");
     }
   };
+  
 
   return (
     <div className={`navbar ${theme}`}>
+      
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        message={snackbarMessage}
+        onClose={handleSnackbarClose}
+        sx={{
+          '& .MuiSnackbarContent-root': {
+            backgroundColor: '#e29d3f', // Custom background color
+            color: 'white', // Text color
+          }
+        }}
+      />
       <div className="logoAndName">
         <Link to="/home">
           <img src={logo} alt="logo" className="logo" />
@@ -243,15 +271,15 @@ const Navbar = ({ theme, setTheme }) => {
         <span className="appName">Taskify</span>
       </div>
       <div className="rightArea">
-        <img
-          src={
-            profilePicture && profilePicture !== defaultProfile
-              ? profilePicture
-              : defaultProfile
-          }
-          alt="profile"
-          className="profilePicture"
-        />
+      <img
+  key={profilePicture}  // Add the key property here to trigger re-render
+  src={profilePicture && profilePicture !== defaultProfile
+    ? profilePicture
+    : defaultProfile}
+  alt="profile"
+  className="profilePicture"
+/>
+
 
         <span className="accountName">{username}</span>
 
@@ -439,100 +467,45 @@ const Navbar = ({ theme, setTheme }) => {
               <span className="profileInModalName">{username}</span>
             </div>
 
-            <div
-              style={{
-                display: "flex",  
-                alignItems: "center",
-                width: "100%", 
-                justifyContent: "flex-start", 
-              }}
-            >
-            <span
-              style={{
-                fontSize: "15px",
-                fontWeight: "bold",
-                color: "#fff",
-                marginRight: "16px",
-              }}
-            >
-              Old Password:
-            </span>
-            <input
-              type="password"
-              placeholder="Old Password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              style={{
-                padding: "10px",
-                border: "1px transparent",
-                borderRadius: "15px",
-                width: '8.5rem',}}
-            />
-            </div>
+            <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "flex-start" }}>
+  <span style={{ fontSize: "15px", fontWeight: "bold", color: "#fff", marginRight: "16px" }}>
+    Old Password:
+  </span>
+  <input
+    type="password"
+    placeholder="Old Password"
+    value={currentPassword}
+    onChange={(e) => setCurrentPassword(e.target.value)}
+    style={{ padding: "10px", border: "1px transparent", borderRadius: "15px", width: '8.5rem' }}
+  />
+</div>
 
-            <div
-              style={{
-                display: "flex",  
-                alignItems: "center",
-                width: "100%", 
-                justifyContent: "flex-start", 
-              }}
-            >
-            <span
-              style={{
-                fontSize: "15px",
-                fontWeight: "bold",
-                color: "#fff",
-                marginRight: "10px",
-              }}
-            >
-              New Password:
-            </span>
-            <input
-              type="password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              style={{
-                padding: "10px",
-                border: "1px transparent",
-                borderRadius: "15px",
-                width: '8.5rem',
-              }}
-            />
-            </div>
+<div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "flex-start" }}>
+  <span style={{ fontSize: "15px", fontWeight: "bold", color: "#fff", marginRight: "10px" }}>
+    New Password:
+  </span>
+  <input
+    type="password"
+    placeholder="New Password"
+    value={newPassword}
+    onChange={(e) => setNewPassword(e.target.value)}
+    style={{ padding: "10px", border: "1px transparent", borderRadius: "15px", width: '8.5rem' }}
+  />
+</div>
 
-            <div
-              style={{
-                display: "flex",  
-                alignItems: "center",
-                width: "100%", 
-                justifyContent: "flex-start", 
-              }}
-            >
-            <span
-              style={{
-                fontSize: "14px",
-                fontWeight: "bold",
-                color: "#fff",
-                marginRight: "10px",
-              }}
-            >
-            Confirm Password:
-            </span>
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              style={{
-                padding: "10px",
-                border: "1px transparent",
-                borderRadius: "15px",
-                width: '8.5rem',
-              }}
-            />
-            </div>
+<div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "flex-start" }}>
+  <span style={{ fontSize: "14px", fontWeight: "bold", color: "#fff", marginRight: "10px" }}>
+    Confirm Password:
+  </span>
+  <input
+    type="password"
+    placeholder="Confirm Password"
+    value={confirmPassword}
+    onChange={(e) => setConfirmPassword(e.target.value)}
+    style={{ padding: "10px", border: "1px transparent", borderRadius: "15px", width: '8.5rem' }}
+  />
+</div>
+
             
             <div
               style={{
